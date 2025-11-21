@@ -316,6 +316,41 @@
       background: #a855f7;
     }
 
+    /* SHOWREEL */
+
+.showreel-section {
+  margin: 2.5rem 0 2rem;
+}
+
+.showreel-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.showreel-title {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.showreel-video-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(55,65,81,0.9);
+  box-shadow: var(--shadow-soft);
+  background: radial-gradient(circle at top left, #1b1b1b, #020617 55%);
+}
+
+.showreel-video-wrap video {
+  display: block;
+  width: 100%;
+  max-height: 540px;
+}
+
+
     /* TIMELINE */
 
     .timeline-shell {
@@ -715,6 +750,21 @@
         </div>
       </section>
     </header>
+
+    <!-- SHOWREEL SECTION -->
+    <section class="showreel-section" aria-label="Showreel">
+      <div class="showreel-inner">
+        <h2 class="showreel-title">Showreel</h2>
+        <div class="showreel-video-wrap">
+          <video
+  src="showreel.mp4"
+  controls
+  preload="metadata"
+  poster="showreel-cover.png"
+></video>
+        </div>
+      </div>
+    </section>
 
     <section class="timeline-shell" aria-label="Project timeline">
       <div class="timeline-header">
@@ -1432,14 +1482,25 @@ function closeModal() {
       filterButtons.forEach(btn => {
         btn.addEventListener("click", () => {
           const filter = btn.dataset.filter;
+
+          // active state on buttons
           filterButtons.forEach(b => b.classList.toggle("active", b === btn));
+
+          // show/hide timeline items
           applyFilter(filter);
 
+          // show/hide showreel
+          const showreel = document.querySelector(".showreel-section");
+          if (showreel) {
+            showreel.style.display = (filter === "all") ? "" : "none";
+          }
+
+          // keep year slider behavior
           const activeTick =
             document.querySelector(".year-tick.active") ||
             tickElems[tickElems.length - 1];
           if (activeTick) {
-            setActiveYear(activeTick.dataset.year, { scroll: true });
+            setActiveYear(activeTick.dataset.year, { scroll: false });
           }
         });
       });

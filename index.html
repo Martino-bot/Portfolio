@@ -1,0 +1,1560 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Martijn Coenen — Portfolio Timeline</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #040404;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --card-bg: #121214;
+      --border: #4b5563;
+      --accent: #ccd6ea;
+      --accent-soft: rgba(210, 217, 233, 0.25);
+      --radius-lg: 14px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.9);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      /* static, not stretched background image at original size */
+      background-image: url("background.png");
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-attachment: fixed;
+      background-size: auto;
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding: 2.5rem 1.25rem 3.5rem;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2.5rem;
+    }
+
+    .tagline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.75);
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid rgba(91, 93, 97, 0.7);
+    }
+
+    .tagline-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+    }
+
+    h1 {
+      font-size: clamp(2.1rem, 3vw, 2.6rem);
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4rem;
+    }
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: var(--muted);
+      max-width: 34rem;
+    }
+
+    .subtitle a {
+      color: #ffffff;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(147,197,253,0.5);
+    }
+
+    .subtitle a:hover {
+      border-bottom-color: #e5e7eb;
+    }
+
+    /* FILTER NAV */
+
+    .nav-filters {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .nav-filter-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(94, 95, 96, 0.9);
+      background: rgba(15,15,15,0.9);
+      padding: 0.3rem 0.8rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .nav-filter-btn span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.9);
+    }
+
+    .nav-filter-btn[data-filter="fiction"] .dot {
+      background: #f97316;
+    }
+
+    .nav-filter-btn[data-filter="nonfiction"] .dot {
+      background: #22c55e;
+    }
+
+    .nav-filter-btn[data-filter="commercial"] .dot {
+      background: #0ea5e9;
+    }
+
+    .nav-filter-btn[data-filter="startup"] .dot {
+      background: #a855f7;
+    }
+
+    .nav-filter-btn.active {
+      background: #111827;
+      border-color: #e5e7eb;
+      color: #f9fafb;
+    }
+
+    .nav-filter-btn.active .dot {
+      background: #f9fafb;
+    }
+
+    /* YEAR SLIDER */
+
+    .year-slider {
+      margin-top: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .year-slider-bar {
+      position: relative;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(55, 65, 81, 0.7);
+      overflow: visible;
+      cursor: pointer;
+    }
+
+    .year-slider-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      background: linear-gradient(90deg, #25eb25, #38f83e);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .year-slider-handle {
+      position: absolute;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: #020617;
+      border: 2px solid #68fa60;
+      box-shadow: 0 0 0 4px var(--accent-soft);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* NOW marker on the bar */
+    .year-now-marker {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translate(50%, -50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: #22c55e;
+      border: 2px solid #020617;
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.45);
+      z-index: 1;
+    }
+
+    .year-slider-ticks {
+      position: relative;
+      margin-top: 0.75rem;
+      margin-bottom: 0.4rem;
+      height: 1.4rem;
+    }
+
+    .year-tick {
+      position: absolute;
+      bottom: 0;
+      transform: translateX(-50%);
+      border: none;
+      background: none;
+      padding: 0.2rem 0.3rem 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .year-tick::before {
+      content: "";
+      position: absolute;
+      top: -0.55rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(107, 114, 128, 0.9);
+    }
+
+    .year-tick.active {
+      color: #f9fafb;
+      font-weight: 600;
+    }
+
+    .year-tick.active::before {
+      background: #e5e7eb;
+      height: 12px;
+    }
+
+    /* NOW label under the ticks */
+    .year-now-label {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      transform: translateX(50%);
+      font-size: 0.78rem;
+      color: #bbf7d0;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .year-now-label::before {
+      content: "";
+      position: absolute;
+      top: -0.55rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 12px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .year-slider-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .year-slider-label span {
+      font-weight: 600;
+      color: #f9fafb;
+    }
+
+    /* PROJECT DOTS ON SLIDER */
+
+    .project-dot {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      border: 2px solid #020617;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.8);
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .project-dot--fiction {
+      background: #f97316;
+    }
+
+    .project-dot--nonfiction {
+      background: #22c55e;
+    }
+
+    .project-dot--commercial {
+      background: #0ea5e9;
+    }
+
+    .project-dot--startup {
+      background: #a855f7;
+    }
+
+    /* TIMELINE */
+
+    .timeline-shell {
+      background: radial-gradient(circle at top left, #1b1b1b, #0e0e0f 5%);
+      border-radius: 24px;
+      padding: 1.5rem 1.5rem 2rem;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(48, 49, 50, 0.9);
+    }
+
+    .timeline-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .timeline-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .timeline-range {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .timeline-range strong {
+      color: #f9fafb;
+      font-weight: 600;
+    }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: minmax(70px, 90px) 1fr;
+      gap: 1.25rem;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      cursor: pointer;
+    }
+
+    .timeline-item.hidden {
+      display: none;
+    }
+
+    .timeline-year {
+      font-weight: 600;
+      color: #6b7280;
+      font-size: 0.9rem;
+      padding-top: 0.35rem;
+    }
+
+    .timeline-card {
+      position: relative;
+      padding-left: 1.75rem;
+      border-left: 2px solid rgba(95, 95, 96, 0.9);
+    }
+
+    .timeline-card::before {
+      content: "";
+      position: absolute;
+      left: -7px;
+      top: 0.8rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #121212;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 0 0 4px rgba(15,15,15,0.9);
+    }
+
+    .timeline-content {
+      position: relative;
+      border-radius: var(--radius-lg);
+      padding: 0.85rem 1rem 0.9rem;
+      border: 1px solid rgba(38, 39, 40, 0.9);
+      background-color: #101011;
+      background-size: cover;
+      background-position: center;
+      color: #f9fafb;
+      overflow: hidden;
+    }
+
+    .timeline-content::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.88) 0%,
+        rgba(0, 0, 0, 0.72) 32%,
+        rgba(0, 0, 0, 0.25) 68%,
+        rgba(0, 0, 0, 0.0) 100%
+      );
+      z-index: 0;
+    }
+
+    .timeline-content > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .project-meta {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 0.45rem;
+      font-size: 0.8rem;
+      padding: 0.18rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 93, 96, 0.9);
+      background: rgba(0,0,0,0.85);
+      color: #f9fafb;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+
+    .project-date {
+      font-variant-numeric: tabular-nums;
+      opacity: 0.95;
+    }
+
+    .project-role {
+      opacity: 0.95;
+    }
+
+    .project-meta-sep {
+      opacity: 0.9;
+    }
+
+    /* Accent colors for the meta pill based on category */
+    .timeline-item[data-category="commercial"] .project-meta {
+      border-color: rgba(56,189,248,0.9);
+      background: rgba(8,47,73,0.95);
+      box-shadow: 0 0 0 1px rgba(8,47,73,0.7);
+    }
+
+    .timeline-item[data-category="nonfiction"] .project-meta {
+      border-color: rgba(74,222,128,0.9);
+      background: rgba(5,46,22,0.95);
+      box-shadow: 0 0 0 1px rgba(5,46,22,0.7);
+    }
+
+    .timeline-item[data-category="fiction"] .project-meta {
+      border-color: rgba(251,146,60,0.9);
+      background: rgba(67,20,7,0.95);
+      box-shadow: 0 0 0 1px rgba(67,20,7,0.7);
+    }
+
+    .timeline-item[data-category="startup"] .project-meta {
+      border-color: rgba(192,132,252,0.9);
+      background: rgba(46,16,101,0.95);
+      box-shadow: 0 0 0 1px rgba(46,16,101,0.7);
+    }
+
+    .badge-now {
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      background: #faf5ff;
+      color: #111827;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      margin-left: 6px;
+    }
+
+    .project-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-bottom: 0.1rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+    }
+
+    .project-context {
+      font-size: 0.8rem;
+      color: #e5e7eb;
+      opacity: 0.9;
+      margin-bottom: 0.25rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+    }
+
+    .project-desc {
+      font-size: 0.85rem;
+      color: #e5e7eb;
+      opacity: 0.88;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+    }
+
+    .small-note {
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1.75rem 1.1rem 2.5rem;
+      }
+
+      .timeline-item {
+        grid-template-columns: 60px 1fr;
+        gap: 0.85rem;
+      }
+
+      .timeline-shell {
+        padding: 1.25rem 1.1rem 1.75rem;
+      }
+    }
+
+    /* MODAL */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-dialog {
+      position: relative;
+      max-width: 900px;
+      width: 100%;
+      margin: 1.5rem;
+      background: #2b2b2c;
+      border-radius: 20px;
+      border: 1px solid rgba(37, 39, 41, 0.9);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+      padding: 1.25rem 1.4rem 1.5rem;
+      color: #e5e7eb;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 1.25rem;
+      z-index: 1;
+    }
+
+    .modal-header {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .modal-meta {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .modal-close {
+      border: none;
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .modal-close:hover {
+      background: #e5e7eb;
+      color: #020617;
+    }
+
+.modal-video-wrap {
+  background: #020617;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(55,65,81,0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 60vh;
+  padding: 0.75rem;
+}
+
+.modal-video-wrap video,
+.modal-video-wrap img {
+  width: 100%;
+  border-radius: 10px;
+  display: block;
+}
+
+.modal-video-wrap iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 10px;
+  display: block;
+}
+
+
+
+    .modal-desc {
+      font-size: 0.88rem;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+
+    .modal-desc p + p {
+      margin-top: 0.6rem;
+    }
+
+    @media (max-width: 800px) {
+      .modal-dialog {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .modal-dialog.no-video {
+  grid-template-columns: 1fr;
+}
+
+.modal-dialog.no-video .modal-video-wrap {
+  display: none;
+}
+
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="tagline">
+        <span class="tagline-dot"></span>
+        <span>Portfolio timeline · 2023 → Now</span>
+      </div>
+      <h1>Martijn Coenen</h1>
+      <p class="subtitle">
+        Cinematographer &amp; filmmaker in training. A simple overview of my work,
+        from early non-fiction experiments to commercial shoots and start-up work.
+        Full projects on
+        <a href="https://martijncoenen.myportfolio.com" target="_blank" rel="noreferrer">
+          martijncoenen.myportfolio.com
+        </a>.
+      </p>
+
+      <!-- FILTER NAV -->
+      <nav class="nav-filters" aria-label="Filter projects by type">
+        <button class="nav-filter-btn active" data-filter="all">
+          <span class="dot"></span>
+          <span>All</span>
+        </button>
+        <button class="nav-filter-btn" data-filter="fiction">
+          <span class="dot"></span>
+          <span>Fiction</span>
+        </button>
+        <button class="nav-filter-btn" data-filter="nonfiction">
+          <span class="dot"></span>
+          <span>Non-fiction</span>
+        </button>
+        <button class="nav-filter-btn" data-filter="commercial">
+          <span class="dot"></span>
+          <span>Commercial</span>
+        </button>
+        <button class="nav-filter-btn" data-filter="startup">
+          <span class="dot"></span>
+          <span>Start-up</span>
+        </button>
+      </nav>
+
+      <!-- YEAR SLIDER -->
+      <section class="year-slider" aria-label="Year timeline">
+        <div class="year-slider-bar" id="year-slider-bar">
+          <div class="year-slider-fill" id="year-slider-fill"></div>
+          <div class="year-slider-handle" id="year-slider-handle"></div>
+          <div class="year-now-marker"></div> <!-- NOW marker -->
+          <!-- project dots injected here -->
+        </div>
+        <div class="year-slider-ticks">
+          <button class="year-tick" data-year="2023">2023</button>
+          <button class="year-tick" data-year="2024">2024</button>
+          <button class="year-tick active" data-year="2025">2025</button>
+          <div class="year-now-label">Now</div>
+        </div>
+        <div class="year-slider-label">
+          Viewing year: <span id="year-slider-active">2025 (latest)</span>
+        </div>
+      </section>
+    </header>
+
+    <section class="timeline-shell" aria-label="Project timeline">
+      <div class="timeline-header">
+        <div class="timeline-title">Timeline · Latest → Oldest</div>
+        <div class="timeline-range">
+          <strong>2025</strong> · current work &nbsp;—&nbsp; <strong>2023</strong> · early projects
+        </div>
+      </div>
+
+      <div class="timeline">
+        <!-- 2025 -->
+        <article class="timeline-item"
+          data-year="2025"
+          data-month="4"
+          data-category="fiction"
+          data-youtube="https://youtu.be/d6mLxZtf8oM"
+          data-bg="red-tape.png"
+          data-meta="Fiction · Short film · May 2025"
+          data-desc="Fiction about a young North-Korean soldier in a modern drone war. A mix of war-movie tension and intimate inner monologue. Shot as a bachelor project with a focus on mood, point of view and the machinery of war.">
+          <div class="timeline-year">2025</div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="project-meta">
+                <span class="project-date">April 2025</span>
+                <span class="project-meta-sep">·</span>
+                <span class="project-role">Fiction · Short film</span>
+                <span class="badge-now">Now</span>
+              </div>
+              <h2 class="project-title">Red Tape</h2>
+              <p class="project-context">War-themed short film</p>
+              <p class="project-desc">
+                Fiction film about a young North-Korean soldier in a modern drone war.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline-item"
+          data-year="2025"
+          data-month="5"
+          data-category="nonfiction"
+          data-video="vermeer-doc.mp4"
+          data-bg="vermeer-doc.png"
+          data-meta="Non-fiction · Documentary · May 2025"
+          data-desc="Documentary experiment inspired by Johannes Vermeer’s way of looking at light, rooms and people. Composition and pacing echo painting while staying firmly in cinema.">
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="project-meta">
+                <span class="project-date">May 2025</span>
+                <span class="project-meta-sep">·</span>
+                <span class="project-role">Non-fiction · Documentary</span>
+              </div>
+              <h2 class="project-title">Dit is een documentaire over Johannes Vermeer</h2>
+              <p class="project-context">Documentary</p>
+              <p class="project-desc">
+                Non-fiction project inspired by Johannes Vermeer’s way of looking.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2024 -->
+        <article class="timeline-item"
+          data-year="2024"
+          data-month="12"
+          data-category="nonfiction"
+          data-youtube="https://youtu.be/CNfolW-AV4g"
+          data-bg="bomma-bompa.png"
+          data-meta="Non-fiction · Documentary · Dec 2024"
+          data-desc="Intimate documentary portrait of my grandparents. Quiet observation of daily rituals, aging and memory inside the family. Sits between school work and something made simply for home.">
+          <div class="timeline-year">2024</div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="project-meta">
+                <span class="project-date">Dec 2024</span>
+                <span class="project-meta-sep">·</span>
+                <span class="project-role">Non-fiction · Documentary</span>
+              </div>
+              <h2 class="project-title">Bomma &amp; Bompa</h2>
+              <p class="project-context">Documentary about elderly family members</p>
+              <p class="project-desc">
+                Close non-fiction portrait of my grandparents.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline-item"
+          data-year="2024"
+          data-month="10"
+          data-category="commercial"
+          data-youtube="https://youtube.com/shorts/MErni7Tqt3U?feature=share"
+          data-bg="ford-mustang.png"
+          data-meta="Commercial · Automotive · Oct 2024"
+          data-desc="Dynamic automotive commercial featuring a Ford Mustang. High-energy camera work and editing aimed at social and online use, with a focus on speed and night driving.">
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="project-meta">
+                <span class="project-date">Oct 2024</span>
+                <span class="project-meta-sep">·</span>
+                <span class="project-role">Commercial · Automotive</span>
+              </div>
+              <h2 class="project-title">Ford Mustang</h2>
+              <p class="project-context">Commercial shoot</p>
+              <p class="project-desc">
+                High-energy commercial piece focused on speed and night driving.
+              </p>
+            </div>
+          </div>
+        </article>
+
+<article class="timeline-item"
+  data-year="2024"
+  data-month="9"
+  data-category="nonfiction"
+  data-bg="stop-motion.png"
+  data-meta="Non-fiction / Experimental · Sep 2024"
+  data-videos="stop-motion-1.mp4,stop-motion-2.mp4,stop-motion-3.mp4"
+  data-desc="Stop-motion experiment as three vertical clips for Instagram, shown together in the overlay.">
+  <div class="timeline-year"></div>
+  <div class="timeline-card">
+    <div class="timeline-content">
+      <div class="project-meta">
+        <span class="project-date">Sep 2024</span>
+        <span class="project-meta-sep">·</span>
+        <span class="project-role">Non-fiction / Experimental</span>
+      </div>
+      <h2 class="project-title">Stop-Motion</h2>
+      <p class="project-context">Instagram · Coenenvideo</p>
+      <p class="project-desc">
+        Short stop-motion clip made as an Instagram experiment.
+      </p>
+    </div>
+  </div>
+</article>
+
+
+        <article class="timeline-item"
+          data-year="2024"
+          data-month="8"
+          data-category="commercial"
+          data-youtube="https://youtube.com/shorts/kr07lYuYOkg?feature=share"
+          data-bg="audi-etron-gt.png"
+          data-meta="Commercial · Automotive · Aug 2024"
+          data-desc="Automotive commercial with the Audi e-tron GT. Focus on sleek lines, reflections and the feel of electric performance. Built for clean, graphic frames.">
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="project-meta">
+                <span class="project-date">Aug 2024</span>
+                <span class="project-meta-sep">·</span>
+                <span class="project-role">Commercial · Automotive</span>
+              </div>
+              <h2 class="project-title">Audi e-tron GT</h2>
+              <p class="project-context">Commercial shoot</p>
+              <p class="project-desc">
+                Sleek automotive piece around the Audi e-tron GT.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline-item"
+          data-year="2024"
+          data-month="6"
+          data-category="nonfiction"
+          data-video="racing-tracks.mp4"
+          data-bg="racing-tracks.png"
+          data-meta="Non-fiction · 2024"
+          data-desc="Personal work on different racing circuits. Fast handheld camera, trackside energy and a love for speed and engines.">
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="project-meta">
+                <span class="project-date">2024</span>
+                <span class="project-meta-sep">·</span>
+                <span class="project-role">Non-fiction</span>
+              </div>
+              <h2 class="project-title">Racing Tracks</h2>
+              <p class="project-context">Spare-time shoots</p>
+              <p class="project-desc">
+                Personal racing work shot on different circuits.
+              </p>
+            </div>
+          </div>
+        </article>
+
+<article class="timeline-item"
+  data-year="2024"
+  data-month="4"
+  data-category="startup"
+  data-bg="chargelink.png"
+  data-meta="Start-up · Co-founder · 2024"
+  data-desc="On-set tool for camera assistants that monitors batteries via wireless nodes. In the overlay: a longer text about the journey, prototyping, tests on film sets and where ChargeLink is heading.">
+  <div class="timeline-year"></div>
+  <div class="timeline-card">
+    <div class="timeline-content">
+      <div class="project-meta">
+        <span class="project-date">2024</span>
+        <span class="project-meta-sep">·</span>
+        <span class="project-role">Start-up · Co-founder</span>
+      </div>
+      <h2 class="project-title">ChargeLink</h2>
+      <p class="project-context">On-set tool for camera assistants</p>
+      <p class="project-desc">
+        Prototype phase of the ChargeLink battery monitoring system.
+      </p>
+    </div>
+  </div>
+</article>
+
+
+        <article class="timeline-item"
+          data-year="2024"
+          data-month="3"
+          data-category="nonfiction"
+          data-youtube="https://youtu.be/pGydiWVXVEM"
+          data-bg="fighting-stereotypes.png"
+          data-meta="Non-fiction · School assignment · Mar 2024"
+          data-desc="Non-fiction assignment tackling social stereotypes. Mix of interviews and staged moments, with a clean, direct visual language.">
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="project-meta">
+                <span class="project-date">Mar 2024</span>
+                <span class="project-meta-sep">·</span>
+                <span class="project-role">Non-fiction · School assignment</span>
+              </div>
+              <h2 class="project-title">Fighting Stereotypes</h2>
+              <p class="project-context">Student project</p>
+              <p class="project-desc">
+                Non-fiction piece around social stereotypes.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline-item"
+          data-year="2024"
+          data-month="3"
+          data-category="commercial"
+          data-youtube="https://youtube.com/shorts/_Xo8MeMOYPU?feature=share"
+          data-bg="aston-martin.png"
+          data-meta="Commercial · Automotive · Mar 2024"
+          data-desc="Commercial work for Aston Martin. Carefully controlled camera moves and lighting underline the luxury and surface detail of the car.">
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="project-meta">
+                <span class="project-date">Mar 2024</span>
+                <span class="project-meta-sep">·</span>
+                <span class="project-role">Commercial · Automotive</span>
+              </div>
+              <h2 class="project-title">Aston Martin</h2>
+              <p class="project-context">Commercial shoot</p>
+              <p class="project-desc">
+                Commercial spot built around luxury surfaces and detail.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2023 -->
+        <article class="timeline-item"
+          data-year="2023"
+          data-month="11"
+          data-category="nonfiction"
+          data-youtube="https://youtu.be/5-kUYB2ytio"
+          data-bg="het-journaal.png"
+          data-meta="Non-fiction · News piece · Nov 2023"
+          data-desc="Student news report in the style of ‘Het Journaal’. Practice in broadcast language, structure and on-location reporting.">
+          <div class="timeline-year">2023</div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="project-meta">
+                <span class="project-date">Nov 2023</span>
+                <span class="project-meta-sep">·</span>
+                <span class="project-role">Non-fiction · News piece</span>
+              </div>
+              <h2 class="project-title">Het Journaal</h2>
+              <p class="project-context">School news report</p>
+              <p class="project-desc">
+                Broadcast-style school news report in the tone of “Het Journaal”.
+              </p>
+            </div>
+          </div>
+        </article>
+
+<article class="timeline-item"
+  data-year="2023"
+  data-month="8"
+  data-category="commercial"
+  data-bg="center-parcs.png"
+  data-meta="Commercial · Aug 2023"
+  data-videos="center-parcs-1.mp4,center-parcs-2.mp4"
+  data-desc="Promotional work for Center Parcs shown in the overlay as two vertical cuts and some context text.">
+  <div class="timeline-year"></div>
+  <div class="timeline-card">
+    <div class="timeline-content">
+      <div class="project-meta">
+        <span class="project-date">Aug 2023</span>
+        <span class="project-meta-sep">·</span>
+        <span class="project-role">Commercial</span>
+      </div>
+      <h2 class="project-title">Center Parcs</h2>
+      <p class="project-context">Promotional film</p>
+      <p class="project-desc">
+        Promotional piece for Center Parcs holiday parks.
+      </p>
+    </div>
+  </div>
+</article>
+
+
+<article class="timeline-item"
+  data-year="2023"
+  data-month="4"
+  data-category="fiction"
+  data-bg="het-plan.png"
+  data-meta="Fiction · Student film · Apr 2023"
+  data-images="het-plan-1.png,het-plan-2.png,het-plan-3.png"
+  data-desc="Fiction short made as a student project. In the overlay: three stills from the film plus a short context text.">
+  <div class="timeline-year"></div>
+  <div class="timeline-card">
+    <div class="timeline-content">
+      <div class="project-meta">
+        <span class="project-date">Apr 2023</span>
+        <span class="project-meta-sep">·</span>
+        <span class="project-role">Fiction · Student film</span>
+      </div>
+      <h2 class="project-title">Het Plan</h2>
+      <p class="project-context">Narrative short film</p>
+      <p class="project-desc">
+        Student fiction project exploring narrative and character.
+      </p>
+    </div>
+  </div>
+</article>
+
+
+        <article class="timeline-item"
+          data-year="2023"
+          data-month="2"
+          data-category="nonfiction"
+          data-youtube="https://youtu.be/36PZDkbGybQ"
+          data-bg="charleroi.png"
+          data-meta="Non-fiction · Feb 2023"
+          data-desc="Early documentary exploration in Charleroi. Observational footage and atmospheric city images.">
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="project-meta">
+                <span class="project-date">Feb 2023</span>
+                <span class="project-meta-sep">·</span>
+                <span class="project-role">Non-fiction</span>
+              </div>
+              <h2 class="project-title">Charleroi</h2>
+              <p class="project-context">Non-fiction piece</p>
+              <p class="project-desc">
+                Observational non-fiction work shot in Charleroi.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline-item"
+          data-year="2023"
+          data-month="1"
+          data-category="nonfiction"
+          data-youtube="https://youtu.be/FODNIKcIMYg"
+          data-bg="french-alps.png"
+          data-meta="Non-fiction · Winter 2023"
+          data-desc="Non-fiction work in the French Alps. Landscape, snow and quiet moments away from the city.">
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="project-meta">
+                <span class="project-date">Winter 2023</span>
+                <span class="project-meta-sep">·</span>
+                <span class="project-role">Non-fiction</span>
+              </div>
+              <h2 class="project-title">French Alps</h2>
+              <p class="project-context">Non-fiction / travel</p>
+              <p class="project-desc">
+                Early non-fiction travel work shot in the French Alps.
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <p class="small-note">
+        ↑ Click on any project tile or its dot in the bar to open a quick overlay with the film
+        and a short description. Use the filters to show only fiction, non-fiction, commercial
+        work or start-up projects.
+      </p>
+    </section>
+  </main>
+
+  <!-- MODAL OVERLAY -->
+  <div class="modal" id="project-modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="modal-title"></div>
+          <div class="modal-meta" id="modal-meta"></div>
+        </div>
+        <button class="modal-close" id="modal-close" aria-label="Close">×</button>
+      </div>
+<div class="modal-video-wrap" id="modal-media"></div>
+<div class="modal-desc" id="modal-desc"></div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const bar = document.getElementById("year-slider-bar");
+      const fill = document.getElementById("year-slider-fill");
+      const handle = document.getElementById("year-slider-handle");
+      const tickElems = Array.from(document.querySelectorAll(".year-tick"));
+      const label = document.getElementById("year-slider-active");
+      const items = Array.from(document.querySelectorAll(".timeline-item"));
+      const filterButtons = Array.from(document.querySelectorAll(".nav-filter-btn"));
+
+      const modal = document.getElementById("project-modal");
+      const modalTitle = document.getElementById("modal-title");
+      const modalMeta = document.getElementById("modal-meta");
+      const modalDesc = document.getElementById("modal-desc");
+      const modalMedia = document.getElementById("modal-media");
+      const modalVideo = document.getElementById("modal-video");
+      const modalClose = document.getElementById("modal-close");
+      const modalBackdrop = modal.querySelector(".modal-backdrop");
+      const modalDialog = modal.querySelector(".modal-dialog");
+      const modalVideoWrap = modal.querySelector(".modal-video-wrap");
+
+
+      let currentFilter = "all";
+
+      // Apply background images with left-side gradient
+      items.forEach(el => {
+        const bg = el.dataset.bg;
+        if (!bg) return;
+        const card = el.querySelector(".timeline-content");
+        if (!card) return;
+        card.style.backgroundImage =
+          "linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 32%, rgba(0,0,0,0.25) 68%, rgba(0,0,0,0) 100%), url('" + bg + "')";
+        card.style.backgroundSize = "cover";
+        card.style.backgroundPosition = "center center";
+      });
+
+      // ----- time axis setup: from earliest project (Jan) to NOW -----
+      const yearsInData = items.map(el => parseInt(el.dataset.year, 10));
+      const minYear = Math.min(...yearsInData);
+      const now = new Date();
+      const nowYear = now.getFullYear();
+      const nowMonth = now.getMonth() + 1; // 1..12
+
+      function monthIndex(year, month) {
+        return (year - minYear) * 12 + (month - 1);
+      }
+
+      const maxIndex = monthIndex(nowYear, nowMonth);
+
+      function ratioForYearStart(year) {
+        const idx = monthIndex(year, 1);
+        if (maxIndex <= 0) return 0;
+        let r = idx / maxIndex;
+        if (r < 0) r = 0;
+        if (r > 1) r = 1;
+        return r;
+      }
+
+      function ratioForItem(el) {
+        const y = parseInt(el.dataset.year, 10);
+        const m = parseInt(el.dataset.month || "6", 10);
+        const idx = monthIndex(y, m);
+        if (maxIndex <= 0) return 0.5;
+        let r = idx / maxIndex;
+        if (r < 0) r = 0;
+        if (r > 1) r = 1;
+        return r;
+      }
+
+      // ----- helpers -----
+
+      function visibleItemsForYear(year) {
+        return items.filter(el => {
+          const matchYear = el.dataset.year === String(year);
+          const cat = el.dataset.category;
+          const matchFilter = currentFilter === "all" || cat === currentFilter;
+          return matchYear && matchFilter && !el.classList.contains("hidden");
+        });
+      }
+
+      function scrollToYear(year) {
+        const visible = visibleItemsForYear(year);
+        if (!visible.length) return;
+        const target = visible[0];
+        const top = target.getBoundingClientRect().top + window.scrollY - 90;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+
+      function setActiveYear(year, opts = { scroll: true }) {
+        tickElems.forEach(t => {
+          t.classList.toggle("active", t.dataset.year === String(year));
+        });
+
+        let r = ratioForYearStart(Number(year));
+        // For the current year, extend the fill all the way to "Now"
+        if (Number(year) === nowYear) {
+          r = 1;
+        }
+        const leftPercent = r * 100;
+        handle.style.left = leftPercent + "%";
+        fill.style.width = leftPercent + "%";
+
+        if (year === String(nowYear)) {
+          label.textContent = `${year} (latest)`;
+        } else {
+          label.textContent = String(year);
+        }
+
+        if (opts.scroll) {
+          scrollToYear(year);
+        }
+      }
+
+      function applyFilter(filter) {
+        currentFilter = filter;
+        items.forEach(el => {
+          const cat = el.dataset.category;
+          const show = filter === "all" || cat === filter;
+          el.classList.toggle("hidden", !show);
+        });
+      }
+
+      function positionYearTicks() {
+        tickElems.forEach(t => {
+          const y = Number(t.dataset.year);
+          const r = ratioForYearStart(y);
+          t.style.left = (r * 100) + "%";
+        });
+      }
+
+      // ----- modal logic -----
+
+// ----- modal logic -----
+
+function openModalFromItem(el) {
+  const titleEl = el.querySelector(".project-title");
+  const title = titleEl ? titleEl.textContent.trim() : "Project";
+  const meta = el.dataset.meta || "";
+  const desc = el.dataset.desc || "";
+
+  const singleVideo = el.dataset.video;
+  const multiVideos = el.dataset.videos;
+  const images = el.dataset.images;
+
+  const ytSingle = el.dataset.youtube;
+  const ytMulti = el.dataset.youtubeVideos;
+
+  modalTitle.textContent = title;
+  modalMeta.textContent = meta;
+  modalDesc.textContent = desc;
+
+  // Reset media container + layout state
+  modalMedia.innerHTML = "";
+  modalDialog.classList.remove("no-video");
+
+  function toEmbedSrc(value) {
+    if (!value) return "";
+    const input = value.trim();
+
+    // Already an embed URL
+    if (input.startsWith("https://www.youtube.com/embed/")) {
+      return input;
+    }
+
+    // Try to parse as URL
+    try {
+      const url = new URL(input);
+
+      // youtu.be short link
+      if (url.hostname === "youtu.be") {
+        const id = url.pathname.slice(1);
+        if (id) return "https://www.youtube.com/embed/" + id;
+      }
+
+      // youtube.com / www.youtube.com (normal + shorts)
+      if (
+        url.hostname === "youtube.com" ||
+        url.hostname === "www.youtube.com" ||
+        url.hostname.endsWith(".youtube.com")
+      ) {
+        // Shorts: /shorts/VIDEO_ID
+        if (url.pathname.startsWith("/shorts/")) {
+          const parts = url.pathname.split("/");
+          const id = parts[2] || "";
+          if (id) return "https://www.youtube.com/embed/" + id;
+        }
+
+        // Normal watch URL with ?v=
+        const id = url.searchParams.get("v");
+        if (id) return "https://www.youtube.com/embed/" + id;
+      }
+    } catch (e) {
+      // not a full URL, maybe just an ID
+    }
+
+    // If it's not a URL and not an embed, assume it's a plain ID
+    if (!input.startsWith("http")) {
+      return "https://www.youtube.com/embed/" + input;
+    }
+
+    // Fallback (shouldn't normally be hit)
+    return input;
+  }
+
+  function addIframe(value) {
+    const src = toEmbedSrc(value);
+    if (!src) return;
+    const iframe = document.createElement("iframe");
+    iframe.src = src;
+    iframe.allow =
+      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    iframe.allowFullscreen = true;
+    iframe.loading = "lazy";
+    iframe.setAttribute("title", title + " — YouTube video");
+    modalMedia.appendChild(iframe);
+  }
+
+  // Decide what to show inside the modal
+  if (images) {
+    // One or more still images
+    images.split(",").map(s => s.trim()).forEach(src => {
+      if (!src) return;
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = title + " still";
+      img.style.width = "100%";
+      img.style.display = "block";
+      img.style.borderRadius = "10px";
+      modalMedia.appendChild(img);
+    });
+  } else if (ytMulti) {
+    // Multiple YouTube videos
+    ytMulti.split(",").map(s => s.trim()).forEach(addIframe);
+  } else if (ytSingle) {
+    // Single YouTube video
+    addIframe(ytSingle);
+  } else if (multiVideos) {
+    // Fallback: multiple local MP4s (if you still use them)
+    multiVideos.split(",").map(s => s.trim()).forEach(src => {
+      if (!src) return;
+      const v = document.createElement("video");
+      v.controls = true;
+      v.src = src;
+      modalMedia.appendChild(v);
+    });
+  } else if (singleVideo) {
+    // Fallback: one local MP4
+    const v = document.createElement("video");
+    v.controls = true;
+    v.src = singleVideo;
+    modalMedia.appendChild(v);
+  } else {
+    // Text-only (e.g. ChargeLink story)
+    modalDialog.classList.add("no-video");
+  }
+
+  modal.classList.add("open");
+  document.body.classList.add("modal-open");
+}
+
+function closeModal() {
+  modal.classList.remove("open");
+  document.body.classList.remove("modal-open");
+  modalDialog.classList.remove("no-video");
+
+  // Pause and clear any HTML5 videos
+  const vids = modalMedia.querySelectorAll("video");
+  vids.forEach(v => {
+    try {
+      if (!v.paused) v.pause();
+    } catch (e) {}
+    v.removeAttribute("src");
+  });
+
+  // Stop YouTube iframes as well
+  const iframes = modalMedia.querySelectorAll("iframe");
+  iframes.forEach(f => {
+    try {
+      f.src = "";
+    } catch (e) {}
+  });
+
+  // Clear media content
+  modalMedia.innerHTML = "";
+}
+
+
+      modalClose.addEventListener("click", closeModal);
+      modalBackdrop.addEventListener("click", closeModal);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.classList.contains("open")) {
+          closeModal();
+        }
+      });
+
+      // ----- filter buttons -----
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const filter = btn.dataset.filter;
+          filterButtons.forEach(b => b.classList.toggle("active", b === btn));
+          applyFilter(filter);
+
+          const activeTick =
+            document.querySelector(".year-tick.active") ||
+            tickElems[tickElems.length - 1];
+          if (activeTick) {
+            setActiveYear(activeTick.dataset.year, { scroll: true });
+          }
+        });
+      });
+
+      // ----- year ticks -----
+
+      tickElems.forEach(tick => {
+        tick.addEventListener("click", () => {
+          const year = tick.dataset.year;
+          setActiveYear(year, { scroll: true });
+        });
+      });
+
+      // ----- slider hover -----
+
+      if (bar) {
+        bar.addEventListener("mousemove", (e) => {
+          const rect = bar.getBoundingClientRect();
+          let pos = e.clientX - rect.left;
+          pos = Math.max(0, Math.min(pos, rect.width));
+          handle.style.left = (pos / rect.width * 100) + "%";
+          fill.style.width = (pos / rect.width * 100) + "%";
+
+          let closestTick = tickElems[0];
+          let minDist = Infinity;
+          tickElems.forEach(t => {
+            const tr = t.getBoundingClientRect();
+            const center = tr.left + tr.width / 2;
+            const dist = Math.abs(center - e.clientX);
+            if (dist < minDist) {
+              minDist = dist;
+              closestTick = t;
+            }
+          });
+
+          if (closestTick) {
+            const year = closestTick.dataset.year;
+            label.textContent =
+              year === String(nowYear) ? `${year} (latest)` : year;
+          }
+        });
+
+        bar.addEventListener("mouseleave", () => {
+          const active =
+            document.querySelector(".year-tick.active") ||
+            tickElems[tickElems.length - 1];
+          if (active) {
+            setActiveYear(active.dataset.year, { scroll: false });
+          }
+        });
+      }
+
+      // ----- make timeline items open modal -----
+
+      items.forEach(el => {
+        el.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          openModalFromItem(el);
+        });
+      });
+
+      // ----- project dots on slider -----
+
+      function createProjectDots() {
+        if (!bar || !items.length) return;
+
+        items.forEach(el => {
+          const r = ratioForItem(el);
+          const leftPercent = r * 100;
+
+          const dot = document.createElement("button");
+          dot.type = "button";
+          const cat = el.dataset.category || "default";
+          dot.className = "project-dot project-dot--" + cat;
+          dot.style.left = leftPercent + "%";
+
+          const titleEl = el.querySelector(".project-title");
+          const title = titleEl ? titleEl.textContent.trim() : "Project";
+          dot.title = title;
+
+          dot.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            openModalFromItem(el);
+          });
+
+          bar.appendChild(dot);
+        });
+      }
+
+      // ----- init -----
+      positionYearTicks();
+      createProjectDots();
+
+      const defaultTick =
+        document.querySelector(".year-tick.active") ||
+        tickElems[tickElems.length - 1];
+      if (defaultTick) {
+        setActiveYear(defaultTick.dataset.year, { scroll: false });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -49,7 +49,134 @@
     }
 
     header {
-      margin-bottom: 2.5rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+
+        .hero-top {
+      display: flex;
+      align-items: stretch;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-main {
+      flex: 1 1 60%;
+      min-width: 0;
+    }
+
+.current-work {
+  position: relative;
+  flex: 0 0 400px;
+  max-width: 320px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(34, 197, 94, 0.8); /* greenish base */
+  box-shadow: var(--shadow-soft);
+  background: #020617;
+  isolation: isolate;
+  animation: currentBlink 1.5s ease-in-out infinite alternate;
+}
+
+
+    .current-work-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      z-index: 0;
+    }
+
+    .current-work-bg-half {
+      flex: 1;
+      background-size: cover;
+      background-position: center;
+      opacity: 1;
+    }
+
+    .current-work-bg-half.left {
+      background-image: url("left-side-current.png");
+    }
+
+    .current-work-bg-half.right {
+      background-image: url("right-side-current.png");
+    }
+
+    .current-work-content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      padding: 0.9rem 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.85),
+        rgba(15, 23, 42, 0.6)
+      );
+      backdrop-filter: blur(6px);
+    }
+
+.current-work-connector {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0; /* JS will stretch this */
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  transform-origin: left center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+    .current-work-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+.current-work-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #22c55e; /* stays green, no animation */
+}
+
+
+
+    .current-work-list {
+      list-style: none;
+      font-size: 0.82rem;
+      color: #e5e7eb;
+      display: grid;
+      gap: 0.15rem;
+    }
+
+    .current-work-list li::before {
+      content: "• ";
+      opacity: 0.7;
+    }
+
+    .current-work-footer {
+      margin-top: 0.4rem;
+      font-size: 0.7rem;
+      color: rgba(209, 213, 219, 0.85);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    @media (max-width: 720px) {
+      .hero-top {
+        flex-direction: column;
+      }
+      .current-work {
+        flex: 1 1 auto;
+        max-width: 100%;
+      }
     }
 
     .tagline {
@@ -192,8 +319,7 @@
       z-index: 2;
     }
 
-    /* NOW marker on the bar */
-    .year-now-marker {
+.year-now-marker {
       position: absolute;
       right: 0;
       top: 50%;
@@ -202,9 +328,10 @@
       height: 12px;
       border-radius: 999px;
       background: #22c55e;
-      border: 2px solid #020617;
+      border: 2px solid #022c15;
       box-shadow: 0 0 0 4px rgba(34,197,94,0.45);
       z-index: 1;
+      animation: currentBlink 1.5s ease-in-out infinite alternate;
     }
 
     .year-slider-ticks {
@@ -350,6 +477,16 @@
   max-height: 540px;
 }
 
+@keyframes currentBlink {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    border-color: rgba(34, 197, 94, 1);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+    border-color: rgba(34, 197, 94, 0.6);
+  }
+}
 
     /* TIMELINE */
 
@@ -693,16 +830,36 @@
 <body>
   <main class="page">
     <header>
-      <div class="tagline">
-        <span class="tagline-dot"></span>
-        <span>Portfolio · 2023 → Now</span>
+      <div class="hero-top">
+        <div class="hero-main">
+          <div class="tagline">
+            <span class="tagline-dot"></span>
+            <span>Portfolio timeline · 2023 → Now</span>
+          </div>
+          <h1>Martijn Coenen</h1>
+          <p class="subtitle">
+            Cinematographer &amp; filmmaker in training. A simple overview of my work,
+            from early non-fiction experiments to commercial shoots and start-up work.
+          </p>
+        </div>
+
+        <aside class="current-work" aria-label="What I'm currently working on">
+          <div class="current-work-bg">
+            <div class="current-work-bg-half left"></div>
+            <div class="current-work-bg-half right"></div>
+          </div>
+          <div class="current-work-content">
+            <div>
+              <div class="current-work-title">Ongoing projects</div>
+              <ul class="current-work-list">
+                <li>Master documentary <strong>Erwin</strong></li>
+                <li><strong>ChargeLink</strong>, on-set battery monitoring. <strong> Testing on proffessional sets</strong></li>
+              </ul>
+            </div>
+            <div class="current-work-footer">2025 · In development</div>
+          </div>
+        </aside>
       </div>
-      <h1>Martijn Coenen</h1>
-      <p class="subtitle">
-        Cinematographer &amp; filmmaker in training. A simple overview of my work,
-        from early non-fiction experiments to commercial shoots and my start-up.
-        </a>.
-      </p>
 
       <!-- FILTER NAV -->
       <nav class="nav-filters" aria-label="Filter projects by type">
@@ -746,6 +903,11 @@
           Viewing year: <span id="year-slider-active">2025 (latest)</span>
         </div>
       </section>
+      <div
+  class="current-work-connector"
+  id="current-work-connector"
+  aria-hidden="true"
+></div>
     </header>
 
     <!-- SHOWREEL SECTION -->
@@ -777,7 +939,7 @@
           data-year="2025"
           data-month="4"
           data-category="fiction"
-          data-youtube="https://youtu.be/lTt3Nh-3te0"
+          data-youtube="https://youtu.be/d6mLxZtf8oM"
           data-bg="red-tape.png"
           data-meta="Fiction · Short film · May 2025"
           data-desc="Fiction about a young North-Korean soldier in a modern drone war. A mix of war-movie tension and intimate inner monologue. Shot as a bachelor project with a focus on mood, point of view and the machinery of war.">
@@ -1032,7 +1194,7 @@
   data-category="commercial"
   data-bg="stop-motion.png"
   data-meta="Commercial / Coenenvideo · Sep 2023"
-  data-youtube="https://youtube.com/shorts/pQb5z1YuUus"
+  data-youtube="https://youtube.com/shorts/jOl4QCwfndk?feature=share https://youtube.com/shorts/-6WdlFwqjok?feature=share https://youtube.com/shorts/pQb5z1YuUus"
   data-desc="Stop-motion experiment as three vertical clips for Instagram, shown together in the overlay.">
   <div class="timeline-year"></div>
   <div class="timeline-card">
@@ -1057,8 +1219,7 @@
   data-category="commercial"
   data-bg="center-parcs.png"
   data-meta="Commercial · Aug 2023"
-  data-youtube="https://youtube.com/shorts/98gC1yp5sZw?feature=share"
-  data-youtube="https://youtube.com/shorts/nhVqc-_7kZE?feature=share"
+  data-videos="center-parcs-1.mp4,center-parcs-2.mp4"
   data-desc="Promotional work for Center Parcs shown in the overlay as two vertical cuts and some context text.">
   <div class="timeline-year"></div>
   <div class="timeline-card">
@@ -1199,6 +1360,35 @@
       const modalBackdrop = modal.querySelector(".modal-backdrop");
       const modalDialog = modal.querySelector(".modal-dialog");
       const modalVideoWrap = modal.querySelector(".modal-video-wrap");
+
+            function positionCurrentWorkConnector() {
+        const header = document.querySelector("header");
+        const connector = document.getElementById("current-work-connector");
+        const box = document.querySelector(".current-work");
+        const nowDot = document.querySelector(".year-now-marker");
+
+        if (!header || !connector || !box || !nowDot) return;
+
+        const headerRect = header.getBoundingClientRect();
+        const boxRect = box.getBoundingClientRect();
+        const dotRect = nowDot.getBoundingClientRect();
+
+        // start: bottom center of the tile
+        const startX = boxRect.left + boxRect.width / 2 - headerRect.left;
+        const startY = boxRect.bottom - headerRect.top;
+
+        // end: center of the "now" dot
+        const endX = dotRect.left + dotRect.width / 2 - headerRect.left;
+        const endY = dotRect.top + dotRect.height / 2 - headerRect.top;
+
+        const dx = endX - startX;
+        const dy = endY - startY;
+        const length = Math.hypot(dx, dy);
+        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+        connector.style.width = `${length}px`;
+        connector.style.transform = `translate(${startX}px, ${startY}px) rotate(${angle}deg)`;
+      }
 
 
       let currentFilter = "all";

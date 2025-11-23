@@ -28,7 +28,7 @@
         "Segoe UI", sans-serif;
       background-color: var(--bg);
       /* static, not stretched background image at original size */
-      background-image: url("background.png");
+      background-image: url("background2.png");
       background-repeat: no-repeat;
       background-position: center top;
       background-attachment: fixed;
@@ -585,13 +585,13 @@
 
     /* TIMELINE */
 
-    .timeline-shell {
-      background: radial-gradient(circle at top left, #1b1b1b, #0e0e0f 5%);
-      border-radius: 24px;
-      padding: 1.5rem 1.5rem 2rem;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(48, 49, 50, 0.9);
-    }
+.timeline-shell {
+  background: transparent;  /* or just delete the background line entirely */
+  border-radius: 24px;
+  padding: 1.5rem 1.5rem 2rem;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(48, 49, 50, 0.9);
+}
 
     .timeline-header {
       display: flex;
@@ -947,6 +947,22 @@
   display: none;
 }
 
+    .contact-footer {
+      margin-top: 1.8rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .contact-footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .contact-footer a:hover {
+      text-decoration: underline;
+    }
+
   </style>
 </head>
 <body>
@@ -1147,7 +1163,7 @@
           data-month="10"
           data-category="commercial"
           data-youtube="https://youtube.com/shorts/MErni7Tqt3U?feature=share"
-          data-bg="ford-mustang.png"
+          data-bg="ford-mustang2.png"
           data-meta="Commercial · Automotive · Oct 2024"
           data-desc="Classic automotive stop motion reel for ford mustang their socials.">
           <div class="timeline-year"></div>
@@ -1172,7 +1188,7 @@
           data-month="8"
           data-category="commercial"
           data-youtube="https://youtube.com/shorts/kr07lYuYOkg?feature=share"
-          data-bg="audi-etron-gt.png"
+          data-bg="audi-etron-gt2.png"
           data-meta="Commercial · Automotive · Aug 2024"
           data-desc="Sleek automotive reel around the Audi electric car for all of their socials, for world EV day.">
           <div class="timeline-year"></div>
@@ -1272,7 +1288,7 @@
           data-month="3"
           data-category="commercial"
           data-youtube="https://youtube.com/shorts/_Xo8MeMOYPU?feature=share"
-          data-bg="aston-martin.png"
+          data-bg="aston-martin1.png"
           data-meta="Commercial · Automotive · Mar 2024"
           data-desc="My first opportunity thanks to my work on Coenenvideo, to create an edit for Aston Martin's socials. A stop motion reel showcasing the car in a dynamic way.">
           <div class="timeline-year"></div>
@@ -1453,6 +1469,16 @@
       </p>
     </section>
   </main>
+
+    <footer class="contact-footer">
+    <p>
+      Contact ·
+      <a href="mailto:Martijn.coenen@student.luca-arts.be">
+        Martijn.coenen@student.luca-arts.be
+      </a>
+    </p>
+  </footer>
+
 
   <!-- MODAL OVERLAY -->
   <div class="modal" id="project-modal" aria-hidden="true">

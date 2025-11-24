@@ -119,18 +119,6 @@
       backdrop-filter: blur(6px);
     }
 
-.current-work-connector {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 2px;
-  width: 0; /* JS will stretch this */
-  background: linear-gradient(90deg, #22c55e, #4ade80);
-  transform-origin: left center;
-  pointer-events: none;
-  z-index: 2;
-}
-
     .current-work-label {
       font-size: 0.72rem;
       text-transform: uppercase;
@@ -963,6 +951,131 @@
       text-decoration: underline;
     }
 
+    /* ABOUT BUTTON IN HEADER */
+.about-btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.about-btn:hover {
+  color: #f9fafb;
+}
+
+/* ABOUT MODAL OVERRIDES */
+
+.about-modal .modal-dialog {
+  background: radial-gradient(circle at top left, #111827, #020617 60%);
+  background-image: none;
+}
+
+.about-modal .modal-dialog::before {
+  display: none; /* remove the heavy gradient overlay used for project modals */
+}
+
+.about-header {
+  margin-bottom: 0.75rem;
+}
+
+.about-close {
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.1rem 0.35rem;
+  border-radius: 999px;
+}
+
+.about-close:hover {
+  background: rgba(31, 41, 55, 0.8);
+  color: #e5e7eb;
+}
+
+/* text + photos layout */
+.about-dialog {
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+}
+
+.about-text {
+  font-size: 0.9rem;
+  color: #d1d5db;
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.about-text .about-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.about-photos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.about-photos img {
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+  object-fit: cover;
+}
+
+/* stack text + photos on small screens */
+@media (max-width: 800px) {
+  .about-dialog {
+    grid-template-columns: 1fr;
+  }
+
+  .about-photos {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .about-photos img {
+    width: calc(50% - 0.3rem);
+  }
+}
+
+/* about short/long toggle */
+.about-content {
+  transition: opacity 0.2s ease;
+}
+
+.about-content[hidden] {
+  opacity: 0;
+}
+
+.about-toggle-btn {
+  position: absolute;
+  bottom: 1rem;
+  left: 1.4rem;
+  font-size: 0.7rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.85);
+  color: #e5e7eb;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+}
+
+.about-toggle-btn:hover {
+  border-color: rgba(249, 250, 251, 0.9);
+}
+
+
   </style>
 </head>
 <body>
@@ -971,9 +1084,11 @@
       <div class="hero-top">
         <div class="hero-main">
           <div class="tagline">
-            <div class="tagline-dot"></div>
-            <div>Martijn Coenen · Cinematographer &amp; Filmmaker</div>
-          </div>
+  <div class="tagline-dot"></div>
+  <button class="about-btn" id="about-btn" type="button">
+    About me
+  </button>
+</div>
           <h1>Martijn Coenen</h1>
           <p class="subtitle">
             Cinematographer &amp; filmmaker in training. A simple overview of my work,
@@ -1481,6 +1596,74 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
       </a>
     </p>
   </footer>
+<!-- ABOUT ME MODAL -->
+<div class="modal about-modal" id="about-modal" aria-hidden="true">
+  <div class="modal-backdrop"></div>
+  <div class="modal-dialog about-dialog" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="modal-header about-header">
+      <div>
+        <div class="modal-title">About me</div>
+        <div class="modal-meta">Martijn Coenen · Cinematographer &amp; Filmmaker</div>
+      </div>
+      <button class="about-close" type="button" aria-label="Close about section">×</button>
+    </div>
+
+    <div class="about-text">
+
+  <!-- normal version -->
+  <div class="about-content" id="about-full">
+    <p>
+      I'm Martijn Coenen, a cinematographer and filmmaker in training based in Belgium.
+      I'm doing a Master in Film &amp; TV at LUCA School of Arts in Genk. My work sits
+      between intimate non-fiction, narrative shorts and automotive/commercial pieces.
+      I like staying close to people and situations – my grandmother in her living room,
+      someone having a rough day, a soldier alone in a field in <em>Red Tape</em>. I'm
+      more interested in images that feel honest than images that just look perfect.
+    </p>
+
+    <p>
+      Sometimes I feel that on set we're always chasing "perfect light", but for me
+      overexposure, low dynamic range or noise aren't automatically wrong. I'd rather
+      build a simple setup that gives the right feeling than force a textbook three-point
+      scheme on every frame. Alongside school I co-founded <strong>ChargeLink</strong>,
+      a practical on-set system that tracks camera batteries in real time so crews don't
+      lose takes to dead packs, and I run <strong>Coenenvideo</strong>, a long-running
+      stop-motion and automotive playground where I learned a lot by just making things.
+    </p>
+
+    <p>
+      On set, if I'm in charge, I try to keep things calm and straightforward. I want
+      people to feel genuinely respected, not talked over or forced into a fake "good
+      vibe". Outside of film my life is not some perfect feed either: I waste time on
+      YouTube, stress about deadlines, like cars, long drives, messing with gear and
+      spending time with my grandmother. I'm mainly interested in growing as a director
+      of photography and working with people who care more about what's in front of the
+      camera than about the "perfect" setup.
+    </p>
+  </div>
+
+  <!-- extremely short version -->
+  <div class="about-content about-content-short" id="about-short" hidden>
+    <p>
+      I make films, keep set tech behaving, and look for shots that actually mean something.
+    </p>
+  </div>
+
+  <!-- tiny toggle button (we'll position it bottom-left with CSS) -->
+  <button type="button" class="about-toggle-btn" id="about-toggle-btn">
+    extremely short version
+  </button>
+</div>
+
+
+    <div class="about-photos">
+      <!-- swap these file names for your real images -->
+      <img src="about-1.png" alt="Martijn on set with a camera">
+      <img src="about-2.png" alt="Behind the scenes still">
+      <img src="about-3.png" alt="Landscape or location still">
+    </div>
+  </div>
+</div>
 
 
   <!-- MODAL OVERLAY -->
@@ -1499,503 +1682,521 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
     </div>
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const bar = document.getElementById("year-slider-bar");
-      const fill = document.getElementById("year-slider-fill");
-      const handle = document.getElementById("year-slider-handle");
-      const tickElems = Array.from(document.querySelectorAll(".year-tick"));
-      const label = document.getElementById("year-slider-active");
-      const items = Array.from(document.querySelectorAll(".timeline-item"));
-      const filterButtons = Array.from(document.querySelectorAll(".nav-filter-btn"));
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const bar = document.getElementById("year-slider-bar");
+    const fill = document.getElementById("year-slider-fill");
+    const handle = document.getElementById("year-slider-handle");
+    const tickElems = Array.from(document.querySelectorAll(".year-tick"));
+    const label = document.getElementById("year-slider-active"); // may be null now
+    const items = Array.from(document.querySelectorAll(".timeline-item"));
+    const filterButtons = Array.from(document.querySelectorAll(".nav-filter-btn"));
 
-      const modal = document.getElementById("project-modal");
-      const modalTitle = document.getElementById("modal-title");
-      const modalMeta = document.getElementById("modal-meta");
-      const modalDesc = document.getElementById("modal-desc");
-      const modalMedia = document.getElementById("modal-media");
-      const modalVideo = document.getElementById("modal-video");
-      const modalClose = document.getElementById("modal-close");
-      const modalBackdrop = modal.querySelector(".modal-backdrop");
-      const modalDialog = modal.querySelector(".modal-dialog");
-      const modalVideoWrap = modal.querySelector(".modal-video-wrap");
+    const modal = document.getElementById("project-modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalMeta = document.getElementById("modal-meta");
+    const modalDesc = document.getElementById("modal-desc");
+    const modalMedia = document.getElementById("modal-media");
+    const modalVideo = document.getElementById("modal-video");
+    const modalClose = document.getElementById("modal-close");
+    const modalBackdrop = modal.querySelector(".modal-backdrop");
+    const modalDialog = modal.querySelector(".modal-dialog");
+    const modalVideoWrap = modal.querySelector(".modal-video-wrap");
 
-            function positionCurrentWorkConnector() {
-        const header = document.querySelector("header");
-        const connector = document.getElementById("current-work-connector");
-        const box = document.querySelector(".current-work");
-        const nowDot = document.querySelector(".year-now-marker");
+    // ABOUT ME MODAL ELEMENTS
+    const aboutModal = document.getElementById("about-modal");
+    const aboutOpenBtn = document.getElementById("about-btn");
+    const aboutBackdrop = aboutModal ? aboutModal.querySelector(".modal-backdrop") : null;
+    const aboutClose = aboutModal ? aboutModal.querySelector(".about-close") : null;
 
-        if (!header || !connector || !box || !nowDot) return;
+    function openAboutModal() {
+      if (!aboutModal) return;
+      aboutModal.classList.add("open");
+      document.body.classList.add("modal-open");
+    }
 
-        const headerRect = header.getBoundingClientRect();
-        const boxRect = box.getBoundingClientRect();
-        const dotRect = nowDot.getBoundingClientRect();
+    function closeAboutModal() {
+      if (!aboutModal) return;
+      aboutModal.classList.remove("open");
+      document.body.classList.remove("modal-open");
+    }
+    // About modal short/long toggle
+    const aboutFull = document.getElementById("about-full");
+    const aboutShort = document.getElementById("about-short");
+    const aboutToggleBtn = document.getElementById("about-toggle-btn");
 
-        // start: bottom center of the tile
-        const startX = boxRect.left + boxRect.width / 2 - headerRect.left;
-        const startY = boxRect.bottom - headerRect.top;
+    if (aboutFull && aboutShort && aboutToggleBtn) {
+      let showingShort = false;
 
-        // end: center of the "now" dot
-        const endX = dotRect.left + dotRect.width / 2 - headerRect.left;
-        const endY = dotRect.top + dotRect.height / 2 - headerRect.top;
+      aboutToggleBtn.addEventListener("click", () => {
+        showingShort = !showingShort;
 
-        const dx = endX - startX;
-        const dy = endY - startY;
-        const length = Math.hypot(dx, dy);
-        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        aboutFull.hidden = showingShort;
+        aboutShort.hidden = !showingShort;
 
-        connector.style.width = `${length}px`;
-        connector.style.transform = `translate(${startX}px, ${startY}px) rotate(${angle}deg)`;
-      }
+        aboutToggleBtn.textContent = showingShort
+          ? "back to normal version"
+          : "extremely short version";
+      });
+    }
 
+    function positionCurrentWorkConnector() {
+      const header = document.querySelector("header");
+      const connector = document.getElementById("current-work-connector");
+      const box = document.querySelector(".current-work");
+      const nowDot = document.querySelector(".year-now-marker");
 
-      let currentFilter = "all";
+      if (!header || !connector || !box || !nowDot) return;
 
-      // Apply background images with left-side gradient
-      items.forEach(el => {
-        const bg = el.dataset.bg;
-        if (!bg) return;
-        const card = el.querySelector(".timeline-content");
-        if (!card) return;
-        card.style.backgroundImage =
-          "linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 32%, rgba(0,0,0,0.25) 68%, rgba(0,0,0,0) 100%), url('" + bg + "')";
-        card.style.backgroundSize = "cover";
-        card.style.backgroundPosition = "center center";
+      const headerRect = header.getBoundingClientRect();
+      const boxRect = box.getBoundingClientRect();
+      const dotRect = nowDot.getBoundingClientRect();
+
+      const startX = boxRect.left + boxRect.width / 2 - headerRect.left;
+      const startY = boxRect.bottom - headerRect.top;
+
+      const endX = dotRect.left + dotRect.width / 2 - headerRect.left;
+      const endY = dotRect.top + dotRect.height / 2 - headerRect.top;
+
+      const dx = endX - startX;
+      const dy = endY - startY;
+      const length = Math.hypot(dx, dy);
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+      connector.style.width = `${length}px`;
+      connector.style.transform = `translate(${startX}px, ${startY}px) rotate(${angle}deg)`;
+    }
+
+    let currentFilter = "all";
+
+    // Apply background images with left-side gradient
+    items.forEach(el => {
+      const bg = el.dataset.bg;
+      if (!bg) return;
+      const card = el.querySelector(".timeline-content");
+      if (!card) return;
+      card.style.backgroundImage =
+        "linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 32%, rgba(0,0,0,0.25) 68%, rgba(0,0,0,0) 100%), url('" + bg + "')";
+      card.style.backgroundSize = "cover";
+      card.style.backgroundPosition = "center center";
+    });
+
+    // ----- time axis setup: from earliest project (Jan) to NOW -----
+    const yearsInData = items.map(el => parseInt(el.dataset.year, 10));
+    const minYear = Math.min(...yearsInData);
+    const now = new Date();
+    const nowYear = now.getFullYear();
+    const nowMonth = now.getMonth() + 1; // 1..12
+
+    function monthIndex(year, month) {
+      return (year - minYear) * 12 + (month - 1);
+    }
+
+    const maxIndex = monthIndex(nowYear, nowMonth);
+
+    function ratioForYearStart(year) {
+      const idx = monthIndex(year, 1);
+      if (maxIndex <= 0) return 0;
+      let r = idx / maxIndex;
+      if (r < 0) r = 0;
+      if (r > 1) r = 1;
+      return r;
+    }
+
+    function ratioForItem(el) {
+      const y = parseInt(el.dataset.year, 10);
+      const m = parseInt(el.dataset.month || "6", 10);
+      const idx = monthIndex(y, m);
+      if (maxIndex <= 0) return 0.5;
+      let r = idx / maxIndex;
+      if (r < 0) r = 0;
+      if (r > 1) r = 1;
+      return r;
+    }
+
+    // ----- helpers -----
+
+    function visibleItemsForYear(year) {
+      return items.filter(el => {
+        const matchYear = el.dataset.year === String(year);
+        const cat = el.dataset.category;
+        const matchFilter = currentFilter === "all" || cat === currentFilter;
+        return matchYear && matchFilter && !el.classList.contains("hidden");
+      });
+    }
+
+    function scrollToYear(year) {
+      const visible = visibleItemsForYear(year);
+      if (!visible.length) return;
+      const target = visible[0];
+      const top = target.getBoundingClientRect().top + window.scrollY - 90;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+
+    function setActiveYear(year, opts = { scroll: true }) {
+      tickElems.forEach(t => {
+        t.classList.toggle("active", t.dataset.year === String(year));
       });
 
-      // ----- time axis setup: from earliest project (Jan) to NOW -----
-      const yearsInData = items.map(el => parseInt(el.dataset.year, 10));
-      const minYear = Math.min(...yearsInData);
-      const now = new Date();
-      const nowYear = now.getFullYear();
-      const nowMonth = now.getMonth() + 1; // 1..12
-
-      function monthIndex(year, month) {
-        return (year - minYear) * 12 + (month - 1);
+      let r = ratioForYearStart(Number(year));
+      if (Number(year) === nowYear) {
+        r = 1;
       }
+      const leftPercent = r * 100;
+      handle.style.left = leftPercent + "%";
+      fill.style.width = leftPercent + "%";
 
-      const maxIndex = monthIndex(nowYear, nowMonth);
-
-      function ratioForYearStart(year) {
-        const idx = monthIndex(year, 1);
-        if (maxIndex <= 0) return 0;
-        let r = idx / maxIndex;
-        if (r < 0) r = 0;
-        if (r > 1) r = 1;
-        return r;
-      }
-
-      function ratioForItem(el) {
-        const y = parseInt(el.dataset.year, 10);
-        const m = parseInt(el.dataset.month || "6", 10);
-        const idx = monthIndex(y, m);
-        if (maxIndex <= 0) return 0.5;
-        let r = idx / maxIndex;
-        if (r < 0) r = 0;
-        if (r > 1) r = 1;
-        return r;
-      }
-
-      // ----- helpers -----
-
-      function visibleItemsForYear(year) {
-        return items.filter(el => {
-          const matchYear = el.dataset.year === String(year);
-          const cat = el.dataset.category;
-          const matchFilter = currentFilter === "all" || cat === currentFilter;
-          return matchYear && matchFilter && !el.classList.contains("hidden");
-        });
-      }
-
-      function scrollToYear(year) {
-        const visible = visibleItemsForYear(year);
-        if (!visible.length) return;
-        const target = visible[0];
-        const top = target.getBoundingClientRect().top + window.scrollY - 90;
-        window.scrollTo({ top, behavior: "smooth" });
-      }
-
-      function setActiveYear(year, opts = { scroll: true }) {
-        tickElems.forEach(t => {
-          t.classList.toggle("active", t.dataset.year === String(year));
-        });
-
-        let r = ratioForYearStart(Number(year));
-        // For the current year, extend the fill all the way to "Now"
-        if (Number(year) === nowYear) {
-          r = 1;
-        }
-        const leftPercent = r * 100;
-        handle.style.left = leftPercent + "%";
-        fill.style.width = leftPercent + "%";
-
+      // label is optional now
+      if (label) {
         if (year === String(nowYear)) {
           label.textContent = `${year} (latest)`;
         } else {
           label.textContent = String(year);
         }
-
-        if (opts.scroll) {
-          scrollToYear(year);
-        }
       }
 
-      function applyFilter(filter) {
-        currentFilter = filter;
-        items.forEach(el => {
-          const cat = el.dataset.category;
-          const show = filter === "all" || cat === filter;
-          el.classList.toggle("hidden", !show);
-        });
+      if (opts.scroll) {
+        scrollToYear(year);
       }
-
-      function positionYearTicks() {
-        tickElems.forEach(t => {
-          const y = Number(t.dataset.year);
-          const r = ratioForYearStart(y);
-          t.style.left = (r * 100) + "%";
-        });
-      }
-
-      // ----- modal logic -----
-
-// ----- modal logic -----
-
-function openModalFromItem(el) {
-  const titleEl = el.querySelector(".project-title");
-  const title = titleEl ? titleEl.textContent.trim() : "Project";
-  const meta = el.dataset.meta || "";
-  const desc = el.dataset.desc || "";
-  const bg = el.dataset.bg || "";
-
-  const singleVideo = el.dataset.video;
-  const multiVideos = el.dataset.videos;
-  const images = el.dataset.images;
-
-  const ytSingle = el.dataset.youtube;
-  const ytMulti = el.dataset.youtubeVideos;
-
-  modalTitle.textContent = title;
-  modalMeta.textContent = meta;
-  modalDesc.textContent = desc;
-
-  // Set project image as modal background
-  if (bg) {
-    modalDialog.style.backgroundImage = `url('${bg}')`;
-  } else {
-    modalDialog.style.backgroundImage = "none";
-  }
-
-  // Reset media container + layout state
-  modalMedia.innerHTML = "";
-  modalDialog.classList.remove("no-video");
-
-  function toEmbedSrc(value) {
-    if (!value) return "";
-    const input = value.trim();
-
-    // Already an embed URL
-    if (input.startsWith("https://www.youtube.com/embed/")) {
-      return input;
     }
 
-    // Try to parse as URL
-    try {
-      const url = new URL(input);
+    function applyFilter(filter) {
+      currentFilter = filter;
+      items.forEach(el => {
+        const cat = el.dataset.category;
+        const show = filter === "all" || cat === filter;
+        el.classList.toggle("hidden", !show);
+      });
+    }
 
-      // youtu.be short link
-      if (url.hostname === "youtu.be") {
-        const id = url.pathname.slice(1);
-        if (id) return "https://www.youtube.com/embed/" + id;
+    function positionYearTicks() {
+      tickElems.forEach(t => {
+        const y = Number(t.dataset.year);
+        const r = ratioForYearStart(y);
+        t.style.left = (r * 100) + "%";
+      });
+    }
+
+    // ----- modal logic -----
+
+    function openModalFromItem(el) {
+      const titleEl = el.querySelector(".project-title");
+      const title = titleEl ? titleEl.textContent.trim() : "Project";
+      const meta = el.dataset.meta || "";
+      const desc = el.dataset.desc || "";
+      const bg = el.dataset.bg || "";
+
+      const singleVideo = el.dataset.video;
+      const multiVideos = el.dataset.videos;
+      const images = el.dataset.images;
+
+      const ytSingle = el.dataset.youtube;
+      const ytMulti = el.dataset.youtubeVideos;
+
+      modalTitle.textContent = title;
+      modalMeta.textContent = meta;
+      modalDesc.textContent = desc;
+
+      if (bg) {
+        modalDialog.style.backgroundImage = `url('${bg}')`;
+      } else {
+        modalDialog.style.backgroundImage = "none";
       }
 
-      // youtube.com / www.youtube.com (normal + shorts)
-      if (
-        url.hostname === "youtube.com" ||
-        url.hostname === "www.youtube.com" ||
-        url.hostname.endsWith(".youtube.com")
-      ) {
-        // Shorts: /shorts/VIDEO_ID
-        if (url.pathname.startsWith("/shorts/")) {
-          const parts = url.pathname.split("/");
-          const id = parts[2] || "";
-          if (id) return "https://www.youtube.com/embed/" + id;
+      modalMedia.innerHTML = "";
+      modalDialog.classList.remove("no-video");
+
+      function toEmbedSrc(value) {
+        if (!value) return "";
+        const input = value.trim();
+
+        if (input.startsWith("https://www.youtube.com/embed/")) {
+          return input;
         }
 
-        // Normal watch URL with ?v=
-        const id = url.searchParams.get("v");
-        if (id) return "https://www.youtube.com/embed/" + id;
+        try {
+          const url = new URL(input);
+
+          if (url.hostname === "youtu.be") {
+            const id = url.pathname.slice(1);
+            if (id) return "https://www.youtube.com/embed/" + id;
+          }
+
+          if (
+            url.hostname === "youtube.com" ||
+            url.hostname === "www.youtube.com" ||
+            url.hostname.endsWith(".youtube.com")
+          ) {
+            if (url.pathname.startsWith("/shorts/")) {
+              const parts = url.pathname.split("/");
+              const id = parts[2] || "";
+              if (id) return "https://www.youtube.com/embed/" + id;
+            }
+
+            const id = url.searchParams.get("v");
+            if (id) return "https://www.youtube.com/embed/" + id;
+          }
+        } catch (e) {
+          // ignore
+        }
+
+        if (!input.startsWith("http")) {
+          return "https://www.youtube.com/embed/" + input;
+        }
+
+        return input;
       }
-    } catch (e) {
-      // not a full URL, maybe just an ID
+
+      function addIframe(value) {
+        const src = toEmbedSrc(value);
+        if (!src) return;
+        const iframe = document.createElement("iframe");
+        iframe.src = src;
+        iframe.allow =
+          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        iframe.loading = "lazy";
+        iframe.setAttribute("title", title + " — YouTube video");
+        modalMedia.appendChild(iframe);
+      }
+
+      if (images) {
+        images.split(",").map(s => s.trim()).forEach(src => {
+          if (!src) return;
+          const img = document.createElement("img");
+          img.src = src;
+          img.alt = title + " still";
+          img.style.width = "100%";
+          img.style.display = "block";
+          img.style.borderRadius = "10px";
+          modalMedia.appendChild(img);
+        });
+      } else if (ytMulti) {
+        ytMulti.split(",").map(s => s.trim()).forEach(addIframe);
+      } else if (ytSingle) {
+        addIframe(ytSingle);
+      } else if (multiVideos) {
+        multiVideos.split(",").map(s => s.trim()).forEach(src => {
+          if (!src) return;
+          const v = document.createElement("video");
+          v.controls = true;
+          v.src = src;
+          modalMedia.appendChild(v);
+        });
+      } else if (singleVideo) {
+        const v = document.createElement("video");
+        v.controls = true;
+        v.src = singleVideo;
+        modalMedia.appendChild(v);
+      } else {
+        modalDialog.classList.add("no-video");
+      }
+
+      modal.classList.add("open");
+      document.body.classList.add("modal-open");
     }
 
-    // If it's not a URL and not an embed, assume it's a plain ID
-    if (!input.startsWith("http")) {
-      return "https://www.youtube.com/embed/" + input;
+    function closeModal() {
+      modal.classList.remove("open");
+      document.body.classList.remove("modal-open");
+      modalDialog.classList.remove("no-video");
+
+      const vids = modalMedia.querySelectorAll("video");
+      vids.forEach(v => {
+        try {
+          if (!v.paused) v.pause();
+        } catch (e) {}
+        v.removeAttribute("src");
+      });
+
+      const iframes = modalMedia.querySelectorAll("iframe");
+      iframes.forEach(f => {
+        try {
+          f.src = "";
+        } catch (e) {}
+      });
+
+      modalMedia.innerHTML = "";
     }
 
-    // Fallback (shouldn't normally be hit)
-    return input;
-  }
+    modalClose.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", closeModal);
 
-  function addIframe(value) {
-    const src = toEmbedSrc(value);
-    if (!src) return;
-    const iframe = document.createElement("iframe");
-    iframe.src = src;
-    iframe.allow =
-      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-    iframe.allowFullscreen = true;
-    iframe.loading = "lazy";
-    iframe.setAttribute("title", title + " — YouTube video");
-    modalMedia.appendChild(iframe);
-  }
+    if (aboutOpenBtn) {
+      aboutOpenBtn.addEventListener("click", openAboutModal);
+    }
+    if (aboutBackdrop) {
+      aboutBackdrop.addEventListener("click", closeAboutModal);
+    }
+    if (aboutClose) {
+      aboutClose.addEventListener("click", closeAboutModal);
+    }
 
-  // Decide what to show inside the modal
-  if (images) {
-    // One or more still images
-    images.split(",").map(s => s.trim()).forEach(src => {
-      if (!src) return;
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = title + " still";
-      img.style.width = "100%";
-      img.style.display = "block";
-      img.style.borderRadius = "10px";
-      modalMedia.appendChild(img);
-    });
-  } else if (ytMulti) {
-    // Multiple YouTube videos
-    ytMulti.split(",").map(s => s.trim()).forEach(addIframe);
-  } else if (ytSingle) {
-    // Single YouTube video
-    addIframe(ytSingle);
-  } else if (multiVideos) {
-    // Fallback: multiple local MP4s (if you still use them)
-    multiVideos.split(",").map(s => s.trim()).forEach(src => {
-      if (!src) return;
-      const v = document.createElement("video");
-      v.controls = true;
-      v.src = src;
-      modalMedia.appendChild(v);
-    });
-  } else if (singleVideo) {
-    // Fallback: one local MP4
-    const v = document.createElement("video");
-    v.controls = true;
-    v.src = singleVideo;
-    modalMedia.appendChild(v);
-  } else {
-    // Text-only (e.g. ChargeLink story)
-    modalDialog.classList.add("no-video");
-  }
-
-  modal.classList.add("open");
-  document.body.classList.add("modal-open");
-}
-
-function closeModal() {
-  modal.classList.remove("open");
-  document.body.classList.remove("modal-open");
-  modalDialog.classList.remove("no-video");
-
-  // Pause and clear any HTML5 videos
-  const vids = modalMedia.querySelectorAll("video");
-  vids.forEach(v => {
-    try {
-      if (!v.paused) v.pause();
-    } catch (e) {}
-    v.removeAttribute("src");
-  });
-
-  // Stop YouTube iframes as well
-  const iframes = modalMedia.querySelectorAll("iframe");
-  iframes.forEach(f => {
-    try {
-      f.src = "";
-    } catch (e) {}
-  });
-
-  // Clear media content
-  modalMedia.innerHTML = "";
-}
-
-
-      modalClose.addEventListener("click", closeModal);
-      modalBackdrop.addEventListener("click", closeModal);
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.classList.contains("open")) {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        if (modal.classList.contains("open")) {
           closeModal();
         }
-      });
-
-      // ----- filter buttons -----
-
-      filterButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-          const filter = btn.dataset.filter;
-
-          // active state on buttons
-          filterButtons.forEach(b => b.classList.toggle("active", b === btn));
-
-          // show/hide timeline items
-          applyFilter(filter);
-
-          // show/hide showreel
-          const showreel = document.querySelector(".showreel-section");
-          if (showreel) {
-            showreel.style.display = (filter === "all") ? "" : "none";
-          }
-
-          // keep year slider behavior
-          const activeTick =
-            document.querySelector(".year-tick.active") ||
-            tickElems[tickElems.length - 1];
-          if (activeTick) {
-            setActiveYear(activeTick.dataset.year, { scroll: false });
-          }
-        });
-      });
-
-      // ----- year ticks -----
-
-      tickElems.forEach(tick => {
-        tick.addEventListener("click", () => {
-          const year = tick.dataset.year;
-          setActiveYear(year, { scroll: true });
-        });
-      });
-
-      // ----- slider hover -----
-
-      if (bar) {
-        bar.addEventListener("mousemove", (e) => {
-          const rect = bar.getBoundingClientRect();
-          let pos = e.clientX - rect.left;
-          pos = Math.max(0, Math.min(pos, rect.width));
-          handle.style.left = (pos / rect.width * 100) + "%";
-          fill.style.width = (pos / rect.width * 100) + "%";
-
-          let closestTick = tickElems[0];
-          let minDist = Infinity;
-          tickElems.forEach(t => {
-            const tr = t.getBoundingClientRect();
-            const center = tr.left + tr.width / 2;
-            const dist = Math.abs(center - e.clientX);
-            if (dist < minDist) {
-              minDist = dist;
-              closestTick = t;
-            }
-          });
-
-          if (closestTick) {
-            const year = closestTick.dataset.year;
-            label.textContent =
-              year === String(nowYear) ? `${year} (latest)` : year;
-          }
-        });
-
-        bar.addEventListener("mouseleave", () => {
-          const active =
-            document.querySelector(".year-tick.active") ||
-            tickElems[tickElems.length - 1];
-          if (active) {
-            setActiveYear(active.dataset.year, { scroll: false });
-          }
-        });
+        if (aboutModal && aboutModal.classList.contains("open")) {
+          closeAboutModal();
+        }
       }
+    });
 
-      // ----- make timeline items open modal -----
+    // ----- filter buttons -----
+    filterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const filter = btn.dataset.filter;
+
+        filterButtons.forEach(b => b.classList.toggle("active", b === btn));
+
+        applyFilter(filter);
+
+        const showreel = document.querySelector(".showreel-section");
+        if (showreel) {
+          showreel.style.display = (filter === "all") ? "" : "none";
+        }
+
+        const activeTick =
+          document.querySelector(".year-tick.active") ||
+          tickElems[tickElems.length - 1];
+        if (activeTick) {
+          setActiveYear(activeTick.dataset.year, { scroll: false });
+        }
+      });
+    });
+
+    // ----- year ticks -----
+    tickElems.forEach(tick => {
+      tick.addEventListener("click", () => {
+        const year = tick.dataset.year;
+        setActiveYear(year, { scroll: true });
+      });
+    });
+
+    // ----- slider hover -----
+    if (bar) {
+      bar.addEventListener("mousemove", (e) => {
+        const rect = bar.getBoundingClientRect();
+        let pos = e.clientX - rect.left;
+        pos = Math.max(0, Math.min(pos, rect.width));
+        handle.style.left = (pos / rect.width * 100) + "%";
+        fill.style.width = (pos / rect.width * 100) + "%";
+
+        let closestTick = tickElems[0];
+        let minDist = Infinity;
+        tickElems.forEach(t => {
+          const tr = t.getBoundingClientRect();
+          const center = tr.left + tr.width / 2;
+          const dist = Math.abs(center - e.clientX);
+          if (dist < minDist) {
+            minDist = dist;
+            closestTick = t;
+          }
+        });
+
+        if (closestTick && label) {
+          const year = closestTick.dataset.year;
+          label.textContent =
+            year === String(nowYear) ? `${year} (latest)` : year;
+        }
+      });
+
+      bar.addEventListener("mouseleave", () => {
+        const active =
+          document.querySelector(".year-tick.active") ||
+          tickElems[tickElems.length - 1];
+        if (active) {
+          setActiveYear(active.dataset.year, { scroll: false });
+        }
+      });
+    }
+
+    // ----- make timeline items open modal -----
+    items.forEach(el => {
+      el.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        openModalFromItem(el);
+      });
+    });
+
+    // ----- project dots on slider -----
+    function createProjectDots() {
+      if (!bar || !items.length) return;
+
+      const preview = document.getElementById("year-preview");
+      const previewTitle = preview ? preview.querySelector(".year-preview-title-text") : null;
+      const slider = document.querySelector(".year-slider");
 
       items.forEach(el => {
-        el.addEventListener("click", (ev) => {
+        const r = ratioForItem(el);
+        const leftPercent = r * 100;
+
+        const dot = document.createElement("button");
+        dot.type = "button";
+        const cat = el.dataset.category || "default";
+        dot.className = "project-dot project-dot--" + cat;
+        dot.style.left = leftPercent + "%";
+
+        const titleEl = el.querySelector(".project-title");
+        const title = titleEl ? titleEl.textContent.trim() : "Project";
+        dot.title = title;
+
+        const bg = el.dataset.bg || "";
+
+        dot.addEventListener("click", (ev) => {
           ev.stopPropagation();
           openModalFromItem(el);
         });
-      });
 
-      // ----- project dots on slider -----
+        const showPreview = () => {
+          if (!preview || !previewTitle || !slider) return;
 
-      function createProjectDots() {
-        if (!bar || !items.length) return;
-
-        const preview = document.getElementById("year-preview");
-        const previewImg = preview ? preview.querySelector("img") : null;
-        const previewTitle = preview ? preview.querySelector(".year-preview-title-text") : null;
-        const slider = document.querySelector(".year-slider");
-
-        items.forEach(el => {
-          const r = ratioForItem(el);
-          const leftPercent = r * 100;
-
-          const dot = document.createElement("button");
-          dot.type = "button";
-          const cat = el.dataset.category || "default";
-          dot.className = "project-dot project-dot--" + cat;
-          dot.style.left = leftPercent + "%";
-
-          const titleEl = el.querySelector(".project-title");
-          const title = titleEl ? titleEl.textContent.trim() : "Project";
-          dot.title = title;
-
-          // image for preview: use data-bg (your PNG)
-          const bg = el.dataset.bg || "";
-
-          dot.addEventListener("click", (ev) => {
-            ev.stopPropagation();
-            openModalFromItem(el);
-          });
-
-          const showPreview = () => {
-  if (!preview || !previewTitle || !slider) return;
-
-  if (!bg) {
-    preview.classList.remove("visible");
-    return;
-  }
-
-  // set full background image on the preview itself
-  preview.style.backgroundImage = `url(${bg})`;
-  previewTitle.textContent = title;
-
-  // position horizontally under the dot
-  const sliderRect = slider.getBoundingClientRect();
-  const dotRect = dot.getBoundingClientRect();
-  const centerX = dotRect.left + dotRect.width / 2 - sliderRect.left;
-  preview.style.left = centerX + "px";
-
-  preview.classList.add("visible");
-};
-
-
-          const hidePreview = () => {
-            if (!preview) return;
+          if (!bg) {
             preview.classList.remove("visible");
-          };
+            return;
+          }
 
-          dot.addEventListener("mouseenter", showPreview);
-          dot.addEventListener("mouseleave", hidePreview);
-          dot.addEventListener("focus", showPreview);
-          dot.addEventListener("blur", hidePreview);
+          preview.style.backgroundImage = `url(${bg})`;
+          previewTitle.textContent = title;
 
-          bar.appendChild(dot);
-        });
-      }
+          const sliderRect = slider.getBoundingClientRect();
+          const dotRect = dot.getBoundingClientRect();
+          const centerX = dotRect.left + dotRect.width / 2 - sliderRect.left;
+          preview.style.left = centerX + "px";
 
+          preview.classList.add("visible");
+        };
 
-      // ----- init -----
-      positionYearTicks();
-      createProjectDots();
+        const hidePreview = () => {
+          if (!preview) return;
+          preview.classList.remove("visible");
+        };
 
-      const defaultTick =
-        document.querySelector(".year-tick.active") ||
-        tickElems[tickElems.length - 1];
-      if (defaultTick) {
-        setActiveYear(defaultTick.dataset.year, { scroll: false });
-      }
-    });
-  </script>
+        dot.addEventListener("mouseenter", showPreview);
+        dot.addEventListener("mouseleave", hidePreview);
+        dot.addEventListener("focus", showPreview);
+        dot.addEventListener("blur", hidePreview);
+
+        bar.appendChild(dot);
+      });
+    }
+
+    // ----- init -----
+    positionYearTicks();
+    createProjectDots();
+
+    const defaultTick =
+      document.querySelector(".year-tick.active") ||
+      tickElems[tickElems.length - 1];
+    if (defaultTick) {
+      setActiveYear(defaultTick.dataset.year, { scroll: false });
+    }
+
+    window.addEventListener("resize", positionCurrentWorkConnector);
+    positionCurrentWorkConnector();
+  });
+</script>
+
 </body>
 </html>

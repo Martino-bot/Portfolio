@@ -621,13 +621,72 @@
     .cl-specs li span:last-child { color: var(--text); text-align: right; }
 
     .cl-model-slot {
+      position: relative;
       aspect-ratio: 4 / 3;
-      border: 1px dashed var(--line-strong);
-      display: grid;
-      place-content: center;
-      justify-items: center;
-      gap: 0.35rem;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      background:
+        radial-gradient(120% 100% at 50% 0%, rgba(61,220,132,0.05), transparent 60%),
+        var(--bg);
+    }
+    .cl-model {
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      --poster-color: transparent;
+      --progress-bar-color: var(--live);
+      animation: clFloat 6s ease-in-out infinite;
+    }
+    /* ChargeLink feature becomes a single layered column with the hub behind it. */
+    .cl-feature { display: block; position: relative; }
+    .cl-feature > .feature-copy { position: relative; z-index: 2; max-width: 34rem; }
+    .cl-feature > .cl-timeline,
+    .cl-feature > .cl-expand { position: relative; z-index: 2; }
+    /* dark scrim between the model and the content so text stays readable */
+    .cl-feature::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(90deg,
+        var(--bg) 0%,
+        rgba(7,7,8,0.82) 30%,
+        rgba(7,7,8,0.18) 62%,
+        transparent 88%);
+    }
+    /* Big passive hub, raised and angled, floating behind everything. Not draggable. */
+    .cl-model--bg {
+      position: absolute;
+      z-index: 0;
+      top: -10%;
+      right: -6%;
+      width: 74%;
+      height: 120%;
+      pointer-events: none;
+    }
+    @media (max-width: 760px) {
+      .cl-feature > .feature-copy { max-width: none; }
+      .cl-feature::before {
+        background: linear-gradient(180deg, transparent 0%, rgba(7,7,8,0.55) 42%, var(--bg) 82%);
+      }
+      .cl-model--bg { width: 100%; right: 0; top: -4%; height: 58%; opacity: 0.5; }
+    }
+    @keyframes clFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+    .cl-model-cap {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 0.5rem 0.7rem;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--faint);
       text-align: center;
+      pointer-events: none;
+      background: linear-gradient(0deg, rgba(7,7,8,0.7), transparent);
     }
     .cl-model-label { font-size: 0.8rem; letter-spacing: 0.06em; color: var(--muted); }
     .cl-model-sub {
@@ -1438,15 +1497,26 @@
       </article>
 
       <!-- 02 · CHARGELINK -->
-      <article class="feature reverse reveal">
-        <div class="feature-stage" data-parallax>
-          <div class="stage-inner">
-            <div class="stage-depth" data-depth="0.25" style="--img:url('chargelink.png')"></div>
-            <div class="stage-card" data-depth="0.55" style="--img:url('chargelink.png')"></div>
-            <div class="stage-chip" data-depth="1.05" style="--img:url('chargelink2.png'); --chip-pos:50% 50%; background-size:150% auto"></div>
-            <span class="stage-tag" data-depth="1.25"><span class="status-dot"></span> Live · on set</span>
-          </div>
-        </div>
+      <article class="feature cl-feature reveal">
+        <!-- Passive, non-interactive hub turning in the background, behind the text & timeline. -->
+        <model-viewer
+          class="cl-model cl-model--bg"
+          src="chargelink-hub.glb"
+          alt="ChargeLink hub"
+          auto-rotate
+          auto-rotate-delay="0"
+          rotation-per-second="14deg"
+          interaction-prompt="none"
+          disable-zoom
+          shadow-intensity="0"
+          exposure="0.9"
+          environment-image="neutral"
+          camera-orbit="0deg 58deg auto"
+          field-of-view="28deg"
+          loading="lazy"
+          reveal="auto"
+          tabindex="-1"
+          aria-hidden="true"></model-viewer>
         <div class="feature-copy">
           <div class="feature-index">02 <span class="bar"></span></div>
           <div class="feature-kicker live"><span class="status-dot"></span> Current work · Co-founder</div>
@@ -1535,8 +1605,23 @@
                 <div class="cl-x-title">The hardware</div>
                 <!-- 3D models (hub + node) will be mounted here later -->
                 <div class="cl-model-slot" id="cl-model-slot">
-                  <span class="cl-model-label">Hub &amp; node — interactive 3D</span>
-                  <span class="cl-model-sub">coming soon</span>
+                  <model-viewer
+                    class="cl-model"
+                    src="chargelink-hub.glb"
+                    alt="ChargeLink hub — interactive 3D model"
+                    camera-controls
+                    auto-rotate
+                    auto-rotate-delay="0"
+                    rotation-per-second="20deg"
+                    interaction-prompt="none"
+                    disable-zoom
+                    shadow-intensity="0.6"
+                    shadow-softness="1"
+                    exposure="1"
+                    environment-image="neutral"
+                    loading="lazy"
+                  ></model-viewer>
+                  <span class="cl-model-cap">ChargeLink hub · drag to rotate · node coming soon</span>
                 </div>
               </div>
             </div>
@@ -2559,6 +2644,32 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
         });
       });
 
+      // ---- 3D model-viewer library: load once, lazily ----
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let modelViewerRequested = false;
+      function ensureModelViewer() {
+        if (modelViewerRequested) return;
+        modelViewerRequested = true;
+        if (prefersReduced) {
+          document.querySelectorAll("model-viewer").forEach(mv => mv.removeAttribute("auto-rotate"));
+        }
+        const s = document.createElement("script");
+        s.type = "module";
+        s.src = "https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js";
+        document.head.appendChild(s);
+      }
+      // Load the library as soon as the ChargeLink stage scrolls into view, so the
+      // background hub turns passively even before "More" is clicked.
+      const clFeature = document.querySelector(".cl-feature");
+      if (clFeature && "IntersectionObserver" in window) {
+        const mvObs = new IntersectionObserver((entries) => {
+          if (entries.some(e => e.isIntersecting)) { ensureModelViewer(); mvObs.disconnect(); }
+        }, { rootMargin: "300px" });
+        mvObs.observe(clFeature);
+      } else {
+        ensureModelViewer();
+      }
+
       // ---- ChargeLink "More" expanding detail panel ----
       const clMoreBtn = document.getElementById("cl-more-btn");
       const clExpand = document.getElementById("cl-expand");
@@ -2568,6 +2679,7 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
           const open = clExpand.classList.toggle("open");
           clMoreBtn.setAttribute("aria-expanded", open ? "true" : "false");
           if (clMoreLabel) clMoreLabel.textContent = open ? "Close" : "More";
+          if (open) ensureModelViewer();
         });
       }
 

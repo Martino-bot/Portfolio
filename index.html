@@ -2,1151 +2,1136 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Portfolio Timeline</title>
+  <title>Martijn Coenen — Cinematographer &amp; Filmmaker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Martijn Coenen — cinematographer and filmmaker. Showreel, ChargeLink on-set battery monitoring, and the documentary Bomma &amp; Bompa." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
   <style>
     :root {
-      --bg: #040404;
-      --text: #f9fafb;
-      --muted: #9ca3af;
-      --card-bg: #121214;
-      --border: #4b5563;
-      --accent: #ccd6ea;
-      --accent-soft: rgba(210, 217, 233, 0.25);
-      --radius-lg: 14px;
-      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.9);
+      --bg: #070708;
+      --bg-2: #0c0c0e;
+      --text: #f4f3ef;        /* warm white */
+      --muted: #8d8d88;
+      --faint: #5c5c58;
+      --line: rgba(244, 243, 239, 0.12);
+      --line-strong: rgba(244, 243, 239, 0.22);
+      --live: #3ddc84;        /* single signal colour */
+      --live-soft: rgba(61, 220, 132, 0.22);
+
+      --serif: "Fraunces", Georgia, "Times New Roman", serif;
+      --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+      --radius: 16px;
+      --maxw: 1080px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
+      font-family: var(--sans);
       background-color: var(--bg);
-      /* static, not stretched background image at original size */
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    body.modal-open { overflow: hidden; }
+
+    /* cinematic fixed backdrop, heavily dimmed so content reads */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
       background-image: url("background2.png");
       background-repeat: no-repeat;
       background-position: center top;
-      background-attachment: fixed;
-      background-size: auto;
-      color: var(--text);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-      padding: 2.5rem 1.25rem 3.5rem;
+      background-size: cover;
+      opacity: 0.18;
+      filter: saturate(0.7);
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(120% 80% at 50% -10%, rgba(61,220,132,0.06), transparent 55%),
+        linear-gradient(180deg, rgba(7,7,8,0.55), rgba(7,7,8,0.92) 60%, var(--bg));
     }
 
-    body.modal-open {
-      overflow: hidden;
+    /* subtle film grain over everything */
+    .grain {
+      position: fixed;
+      inset: -50%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.05;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+      mix-blend-mode: overlay;
     }
 
     .page {
-      max-width: 960px;
-      margin: 0 auto;
-    }
-
-    header {
-  margin-bottom: 2.5rem;
-  position: relative;
-}
-
-
-        .hero-top {
-      display: flex;
-      align-items: stretch;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .hero-main {
-      flex: 1 1 60%;
-      min-width: 0;
-    }
-
-.current-work {
-  position: relative;
-  flex: 0 0 400px;
-  max-width: 320px;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 1px solid rgba(34, 197, 94, 0.8); /* greenish base */
-  box-shadow: var(--shadow-soft);
-  background: #020617;
-  isolation: isolate;
-  animation: currentBlink 1.5s ease-in-out infinite alternate;
-}
-
-
-    .current-work-bg {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      z-index: 0;
-    }
-
-    .current-work-bg-half {
-      flex: 1;
-      background-size: cover;
-      background-position: center;
-      opacity: 1;
-    }
-
-    .current-work-bg-half.left {
-      background-image: url("left-side-current.png");
-    }
-
-    .current-work-bg-half.right {
-      background-image: url("right-side-current.png");
-    }
-
-    .current-work-content {
       position: relative;
       z-index: 1;
-      height: 100%;
-      padding: 0.9rem 1rem;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: clamp(2.2rem, 4vw, 3.6rem) clamp(1.1rem, 4vw, 2.4rem) 4rem;
+    }
+
+    a { color: inherit; }
+
+    /* ---------- HEADER ---------- */
+
+    header { margin-bottom: clamp(3rem, 7vw, 5.5rem); }
+
+    .topline {
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: space-between;
-      background: linear-gradient(
-        135deg,
-        rgba(0, 0, 0, 0.85),
-        rgba(15, 23, 42, 0.6)
-      );
-      backdrop-filter: blur(6px);
+      gap: 1rem;
+      margin-bottom: clamp(2.4rem, 6vw, 4rem);
     }
 
-    .current-work-label {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--muted);
-      margin-bottom: 0.25rem;
+    .mark {
+      font-family: var(--serif);
+      font-size: 1rem;
+      letter-spacing: 0.01em;
+      color: var(--text);
     }
+    .mark span { color: var(--faint); }
 
-.current-work-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-  color: #22c55e; /* stays green, no animation */
-}
-
-
-
-    .current-work-list {
-      list-style: none;
-      font-size: 0.82rem;
-      color: #e5e7eb;
-      display: grid;
-      gap: 0.15rem;
-    }
-
-    .current-work-list li::before {
-      content: "• ";
-      opacity: 0.7;
-    }
-
-    .current-work-footer {
-      margin-top: 0.4rem;
-      font-size: 0.7rem;
-      color: rgba(209, 213, 219, 0.85);
-      text-transform: uppercase;
+    .topline-right {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      font-size: 0.78rem;
       letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
 
-    @media (max-width: 720px) {
-      .hero-top {
-        flex-direction: column;
-      }
-      .current-work {
-        flex: 1 1 auto;
-        max-width: 100%;
-      }
-    }
-
-    .tagline {
+    .status {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.3rem 0.75rem;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
       border-radius: 999px;
-      background: rgba(0, 0, 0, 0.75);
-      color: var(--muted);
-      font-size: 0.8rem;
-      margin-bottom: 0.75rem;
-      border: 1px solid rgba(91, 93, 97, 0.7);
+      background: var(--live);
+      box-shadow: 0 0 0 0 var(--live-soft);
+      animation: pulse 2s ease-out infinite;
+    }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 var(--live-soft); }
+      70%  { box-shadow: 0 0 0 7px rgba(61,220,132,0); }
+      100% { box-shadow: 0 0 0 0 rgba(61,220,132,0); }
     }
 
-    .tagline-dot {
-      width: 8px;
-      height: 8px;
+    .about-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s var(--ease);
+    }
+    .about-btn:hover { color: var(--text); }
+
+    .hero-name {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-optical-sizing: auto;
+      font-size: clamp(3.4rem, 11vw, 7.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: clamp(1rem, 2.5vw, 1.6rem);
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .hero-sub {
+      max-width: 40rem;
+      font-size: clamp(1rem, 1.6vw, 1.18rem);
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .hero-sub strong { color: var(--text); font-weight: 500; }
+
+    .scroll-cue {
+      margin-top: clamp(2rem, 5vw, 3.2rem);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .scroll-cue .line {
+      width: 46px; height: 1px;
+      background: var(--line-strong);
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-cue .line::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 40%;
+      background: var(--text);
+      animation: slide 2.4s var(--ease) infinite;
+    }
+    @keyframes slide {
+      0% { transform: translateX(-120%); }
+      60%,100% { transform: translateX(360%); }
+    }
+
+    /* ---------- SECTION HEADINGS ---------- */
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: clamp(1.6rem, 4vw, 2.6rem);
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .section-head h2 {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      letter-spacing: -0.01em;
+    }
+    .section-head .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    /* ---------- FEATURED ---------- */
+
+    .featured { margin-bottom: clamp(3.5rem, 8vw, 6rem); }
+
+    .feature {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+      align-items: center;
+      padding: clamp(2rem, 5vw, 3.6rem) 0;
+      border-top: 1px solid var(--line);
+    }
+    .feature:first-of-type { border-top: none; }
+    .feature.reverse { grid-template-columns: 0.85fr 1.15fr; }
+    .feature.reverse .feature-stage { order: 2; }
+    .feature.reverse .feature-copy { order: 1; }
+
+    /* --- the 2.5D layered stage --- */
+    .feature-stage {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      perspective: 1200px;
+    }
+    .stage-inner {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      transform: rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+      transition: transform 0.4s var(--ease);
+      will-change: transform;
+    }
+
+    /* plane 1 — blurred depth backdrop */
+    .stage-depth {
+      position: absolute;
+      inset: -8%;
+      background-image: var(--img);
+      background-size: cover;
+      background-position: center;
+      filter: blur(26px) brightness(0.5) saturate(0.85);
+      border-radius: 30px;
+      opacity: 0.85;
+      transition: transform 0.5s var(--ease);
+      will-change: transform;
+    }
+    /* plane 2 — the main framed "frame from the film" */
+    .stage-card {
+      position: absolute;
+      inset: 6% 8%;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #0a0a0b center/cover no-repeat;
+      background-image: var(--img);
+      border: 1px solid var(--line-strong);
+      box-shadow:
+        0 2px 0 rgba(255,255,255,0.05) inset,
+        0 30px 60px -20px rgba(0,0,0,0.85);
+      transition: transform 0.5s var(--ease);
+      will-change: transform;
+    }
+    .stage-card video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* gentle vignette so floating elements read */
+    .stage-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(120% 90% at 30% 20%, transparent 40%, rgba(0,0,0,0.45));
+      pointer-events: none;
+    }
+
+    /* plane 3 — the "cut out" detail floating off the frame */
+    .stage-chip {
+      position: absolute;
+      width: 38%;
+      aspect-ratio: 4 / 3;
+      border-radius: 12px;
+      overflow: hidden;
+      background-image: var(--img);
+      background-size: 250% auto;
+      background-position: var(--chip-pos, 70% 55%);
+      border: 1px solid var(--line-strong);
+      box-shadow: 0 24px 45px -16px rgba(0,0,0,0.9);
+      bottom: -6%;
+      right: -5%;
+      transition: transform 0.5s var(--ease);
+      will-change: transform;
+    }
+    .stage-chip::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06) inset;
+      border-radius: 12px;
+    }
+
+    /* plane 4 — glass caption tag */
+    .stage-tag {
+      position: absolute;
+      left: -4%;
+      top: 8%;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: rgba(12,12,14,0.72);
+      border: 1px solid var(--line-strong);
       border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 40px -18px rgba(0,0,0,0.9);
+      transition: transform 0.5s var(--ease);
+      white-space: nowrap;
+    }
+    .stage-tag .status-dot { animation: pulse 2s ease-out infinite; }
+
+    /* play affordance for video stages */
+    .stage-play {
+      position: absolute;
+      inset: 6% 8%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      z-index: 4;
+      transition: opacity 0.35s var(--ease);
+    }
+    .stage-play .disc {
+      width: clamp(52px, 7vw, 74px);
+      height: clamp(52px, 7vw, 74px);
+      border-radius: 999px;
+      background: rgba(12,12,14,0.55);
+      border: 1px solid rgba(255,255,255,0.5);
+      backdrop-filter: blur(6px);
+      display: grid;
+      place-items: center;
+      transition: transform 0.3s var(--ease), background 0.3s var(--ease);
+    }
+    .stage-play:hover .disc { transform: scale(1.08); background: rgba(12,12,14,0.75); }
+    .stage-play .disc::after {
+      content: "";
+      width: 0; height: 0;
+      border-left: 16px solid var(--text);
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      margin-left: 5px;
+    }
+    .stage-play.hidden { opacity: 0; pointer-events: none; }
+
+    /* --- the copy column --- */
+    .feature-copy { max-width: 30rem; }
+
+    .feature-index {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      color: var(--faint);
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+    .feature-index .bar {
+      display: inline-block;
+      width: 34px; height: 1px;
+      background: var(--line-strong);
+      vertical-align: middle;
+      margin-left: 0.6rem;
     }
 
-    h1 {
-      font-size: clamp(4rem, 3vw, 4rem);
-      letter-spacing: -0.03em;
-      margin-bottom: 0.4rem;
-    }
-
-    .subtitle {
-      font-size: 0.98rem;
+    .feature-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
       color: var(--muted);
-      max-width: 34rem;
+      margin-bottom: 0.9rem;
+    }
+    .feature-kicker.live { color: var(--live); }
+
+    .feature-title {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.9rem;
+    }
+    .feature-title em { font-style: italic; color: var(--muted); }
+
+    .feature-desc {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 1.4rem;
     }
 
-    .subtitle a {
-      color: #ffffff;
+    .feature-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      align-items: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font: inherit;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
       text-decoration: none;
-      border-bottom: 1px solid rgba(147,197,253,0.5);
+      transition: border-color 0.2s var(--ease), background 0.2s var(--ease), transform 0.2s var(--ease);
     }
-
-    .subtitle a:hover {
-      border-bottom-color: #e5e7eb;
+    .btn:hover { border-color: var(--text); transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--text);
+      color: #0a0a0b;
+      border-color: var(--text);
     }
+    .btn-primary:hover { background: #fff; }
+    .btn .arrow { transition: transform 0.2s var(--ease); }
+    .btn:hover .arrow { transform: translateX(3px); }
 
-    /* FILTER NAV */
+    /* ---------- WORK / ARCHIVE ---------- */
+
+    .work { margin-top: clamp(1rem, 3vw, 2rem); }
 
     .nav-filters {
-      margin-top: 1.5rem;
-      margin-bottom: 1rem;
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
+      margin-bottom: 1.4rem;
     }
-
     .nav-filter-btn {
       border-radius: 999px;
-      border: 1px solid rgba(94, 95, 96, 0.9);
-      background: rgba(15,15,15,0.9);
-      padding: 0.3rem 0.8rem;
-      font-size: 0.8rem;
+      border: 1px solid var(--line);
+      background: transparent;
+      padding: 0.34rem 0.85rem;
+      font: inherit;
+      font-size: 0.78rem;
       color: var(--muted);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
+      transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
     }
-
-    .nav-filter-btn span.dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: rgba(148, 163, 184, 0.9);
+    .nav-filter-btn:hover { color: var(--text); border-color: var(--line-strong); }
+    .nav-filter-btn .dot {
+      width: 6px; height: 6px; border-radius: 999px;
+      background: var(--faint);
     }
-
-    .nav-filter-btn[data-filter="fiction"] .dot {
-      background: #f97316;
-    }
-
-    .nav-filter-btn[data-filter="nonfiction"] .dot {
-      background: #22c55e;
-    }
-
-    .nav-filter-btn[data-filter="commercial"] .dot {
-      background: #0ea5e9;
-    }
-
-    .nav-filter-btn[data-filter="startup"] .dot {
-      background: #a855f7;
-    }
-
+    .nav-filter-btn[data-filter="fiction"] .dot { background: #e08a4b; }
+    .nav-filter-btn[data-filter="nonfiction"] .dot { background: var(--live); }
+    .nav-filter-btn[data-filter="commercial"] .dot { background: #5aa9e6; }
+    .nav-filter-btn[data-filter="startup"] .dot { background: #b98ae0; }
     .nav-filter-btn.active {
-      background: #111827;
-      border-color: #e5e7eb;
-      color: #f9fafb;
+      color: var(--text);
+      border-color: var(--text);
     }
+    .nav-filter-btn.active .dot { background: var(--text); }
 
-    .nav-filter-btn.active .dot {
-      background: #f9fafb;
+    /* year slider (refined) */
+    .year-slider {
+      position: relative;
+      margin: 0.5rem 0 2.8rem;
+      padding-bottom: 3.4rem;
     }
-
-    /* YEAR SLIDER */
-
-.year-slider {
-  position: relative;
-  margin-top: 0.75rem;
-  margin-bottom: 3rem;   /* more gap above the showreel */
-  padding-bottom: 4.4rem;/* more room for the preview box */
-}
-
-
-.year-slider-bar {
-  position: relative;
-  height: 32px;              /* big hitbox */
-  margin: 0.25rem 0 0.55rem;
-  background: transparent;   /* hitbox is invisible, track is drawn via ::before */
-  cursor: pointer;
-}
-
-/* light grey track behind the moving fill */
-.year-slider-bar::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 10%;
-  transform: translateY(275%);
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(55, 65, 81, 0.7);  /* light grey track */
-  z-index: 0;
-}
-
-/* moving green fill that sits on top of the grey track */
-.year-slider-fill {
-  position: absolute;
-  left: 0;
-  top: 10%;
-  transform: translateY(350%);
-  height: 4px;
-  width: 0;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #25eb25, #38f83e);
-  pointer-events: none;
-  z-index: 1;
-}
-
-
-
-    .year-slider-fill {
+    .year-slider-bar {
+      position: relative;
+      height: 30px;
+      margin: 0.25rem 0 0.55rem;
+      cursor: pointer;
+    }
+    .year-slider-bar::before {
+      content: "";
       position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 0;
-      background: linear-gradient(90deg, #25eb25, #38f83e);
-      pointer-events: none;
+      left: 0; right: 0; top: 50%;
+      transform: translateY(-50%);
+      height: 2px;
+      border-radius: 999px;
+      background: var(--line);
       z-index: 0;
     }
-
+    .year-slider-fill {
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      height: 2px;
+      width: 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(61,220,132,0.4), var(--live));
+      pointer-events: none;
+      z-index: 1;
+    }
     .year-slider-handle {
       position: absolute;
       top: 50%;
-      width: 16px;
-      height: 16px;
+      width: 14px; height: 14px;
       border-radius: 999px;
-      background: #020617;
-      border: 2px solid #68fa60;
-      box-shadow: 0 0 0 4px var(--accent-soft);
+      background: var(--bg);
+      border: 2px solid var(--live);
+      box-shadow: 0 0 0 4px var(--live-soft);
       transform: translate(-50%, -50%);
       pointer-events: none;
+      z-index: 3;
+    }
+    .year-now-marker {
+      position: absolute;
+      right: 0; top: 50%;
+      transform: translate(50%, -50%);
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: var(--live);
+      box-shadow: 0 0 0 4px var(--live-soft);
       z-index: 2;
     }
-
-.year-now-marker {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translate(50%, -50%);
-      width: 12px;
-      height: 12px;
-      border-radius: 999px;
-      background: #22c55e;
-      border: 2px solid #022c15;
-      box-shadow: 0 0 0 4px rgba(34,197,94,0.45);
-      z-index: 1;
-      animation: currentBlink 1.5s ease-in-out infinite alternate;
-    }
-
     .year-slider-ticks {
       position: relative;
-      margin-top: 0.75rem;
-      margin-bottom: 0.4rem;
+      margin-top: 0.8rem;
       height: 1.4rem;
     }
-
     .year-tick {
       position: absolute;
       bottom: 0;
       transform: translateX(-50%);
-      border: none;
-      background: none;
+      border: none; background: none;
       padding: 0.2rem 0.3rem 0;
-      font-size: 0.8rem;
+      font: inherit;
+      font-size: 0.78rem;
       color: var(--muted);
       cursor: pointer;
-      font-weight: 500;
       white-space: nowrap;
     }
-
     .year-tick::before {
       content: "";
       position: absolute;
-      top: -0.55rem;
-      left: 50%;
+      top: -0.55rem; left: 50%;
       transform: translateX(-50%);
-      width: 2px;
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(107, 114, 128, 0.9);
+      width: 1px; height: 9px;
+      background: var(--line-strong);
     }
+    .year-tick.active { color: var(--text); font-weight: 500; }
+    .year-tick.active::before { background: var(--text); height: 11px; }
 
-    .year-tick.active {
-      color: #f9fafb;
-      font-weight: 600;
-    }
-
-    .year-tick.active::before {
-      background: #e5e7eb;
-      height: 12px;
-    }
-
-/* DOT PREVIEW UNDER SLIDER */
-
-.year-preview {
-  position: absolute;
-  left: 50%;
-  bottom: -3rem;                     /* slightly lower; years stay visible */
-  transform: translateX(-50%);
-  display: flex;
-  align-items: flex-end;
-  padding: 0.6rem 0.9rem;
-  min-width: 220px;
-  max-width: 460px;
-  height: 120px;                   /* fixed height */
-  background-size: cover;          /* image fills whole background */
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 0.8rem;
-  border: 1px solid rgba(148, 163, 184, 0.9);
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.85);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
-  z-index: 5;
-}
-
-.year-preview.visible {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-3px);
-}
-
-/* We don't need the small windowed image anymore */
-.year-preview-img-wrap {
-  display: none;
-}
-
-
-.year-preview-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.year-preview-meta {
-  font-size: 0.78rem;
-  color: var(--muted);
-}
-
-.year-preview-label {
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.68rem;
-  margin-bottom: 0.1rem;
-  opacity: 0.85;
-}
-
-.year-preview-title-text {
-  font-size: 0.9rem;
-  color: var(--text);
-  font-weight: 500;
-}
-
-
-    /* NOW label under the ticks */
     .year-now-label {
       position: absolute;
-      right: 0;
-      bottom: 0;
+      right: 0; bottom: 0;
       transform: translateX(50%);
-      font-size: 0.78rem;
-      color: #bbf7d0;
-      font-weight: 600;
+      font-size: 0.72rem;
+      color: var(--live);
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: .12em;
+      letter-spacing: 0.12em;
     }
-
     .year-now-label::before {
       content: "";
       position: absolute;
-      top: -0.55rem;
-      left: 50%;
+      top: -0.55rem; left: 50%;
       transform: translateX(-50%);
-      width: 2px;
-      height: 12px;
-      border-radius: 999px;
-      background: #22c55e;
+      width: 1px; height: 11px;
+      background: var(--live);
     }
 
-    .year-slider-label {
-      font-size: 0.78rem;
+    .year-preview {
+      position: absolute;
+      left: 50%;
+      bottom: -2.2rem;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: flex-end;
+      padding: 0.6rem 0.9rem;
+      min-width: 200px;
+      max-width: 360px;
+      height: 110px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 12px;
+      border: 1px solid var(--line-strong);
+      box-shadow: 0 20px 40px -18px rgba(0,0,0,0.9);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s var(--ease), transform 0.18s var(--ease);
+      z-index: 5;
+    }
+    .year-preview.visible { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+    .year-preview-img-wrap { display: none; }
+    .year-preview-meta {
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(0deg, rgba(0,0,0,0.85), transparent);
+      padding: 0.4rem 0.5rem 0;
+      border-radius: 8px;
+    }
+    .year-preview-label {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.62rem;
       color: var(--muted);
+      margin-bottom: 0.1rem;
     }
-
-    .year-slider-label span {
-      font-weight: 600;
-      color: #f9fafb;
-    }
-
-    /* PROJECT DOTS ON SLIDER */
+    .year-preview-title-text { font-size: 0.85rem; color: var(--text); }
 
     .project-dot {
       position: absolute;
       top: 50%;
       transform: translate(-50%, -50%);
-      width: 11px;
-      height: 11px;
+      width: 9px; height: 9px;
       border-radius: 999px;
-      border: 2px solid #020617;
-      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.8);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.6);
       cursor: pointer;
       z-index: 2;
     }
+    .project-dot--fiction { background: #e08a4b; }
+    .project-dot--nonfiction { background: var(--live); }
+    .project-dot--commercial { background: #5aa9e6; }
+    .project-dot--startup { background: #b98ae0; }
 
-    .project-dot--fiction {
-      background: #f97316;
+    /* timeline */
+    .timeline-meta {
+      font-size: 0.8rem;
+      color: var(--faint);
+      letter-spacing: 0.04em;
+      margin-bottom: 1.4rem;
     }
-
-    .project-dot--nonfiction {
-      background: #22c55e;
-    }
-
-    .project-dot--commercial {
-      background: #0ea5e9;
-    }
-
-    .project-dot--startup {
-      background: #a855f7;
-    }
-
-    /* SHOWREEL */
-
-.showreel-section {
-  margin: 2.5rem 0 2rem;
-}
-
-.showreel-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.showreel-title {
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-  margin-bottom: 0.75rem;
-}
-
-.showreel-video-wrap {
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid rgba(55,65,81,0.9);
-  box-shadow: var(--shadow-soft);
-  background: radial-gradient(circle at top left, #1b1b1b, #020617 55%);
-}
-
-.showreel-video-wrap video {
-  display: block;
-  width: 100%;
-  max-height: 540px;
-}
-
-@keyframes currentBlink {
-  0% {
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-    border-color: rgba(34, 197, 94, 1);
-  }
-  100% {
-    box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
-    border-color: rgba(34, 197, 94, 0.6);
-  }
-}
-
-    /* TIMELINE */
-
-.timeline-shell {
-  background: transparent;  /* or just delete the background line entirely */
-  border-radius: 24px;
-  padding: 1.5rem 1.5rem 2rem;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(48, 49, 50, 0.9);
-}
-
-    .timeline-header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      margin-bottom: 1.75rem;
-    }
-
-    .timeline-title {
-      font-weight: 600;
-      font-size: 0.95rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .timeline-range {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .timeline-range strong {
-      color: #f9fafb;
-      font-weight: 600;
-    }
-
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 1.75rem;
-    }
+    .timeline { display: flex; flex-direction: column; }
 
     .timeline-item {
       display: grid;
-      grid-template-columns: minmax(70px, 90px) 1fr;
-      gap: 1.25rem;
-      transition: opacity 0.15s ease, transform 0.15s ease;
+      grid-template-columns: 64px 1fr;
+      gap: 1.2rem;
+      align-items: start;
+      padding: 0.9rem 0;
+      border-top: 1px solid var(--line);
       cursor: pointer;
+      transition: opacity 0.2s var(--ease);
     }
-
-    .timeline-item.hidden {
-      display: none;
-    }
+    .timeline-item:hover { opacity: 1; }
+    .timeline-item.hidden { display: none; }
 
     .timeline-year {
-      font-weight: 600;
-      color: #6b7280;
+      font-family: var(--serif);
+      color: var(--faint);
       font-size: 0.9rem;
-      padding-top: 0.35rem;
+      padding-top: 0.3rem;
+      font-variant-numeric: tabular-nums;
     }
 
-    .timeline-card {
-      position: relative;
-      padding-left: 1.75rem;
-      border-left: 2px solid rgba(95, 95, 96, 0.9);
-    }
-
-    .timeline-card::before {
-      content: "";
-      position: absolute;
-      left: -7px;
-      top: 0.8rem;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #121212;
-      border: 2px solid #e5e7eb;
-      box-shadow: 0 0 0 4px rgba(15,15,15,0.9);
-    }
-
+    .timeline-card { position: relative; }
     .timeline-content {
       position: relative;
-      border-radius: var(--radius-lg);
-      padding: 0.85rem 1rem 0.9rem;
-      border: 1px solid rgba(38, 39, 40, 0.9);
-      background-color: #101011;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-radius: 12px;
+      padding: 0.55rem;
+      border: 1px solid transparent;
+      transition: border-color 0.25s var(--ease), background 0.25s var(--ease), transform 0.25s var(--ease);
+    }
+    .timeline-item:hover .timeline-content {
+      border-color: var(--line-strong);
+      background: rgba(255,255,255,0.02);
+      transform: translateX(4px);
+    }
+
+    .timeline-thumb {
+      flex: 0 0 96px;
+      width: 96px;
+      height: 60px;
+      border-radius: 8px;
+      background-color: #111;
       background-size: cover;
       background-position: center;
-      color: #f9fafb;
-      overflow: hidden;
+      border: 1px solid var(--line);
+      filter: grayscale(0.4) brightness(0.9);
+      transition: filter 0.3s var(--ease);
     }
+    .timeline-item:hover .timeline-thumb { filter: grayscale(0) brightness(1); }
 
-    .timeline-content::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.88) 0%,
-        rgba(0, 0, 0, 0.72) 32%,
-        rgba(0, 0, 0, 0.25) 68%,
-        rgba(0, 0, 0, 0.0) 100%
-      );
-      z-index: 0;
-    }
-
-    .timeline-content > * {
-      position: relative;
-      z-index: 1;
-    }
-
+    .timeline-body { min-width: 0; flex: 1; }
     .project-meta {
       display: inline-flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.35rem;
-      margin-bottom: 0.45rem;
-      font-size: 0.8rem;
-      padding: 0.18rem 0.7rem;
-      border-radius: 999px;
-      border: 1px solid rgba(91, 93, 96, 0.9);
-      background: rgba(0,0,0,0.85);
-      color: #f9fafb;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-    }
-
-    .project-date {
-      font-variant-numeric: tabular-nums;
-      opacity: 0.95;
-    }
-
-    .project-role {
-      opacity: 0.95;
-    }
-
-    .project-meta-sep {
-      opacity: 0.9;
-    }
-
-    /* Accent colors for the meta pill based on category */
-    .timeline-item[data-category="commercial"] .project-meta {
-      border-color: rgba(56,189,248,0.9);
-      background: rgba(8,47,73,0.95);
-      box-shadow: 0 0 0 1px rgba(8,47,73,0.7);
-    }
-
-    .timeline-item[data-category="nonfiction"] .project-meta {
-      border-color: rgba(74,222,128,0.9);
-      background: rgba(5,46,22,0.95);
-      box-shadow: 0 0 0 1px rgba(5,46,22,0.7);
-    }
-
-    .timeline-item[data-category="fiction"] .project-meta {
-      border-color: rgba(251,146,60,0.9);
-      background: rgba(67,20,7,0.95);
-      box-shadow: 0 0 0 1px rgba(67,20,7,0.7);
-    }
-
-    .timeline-item[data-category="startup"] .project-meta {
-      border-color: rgba(192,132,252,0.9);
-      background: rgba(46,16,101,0.95);
-      box-shadow: 0 0 0 1px rgba(46,16,101,0.7);
-    }
-
-    .badge-now {
-      padding: 0.1rem 0.5rem;
-      border-radius: 999px;
-      background: #faf5ff;
-      color: #111827;
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      margin-left: 6px;
-    }
-
-    .project-title {
-      font-size: 0.98rem;
-      font-weight: 600;
-      margin-bottom: 0.1rem;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.7);
-    }
-
-    .project-context {
-      font-size: 0.8rem;
-      color: #e5e7eb;
-      opacity: 0.9;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      color: var(--muted);
       margin-bottom: 0.25rem;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.7);
     }
-
+    .project-meta-sep { color: var(--faint); }
+    .project-role { color: var(--muted); }
+    .badge-now {
+      padding: 0.06rem 0.45rem;
+      border-radius: 999px;
+      background: var(--live-soft);
+      color: var(--live);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      margin-left: 4px;
+    }
+    .project-title {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .project-context { display: none; }
     .project-desc {
-      font-size: 0.85rem;
-      color: #e5e7eb;
-      opacity: 0.88;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
+    .timeline-go {
+      flex: 0 0 auto;
+      color: var(--faint);
+      font-size: 1rem;
+      transition: transform 0.2s var(--ease), color 0.2s var(--ease);
+    }
+    .timeline-item:hover .timeline-go { color: var(--text); transform: translateX(3px); }
 
     .small-note {
-      margin-top: 1.5rem;
+      margin-top: 1.6rem;
       font-size: 0.78rem;
-      color: var(--muted);
+      color: var(--faint);
     }
 
-    @media (max-width: 640px) {
-      body {
-        padding: 1.75rem 1.1rem 2.5rem;
-      }
-
-      .timeline-item {
-        grid-template-columns: 60px 1fr;
-        gap: 0.85rem;
-      }
-
-      .timeline-shell {
-        padding: 1.25rem 1.1rem 1.75rem;
-      }
+    /* ---------- REVEAL ON SCROLL ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
     }
+    .reveal.in { opacity: 1; transform: none; }
 
-    /* MODAL */
-
+    /* ---------- MODAL ---------- */
     .modal {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 50;
     }
-
-    .modal.open {
-      display: flex;
-    }
-
+    .modal.open { display: flex; }
     .modal-backdrop {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.92);
-      backdrop-filter: blur(6px);
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(8px);
     }
-
     .modal-dialog {
       position: relative;
-      max-width: 900px;
+      max-width: 920px;
       width: 100%;
       margin: 1.5rem;
       border-radius: 20px;
-      border: 1px solid rgba(37, 39, 41, 0.9);
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
-      padding: 1.25rem 1.4rem 1.5rem;
-      color: #e5e7eb;
+      border: 1px solid var(--line-strong);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.9);
+      padding: 1.4rem 1.5rem 1.6rem;
+      color: var(--text);
       display: grid;
       grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-      gap: 1.25rem;
+      gap: 1.4rem;
       z-index: 1;
-
-      /* project image background */
-      background-color: #050509;
+      background-color: #07070a;
       background-size: cover;
       background-position: center;
-      background-repeat: no-repeat;
       overflow: hidden;
     }
-
-    /* dark gradient on top of the image for readability */
     .modal-dialog::before {
       content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        120deg,
-        rgba(0, 0, 0, 0.92) 0%,
-        rgba(0, 0, 0, 0.85) 35%,
-        rgba(0, 0, 0, 0.5) 75%,
-        rgba(0, 0, 0, 0.0) 100%
-      );
+      position: absolute; inset: 0;
+      background: linear-gradient(120deg, rgba(7,7,10,0.95) 0%, rgba(7,7,10,0.85) 40%, rgba(7,7,10,0.45) 80%, transparent 100%);
       z-index: 0;
     }
-
-    .modal-dialog > * {
-      position: relative;
-      z-index: 1;
-    }
-
+    .modal-dialog > * { position: relative; z-index: 1; }
     .modal-header {
       grid-column: 1 / -1;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       gap: 0.75rem;
-      margin-bottom: 0.25rem;
     }
-
-    .modal-close {
-  display: none;
-}
-
-
     .modal-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
     }
-
     .modal-meta {
-      font-size: 0.8rem;
-      color: #9ca3af;
-    }
-
-.modal-video-wrap {
-  background: transparent; /* let project image show through */
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(15,15,15,0.7);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  max-height: 60vh;
-  padding: 0.75rem;
-  backdrop-filter: blur(3px); /* slight blur under the video */
-}
-
-.modal-video-wrap video,
-.modal-video-wrap img {
-  width: 100%;
-  border-radius: 10px;
-  display: block;
-}
-
-.modal-video-wrap iframe {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border: 0;
-  border-radius: 10px;
-  display: block;
-}
-
-
-
-    .modal-desc {
-      font-size: 0.88rem;
-      color: #9ca3af;
-      line-height: 1.6;
-    }
-
-    .modal-desc p + p {
-      margin-top: 0.6rem;
-    }
-
-    @media (max-width: 800px) {
-      .modal-dialog {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .modal-dialog.no-video {
-  grid-template-columns: 1fr;
-}
-
-.modal-dialog.no-video .modal-video-wrap {
-  display: none;
-}
-
-    .contact-footer {
-      margin-top: 1.8rem;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--muted);
-      text-align: center;
+      letter-spacing: 0.04em;
+      margin-top: 0.2rem;
     }
+    .modal-close {
+      border: none;
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      width: 34px; height: 34px;
+      border-radius: 999px;
+      font-size: 1.2rem;
+      line-height: 1;
+      cursor: pointer;
+      flex: 0 0 auto;
+      transition: background 0.2s var(--ease);
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.14); }
+    .modal-video-wrap {
+      background: transparent;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 62vh;
+    }
+    .modal-video-wrap video,
+    .modal-video-wrap img {
+      width: 100%;
+      border-radius: 10px;
+      display: block;
+    }
+    .modal-video-wrap iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      border-radius: 10px;
+      display: block;
+    }
+    .modal-desc {
+      font-size: 0.9rem;
+      color: #cfcfca;
+      line-height: 1.7;
+    }
+    .modal-desc p + p { margin-top: 0.6rem; }
+    .modal-dialog.no-video { grid-template-columns: 1fr; }
+    .modal-dialog.no-video .modal-video-wrap { display: none; }
 
+    /* about modal */
+    .about-modal .modal-dialog {
+      background: radial-gradient(circle at top left, #15151a, #07070a 65%);
+      background-image: none;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    }
+    .about-modal .modal-dialog::before { display: none; }
+    .about-text {
+      font-size: 0.92rem;
+      color: #d4d3cd;
+      line-height: 1.75;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      max-height: 70vh;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+    .about-photos { display: flex; flex-direction: column; gap: 0.6rem; }
+    .about-photos img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+      object-fit: cover;
+      filter: grayscale(0.2);
+    }
+    .about-content { transition: opacity 0.2s var(--ease); }
+    .about-content[hidden] { opacity: 0; }
+    .about-toggle-btn {
+      align-self: flex-start;
+      font: inherit;
+      font-size: 0.72rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.2s var(--ease);
+    }
+    .about-toggle-btn:hover { border-color: var(--text); }
+
+    /* footer */
+    .contact-footer {
+      margin-top: clamp(3rem, 7vw, 5rem);
+      padding-top: 1.6rem;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
     .contact-footer a {
-      color: var(--accent);
+      color: var(--text);
       text-decoration: none;
+      border-bottom: 1px solid var(--line-strong);
+      transition: border-color 0.2s var(--ease);
+    }
+    .contact-footer a:hover { border-color: var(--text); }
+    .contact-footer .foot-name { font-family: var(--serif); }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 820px) {
+      .feature, .feature.reverse {
+        grid-template-columns: 1fr;
+        gap: 1.6rem;
+      }
+      .feature.reverse .feature-stage,
+      .feature.reverse .feature-copy { order: 0; }
+      .modal-dialog,
+      .about-modal .modal-dialog { grid-template-columns: 1fr; }
+      .about-photos { flex-direction: row; flex-wrap: wrap; }
+      .about-photos img { width: calc(50% - 0.3rem); }
+    }
+    @media (max-width: 560px) {
+      .topline-right .status .label { display: none; }
+      .timeline-item { grid-template-columns: 48px 1fr; gap: 0.8rem; }
+      .timeline-thumb { flex-basis: 76px; width: 76px; height: 50px; }
+      .project-desc { white-space: normal; }
     }
 
-    .contact-footer a:hover {
-      text-decoration: underline;
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .stage-inner { transition: none; }
+      html { scroll-behavior: auto; }
     }
-
-    /* ABOUT BUTTON IN HEADER */
-.about-btn {
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  font-size: 0.8rem;
-  cursor: pointer;
-  padding: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-.about-btn:hover {
-  color: #f9fafb;
-}
-
-/* ABOUT MODAL OVERRIDES */
-
-.about-modal .modal-dialog {
-  background: radial-gradient(circle at top left, #111827, #020617 60%);
-  background-image: none;
-}
-
-.about-modal .modal-dialog::before {
-  display: none; /* remove the heavy gradient overlay used for project modals */
-}
-
-.about-header {
-  margin-bottom: 0.75rem;
-}
-
-.about-close {
-  border: none;
-  background: transparent;
-  color: #9ca3af;
-  font-size: 1.4rem;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0.1rem 0.35rem;
-  border-radius: 999px;
-}
-
-.about-close:hover {
-  background: rgba(31, 41, 55, 0.8);
-  color: #e5e7eb;
-}
-
-/* text + photos layout */
-.about-dialog {
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-}
-
-.about-text {
-  font-size: 0.9rem;
-  color: #d1d5db;
-  line-height: 1.7;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  max-height: 70vh;
-  overflow-y: auto;
-  padding-right: 0.5rem;
-}
-
-.about-text .about-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.3rem;
-}
-
-.about-photos {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.about-photos img {
-  width: 100%;
-  border-radius: 12px;
-  display: block;
-  object-fit: cover;
-}
-
-/* stack text + photos on small screens */
-@media (max-width: 800px) {
-  .about-dialog {
-    grid-template-columns: 1fr;
-  }
-
-  .about-photos {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .about-photos img {
-    width: calc(50% - 0.3rem);
-  }
-}
-
-/* about short/long toggle */
-.about-content {
-  transition: opacity 0.2s ease;
-}
-
-.about-content[hidden] {
-  opacity: 0;
-}
-
-.about-toggle-btn {
-  position: flex;
-  bottom: 1rem;
-  left: 1.4rem;
-  font-size: 0.7rem;
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.6);
-  background: rgba(15, 23, 42, 0.85);
-  color: #e5e7eb;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-  white-space: nowrap;
-}
-
-.about-toggle-btn:hover {
-  border-color: rgba(249, 250, 251, 0.9);
-}
-
-
   </style>
 </head>
 <body>
-  <main class="page">
-    <header>
-      <div class="hero-top">
-        <div class="hero-main">
-          <div class="tagline">
-  <div class="tagline-dot"></div>
-  <button class="about-btn" id="about-btn" type="button">
-    About me
-  </button>
-</div>
-          <h1>Martijn Coenen</h1>
-          <p class="subtitle">
-            Cinematographer &amp; filmmaker in training. A simple overview of my work,
-            from early non-fiction experiments to commercial shoots and start-up work.
-          </p>
-        </div>
+  <div class="grain" aria-hidden="true"></div>
 
-        <aside class="current-work" aria-label="What I'm currently working on">
-          <div class="current-work-bg">
-            <div class="current-work-bg-half left"></div>
-            <div class="current-work-bg-half right"></div>
-          </div>
-          <div class="current-work-content">
-            <div>
-              <div class="current-work-title">Ongoing projects</div>
-              <ul class="current-work-list">
-                <li>Master film <strong>Le Mécène</strong></li>
-                <li><strong>ChargeLink</strong>, on-set battery monitoring. <strong>Testing on proffesional sets</strong></li>
-              </ul>
+  <main class="page">
+    <!-- ===================== HEADER ===================== -->
+    <header>
+      <div class="topline">
+        <div class="mark">Martijn&nbsp;Coenen <span>— CINEMATOGRAPHER</span></div>
+        <div class="topline-right">
+          <span class="status">
+            <span class="status-dot"></span>
+            <span class="label">Available 2025</span>
+          </span>
+          <button class="about-btn" id="about-btn" type="button">About</button>
+        </div>
+      </div>
+
+      <h1 class="hero-name">Martijn<br />Coenen<em>.</em></h1>
+      <p class="hero-sub">
+        Cinematographer &amp; filmmaker in training. I stay close to people and
+        situations — looking for images that feel <strong>honest</strong> rather than
+        merely perfect. Below: three things worth your time, then everything else.
+      </p>
+
+      <a class="scroll-cue" href="#featured">
+        <span class="line"></span> Featured work
+      </a>
+    </header>
+
+    <!-- ===================== FEATURED ===================== -->
+    <section class="featured" id="featured" aria-label="Featured work">
+      <div class="section-head reveal">
+        <h2>Worth your time</h2>
+        <span class="eyebrow">2024 — 2025 · selected</span>
+      </div>
+
+      <!-- 01 · SHOWREEL -->
+      <article class="feature reveal">
+        <div class="feature-stage" data-parallax>
+          <div class="stage-inner">
+            <div class="stage-depth" data-depth="0.25" style="--img:url('showreel-cover3.png')"></div>
+            <div class="stage-card" data-depth="0.55" style="--img:url('showreel-cover3.png')">
+              <video id="showreel-video" src="showreel.mp4" poster="showreel-cover3.png" preload="metadata" playsinline></video>
             </div>
-            <div class="current-work-footer">2025 · In development</div>
+            <button class="stage-play" id="showreel-play" type="button" aria-label="Play showreel" data-depth="0.7">
+              <span class="disc"></span>
+            </button>
+            <div class="stage-chip" data-depth="1.05" style="--img:url('red-tape.png'); --chip-pos:50% 40%"></div>
+            <span class="stage-tag" data-depth="1.25"><span class="status-dot"></span> Showreel · 2025</span>
           </div>
-        </aside>
+        </div>
+        <div class="feature-copy">
+          <div class="feature-index">01 <span class="bar"></span></div>
+          <div class="feature-kicker">Reel</div>
+          <h3 class="feature-title">The <em>showreel</em></h3>
+          <p class="feature-desc">
+            A cut through the work — fiction, documentary, automotive and trackside.
+            The fastest way to see how I see. Best with sound up.
+          </p>
+          <div class="feature-actions">
+            <button class="btn btn-primary" id="showreel-play-2" type="button">
+              Play reel <span class="arrow">▸</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 02 · CHARGELINK -->
+      <article class="feature reverse reveal">
+        <div class="feature-stage" data-parallax>
+          <div class="stage-inner">
+            <div class="stage-depth" data-depth="0.25" style="--img:url('chargelink.png')"></div>
+            <div class="stage-card" data-depth="0.55" style="--img:url('chargelink.png')"></div>
+            <div class="stage-chip" data-depth="1.05" style="--img:url('chargelink2.png'); --chip-pos:50% 50%; background-size:150% auto"></div>
+            <span class="stage-tag" data-depth="1.25"><span class="status-dot"></span> Live · on set</span>
+          </div>
+        </div>
+        <div class="feature-copy">
+          <div class="feature-index">02 <span class="bar"></span></div>
+          <div class="feature-kicker live"><span class="status-dot"></span> Current work · Co-founder</div>
+          <h3 class="feature-title">ChargeLink</h3>
+          <p class="feature-desc">
+            An on-set tool I co-founded with Jonas Vanoyenbrugge: wireless nodes that
+            monitor camera batteries in real time, so crews never lose a take to a dead
+            pack. Currently being tested on professional sets.
+          </p>
+          <div class="feature-actions">
+            <a class="btn btn-primary" href="https://chargelink.be" target="_blank" rel="noopener">
+              chargelink.be <span class="arrow">↗</span>
+            </a>
+            <button class="btn feature-open" type="button" data-target="chargelink">
+              More <span class="arrow">▸</span>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- 03 · BOMMA & BOMPA -->
+      <article class="feature reveal">
+        <div class="feature-stage" data-parallax>
+          <div class="stage-inner">
+            <div class="stage-depth" data-depth="0.25" style="--img:url('bomma-bompa2.png')"></div>
+            <div class="stage-card" data-depth="0.55" style="--img:url('bomma-bompa2.png')"></div>
+            <button class="stage-play feature-open" type="button" data-target="bomma" aria-label="Watch Bomma &amp; Bompa" data-depth="0.7">
+              <span class="disc"></span>
+            </button>
+            <div class="stage-chip" data-depth="1.05" style="--img:url('bomma-bompa2.png'); --chip-pos:20% 45%"></div>
+            <span class="stage-tag" data-depth="1.25"><span class="status-dot"></span> Documentary · 2024</span>
+          </div>
+        </div>
+        <div class="feature-copy">
+          <div class="feature-index">03 <span class="bar"></span></div>
+          <div class="feature-kicker">Short documentary</div>
+          <h3 class="feature-title">Bomma <em>&amp;</em> Bompa</h3>
+          <p class="feature-desc">
+            An intimate portrait of my grandparents — quiet observation of daily rituals,
+            aging and memory inside the family. Made somewhere between school work and
+            something kept simply for home.
+          </p>
+          <div class="feature-actions">
+            <button class="btn btn-primary feature-open" type="button" data-target="bomma">
+              Watch <span class="arrow">▸</span>
+            </button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===================== ARCHIVE ===================== -->
+    <section class="work" id="work" aria-label="All work">
+      <div class="section-head reveal">
+        <h2>Everything else</h2>
+        <span class="eyebrow">Archive · latest → oldest</span>
       </div>
 
       <!-- FILTER NAV -->
-      <nav class="nav-filters" aria-label="Filter projects by type">
-        <button class="nav-filter-btn active" data-filter="all">
-          <span class="dot"></span>
-          <span>All</span>
-        </button>
-        <button class="nav-filter-btn" data-filter="fiction">
-          <span class="dot"></span>
-          <span>Fiction</span>
-        </button>
-        <button class="nav-filter-btn" data-filter="nonfiction">
-          <span class="dot"></span>
-          <span>Non-fiction</span>
-        </button>
-        <button class="nav-filter-btn" data-filter="commercial">
-          <span class="dot"></span>
-          <span>Commercial</span>
-        </button>
-        <button class="nav-filter-btn" data-filter="startup">
-          <span class="dot"></span>
-          <span>Start-up</span>
-        </button>
+      <nav class="nav-filters reveal" aria-label="Filter projects by type">
+        <button class="nav-filter-btn active" data-filter="all"><span class="dot"></span><span>All</span></button>
+        <button class="nav-filter-btn" data-filter="fiction"><span class="dot"></span><span>Fiction</span></button>
+        <button class="nav-filter-btn" data-filter="nonfiction"><span class="dot"></span><span>Non-fiction</span></button>
+        <button class="nav-filter-btn" data-filter="commercial"><span class="dot"></span><span>Commercial</span></button>
+        <button class="nav-filter-btn" data-filter="startup"><span class="dot"></span><span>Start-up</span></button>
       </nav>
 
-<!-- YEAR SLIDER -->
-      <section class="year-slider" aria-label="Year timeline">
+      <!-- YEAR SLIDER -->
+      <div class="year-slider reveal" aria-label="Year timeline">
         <div class="year-slider-bar" id="year-slider-bar">
           <div class="year-slider-fill" id="year-slider-fill"></div>
           <div class="year-slider-handle" id="year-slider-handle"></div>
-          <div class="year-now-marker"></div> <!-- NOW marker -->
+          <div class="year-now-marker"></div>
           <!-- project dots injected here -->
         </div>
         <div class="year-slider-ticks">
@@ -1156,520 +1141,465 @@
           <div class="year-now-label">Now</div>
         </div>
 
-        <!-- DOT HOVER PREVIEW -->
         <div class="year-preview" id="year-preview" aria-hidden="true">
-          <div class="year-preview-img-wrap">
-            <img src="" alt="" loading="lazy" />
-          </div>
+          <div class="year-preview-img-wrap"><img src="" alt="" loading="lazy" /></div>
           <div class="year-preview-meta">
             <div class="year-preview-label">Preview</div>
             <div class="year-preview-title year-preview-title-text"></div>
           </div>
         </div>
-      </section>
-      <div
-  class="current-work-connector"
-  id="current-work-connector"
-  aria-hidden="true"
-></div>
-    </header>
-
-    <!-- SHOWREEL SECTION -->
-    <section class="showreel-section" aria-label="Showreel">
-      <div class="showreel-inner">
-        <h2 class="showreel-title">Showreel</h2>
-        <div class="showreel-video-wrap">
-          <video
-  src="showreel.mp4"
-  controls
-  preload="metadata"
-  poster="showreel-cover3.png"
-></video>
-        </div>
       </div>
-    </section>
 
-    <section class="timeline-shell" aria-label="Project timeline">
-      <div class="timeline-header">
-        <div class="timeline-title">Timeline · Latest → Oldest</div>
-        <div class="timeline-range">
-          <strong>2025</strong> · current work &nbsp;—&nbsp; <strong>2023</strong> · early projects
-        </div>
-      </div>
+      <p class="timeline-meta reveal">2025 · current work &nbsp;—&nbsp; 2023 · early projects</p>
 
       <div class="timeline">
         <!-- 2025 -->
-        <article class="timeline-item"
-          data-year="2025"
-          data-month="4"
-          data-category="fiction"
-          data-youtube=""
-          data-bg="red-tape.png"
+        <article class="timeline-item reveal"
+          data-year="2025" data-month="4" data-category="fiction"
+          data-youtube="" data-bg="red-tape.png"
           data-meta="Fiction · Short film · May 2025"
           data-desc="Fiction about a young North Korean soldier in a modern drone war. A mix of war-movie tension and intimate inner monologue, shot as a bachelor project with a focus on mood, point of view, and the machinery of war.
       On the production side I really wanted to surprise people with my capabilities. that’s the main reason I made this film. I know the script isn’t the strongest, but on a production level I think I achieved my goal of surprising people with what I’m capable of. It was amazing to see it all come together.">
           <div class="timeline-year">2025</div>
           <div class="timeline-card">
             <div class="timeline-content">
-              <div class="project-meta">
-                <span class="project-date">April 2025</span>
-                <span class="project-meta-sep">·</span>
-                <span class="project-role">Fiction · Short film · Bachelor</span>
-                <span class="badge-now">Latest work</span>
+              <div class="timeline-thumb" style="background-image:url('red-tape.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">April 2025</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Fiction · Short film · Bachelor</span>
+                  <span class="badge-now">Latest</span>
+                </div>
+                <h3 class="project-title">Red Tape</h3>
+                <p class="project-context">War-themed short film</p>
+                <p class="project-desc">Fiction film about a young North-Korean soldier in a modern drone war.</p>
               </div>
-              <h2 class="project-title">Red Tape</h2>
-              <p class="project-context">War-themed short film</p>
-              <p class="project-desc">
-                Fiction film about a young North-Korean soldier in a modern drone war.
-              </p>
+              <span class="timeline-go">→</span>
             </div>
           </div>
         </article>
 
-        <article class="timeline-item"
-          data-year="2025"
-          data-month="5"
-          data-category="nonfiction"
-          data-youtube="https://youtu.be/zMlLyQ9vt2o"
-          data-bg="vermeer-doc.png"
+        <article class="timeline-item reveal"
+          data-year="2025" data-month="5" data-category="nonfiction"
+          data-youtube="https://youtu.be/zMlLyQ9vt2o" data-bg="vermeer-doc.png"
           data-meta="Non-fiction · Documentary · May 2025"
           data-desc="Documentary experiment / mockumentary written and executed by Simon Verbeylen. He appears in his own film as the analyst, mocking the way some people invent meaning on the spot behind every tiny detail in a painting. Maybe Vermeer just painted a window… to paint a window?">
           <div class="timeline-year"></div>
           <div class="timeline-card">
             <div class="timeline-content">
-              <div class="project-meta">
-                <span class="project-date">May 2025</span>
-                <span class="project-meta-sep">·</span>
-                <span class="project-role">Non-fiction · Documentary</span>
+              <div class="timeline-thumb" style="background-image:url('vermeer-doc.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">May 2025</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Non-fiction · Documentary</span>
+                </div>
+                <h3 class="project-title">This is a documentary about Johannes Vermeer</h3>
+                <p class="project-context">Documentary</p>
+                <p class="project-desc">Non-fiction project of Simon Verbeylen, mocking the way we "look" at art.</p>
               </div>
-              <h2 class="project-title">This is a documentary about Johannes Vermeer</h2>
-              <p class="project-context">Documentary</p>
-              <p class="project-desc">
-                Non-fiction project of Simon Verbeylen, mocking the way we "look" at art.
-              </p>
+              <span class="timeline-go">→</span>
             </div>
           </div>
         </article>
 
         <!-- 2024 -->
-        <article class="timeline-item"
-          data-year="2024"
-          data-month="12"
-          data-category="nonfiction"
-          data-youtube="https://youtu.be/CNfolW-AV4g"
-          data-bg="bomma-bompa2.png"
+        <article class="timeline-item reveal"
+          data-year="2024" data-month="12" data-category="nonfiction"
+          data-youtube="https://youtu.be/CNfolW-AV4g" data-bg="bomma-bompa2.png"
           data-meta="Non-fiction · Documentary · Dec 2024"
           data-desc="Intimate documentary portrait of my grandparents. Quiet observation of daily rituals, aging and memory inside the family. Sits between school work and something made simply for home.">
           <div class="timeline-year">2024</div>
           <div class="timeline-card">
             <div class="timeline-content">
-              <div class="project-meta">
-                <span class="project-date">Dec 2024</span>
-                <span class="project-meta-sep">·</span>
-                <span class="project-role">Non-fiction · Documentary</span>
+              <div class="timeline-thumb" style="background-image:url('bomma-bompa2.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">Dec 2024</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Non-fiction · Documentary</span>
+                  <span class="badge-now">Featured</span>
+                </div>
+                <h3 class="project-title">Bomma &amp; Bompa</h3>
+                <p class="project-context">Documentary about elderly family members</p>
+                <p class="project-desc">Close non-fiction portrait of my grandparents.</p>
               </div>
-              <h2 class="project-title">Bomma &amp; Bompa</h2>
-              <p class="project-context">Documentary about elderly family members</p>
-              <p class="project-desc">
-                Close non-fiction portrait of my grandparents.
-              </p>
+              <span class="timeline-go">→</span>
             </div>
           </div>
         </article>
 
-        <article class="timeline-item"
-          data-year="2024"
-          data-month="10"
-          data-category="commercial"
-          data-youtube="https://youtube.com/shorts/MErni7Tqt3U?feature=share"
-          data-bg="ford-mustang2.png"
+        <article class="timeline-item reveal"
+          data-year="2024" data-month="10" data-category="commercial"
+          data-youtube="https://youtube.com/shorts/MErni7Tqt3U?feature=share" data-bg="ford-mustang2.png"
           data-meta="Commercial · Automotive · Oct 2024"
           data-desc="Classic automotive stop motion reel for ford mustang their socials.">
           <div class="timeline-year"></div>
           <div class="timeline-card">
             <div class="timeline-content">
-              <div class="project-meta">
-                <span class="project-date">Oct 2024</span>
-                <span class="project-meta-sep">·</span>
-                <span class="project-role">Commercial · Automotive</span>
+              <div class="timeline-thumb" style="background-image:url('ford-mustang2.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">Oct 2024</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Commercial · Automotive</span>
+                </div>
+                <h3 class="project-title">Ford Mustang</h3>
+                <p class="project-context">Commercial edit</p>
+                <p class="project-desc">Classic automotive stop motion reel.</p>
               </div>
-              <h2 class="project-title">Ford Mustang</h2>
-              <p class="project-context">Commercial edit</p>
-              <p class="project-desc">
-                Classic automotive stop motion reel.
-              </p>
+              <span class="timeline-go">→</span>
             </div>
           </div>
         </article>
 
-        <article class="timeline-item"
-          data-year="2024"
-          data-month="8"
-          data-category="commercial"
-          data-youtube="https://youtube.com/shorts/kr07lYuYOkg?feature=share"
-          data-bg="audi-etron-gt2.png"
+        <article class="timeline-item reveal"
+          data-year="2024" data-month="8" data-category="commercial"
+          data-youtube="https://youtube.com/shorts/kr07lYuYOkg?feature=share" data-bg="audi-etron-gt2.png"
           data-meta="Commercial · Automotive · Aug 2024"
           data-desc="Sleek automotive reel around the Audi electric car for all of their socials, for world EV day.">
           <div class="timeline-year"></div>
           <div class="timeline-card">
             <div class="timeline-content">
-              <div class="project-meta">
-                <span class="project-date">Aug 2024</span>
-                <span class="project-meta-sep">·</span>
-                <span class="project-role">Commercial · Automotive</span>
+              <div class="timeline-thumb" style="background-image:url('audi-etron-gt2.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">Aug 2024</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Commercial · Automotive</span>
+                </div>
+                <h3 class="project-title">Audi EV</h3>
+                <p class="project-context">Commercial edit</p>
+                <p class="project-desc">Sleek automotive reel around the Audi electric car for their socials, for world EV day.</p>
               </div>
-              <h2 class="project-title">Audi EV</h2>
-              <p class="project-context">Commercial edit</p>
-              <p class="project-desc">
-                Sleek automotive reel around the Audi electric car for their socials, for world EV day.
-              </p>
+              <span class="timeline-go">→</span>
             </div>
           </div>
         </article>
 
-        <article class="timeline-item"
-          data-year="2024"
-          data-month="6"
-          data-category="nonfiction"
-          data-video="racing-tracks.mp4"
-          data-bg="racing-tracks.png"
+        <article class="timeline-item reveal"
+          data-year="2024" data-month="6" data-category="nonfiction"
+          data-video="racing-tracks.mp4" data-bg="racing-tracks.png"
           data-meta="Non-fiction · 2024"
           data-desc="Personal  and proffesional work on Spa, le Mans and Zolder. Fast handheld camera, trackside energy and a love for speed and engines. Had the opportunity to shoot for Ford Mustang at 24hour races">
           <div class="timeline-year"></div>
           <div class="timeline-card">
             <div class="timeline-content">
-              <div class="project-meta">
-                <span class="project-date">2024</span>
-                <span class="project-meta-sep">·</span>
-                <span class="project-role">Non-fiction</span>
+              <div class="timeline-thumb" style="background-image:url('racing-tracks.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">2024</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Non-fiction</span>
+                </div>
+                <h3 class="project-title">Racing Tracks</h3>
+                <p class="project-context">Spare-time shoots</p>
+                <p class="project-desc">Racing work shot on different circuits.</p>
               </div>
-              <h2 class="project-title">Racing Tracks</h2>
-              <p class="project-context">Spare-time shoots</p>
-              <p class="project-desc">
-                Racing work shot on different circuits.
-              </p>
+              <span class="timeline-go">→</span>
             </div>
           </div>
         </article>
 
-<article class="timeline-item"
-  data-year="2024"
-  data-month="4"
-  data-category="startup"
-  data-bg="chargelink2.png"
-  data-meta="Start-up · Co-founder · 2024"
-  data-desc="On-set tool for camera assistants that monitors batteries via wireless nodes. A project I Co-founded together with my friend Jonas Vanoyenbrugge, aiming to improve the control on the set and reduce the potential for human error. Our website: https://chargelink.be.">
-  <div class="timeline-year"></div>
-  <div class="timeline-card">
-    <div class="timeline-content">
-      <div class="project-meta">
-        <span class="project-date">2024</span>
-        <span class="project-meta-sep">·</span>
-        <span class="project-role">Start-up · Co-founder</span>
-      </div>
-      <h2 class="project-title">ChargeLink</h2>
-      <p class="project-context">On-set tool for camera assistants</p>
-      <p class="project-desc">
-        Prototype phase of the ChargeLink battery monitoring system.
-      </p>
-    </div>
-  </div>
-</article>
+        <article class="timeline-item reveal"
+          data-year="2024" data-month="4" data-category="startup"
+          data-bg="chargelink2.png"
+          data-meta="Start-up · Co-founder · 2024"
+          data-desc="On-set tool for camera assistants that monitors batteries via wireless nodes. A project I Co-founded together with my friend Jonas Vanoyenbrugge, aiming to improve the control on the set and reduce the potential for human error. Our website: https://chargelink.be.">
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="timeline-thumb" style="background-image:url('chargelink2.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">2024</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Start-up · Co-founder</span>
+                  <span class="badge-now">Featured</span>
+                </div>
+                <h3 class="project-title">ChargeLink</h3>
+                <p class="project-context">On-set tool for camera assistants</p>
+                <p class="project-desc">Prototype phase of the ChargeLink battery monitoring system.</p>
+              </div>
+              <span class="timeline-go">→</span>
+            </div>
+          </div>
+        </article>
 
-
-        <article class="timeline-item"
-          data-year="2024"
-          data-month="3"
-          data-category="nonfiction"
-          data-youtube="https://youtu.be/pGydiWVXVEM"
-          data-bg="fighting-stereotypes.png"
+        <article class="timeline-item reveal"
+          data-year="2024" data-month="3" data-category="nonfiction"
+          data-youtube="https://youtu.be/pGydiWVXVEM" data-bg="fighting-stereotypes.png"
           data-meta="Non-fiction · School assignment · Mar 2024"
           data-desc="Non-fiction assignment tackling social stereotypes. Mix of interviews and staged moments, with a clean, direct visual language. Made as a part of the FilmEU program, with felow student filmmakers from all over Europe.">
           <div class="timeline-year"></div>
           <div class="timeline-card">
             <div class="timeline-content">
-              <div class="project-meta">
-                <span class="project-date">Mar 2024</span>
-                <span class="project-meta-sep">·</span>
-                <span class="project-role">Non-fiction · School assignment</span>
+              <div class="timeline-thumb" style="background-image:url('fighting-stereotypes.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">Mar 2024</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Non-fiction · School assignment</span>
+                </div>
+                <h3 class="project-title">Fighting Stereotypes</h3>
+                <p class="project-context">Student project</p>
+                <p class="project-desc">Non-fiction piece around social stereotypes.</p>
               </div>
-              <h2 class="project-title">Fighting Stereotypes</h2>
-              <p class="project-context">Student project</p>
-              <p class="project-desc">
-                Non-fiction piece around social stereotypes.
-              </p>
+              <span class="timeline-go">→</span>
             </div>
           </div>
         </article>
 
-        <article class="timeline-item"
-          data-year="2024"
-          data-month="3"
-          data-category="commercial"
-          data-youtube="https://youtube.com/shorts/_Xo8MeMOYPU?feature=share"
-          data-bg="aston-martin1.png"
+        <article class="timeline-item reveal"
+          data-year="2024" data-month="3" data-category="commercial"
+          data-youtube="https://youtube.com/shorts/_Xo8MeMOYPU?feature=share" data-bg="aston-martin1.png"
           data-meta="Commercial · Automotive · Mar 2024"
           data-desc="My first opportunity thanks to my work on Coenenvideo, to create an edit for Aston Martin's socials. A stop motion reel showcasing the car in a dynamic way.">
           <div class="timeline-year"></div>
           <div class="timeline-card">
             <div class="timeline-content">
-              <div class="project-meta">
-                <span class="project-date">Mar 2024</span>
-                <span class="project-meta-sep">·</span>
-                <span class="project-role">Commercial · Automotive</span>
+              <div class="timeline-thumb" style="background-image:url('aston-martin1.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">Mar 2024</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Commercial · Automotive</span>
+                </div>
+                <h3 class="project-title">Aston Martin</h3>
+                <p class="project-context">Commercial edit</p>
+                <p class="project-desc">Stop Motion made for Aston Martin's Socials.</p>
               </div>
-              <h2 class="project-title">Aston Martin</h2>
-              <p class="project-context">Commercial edit</p>
-              <p class="project-desc">
-                Stop Motion made for Aston Martin's Socials.
-              </p>
+              <span class="timeline-go">→</span>
             </div>
           </div>
         </article>
 
         <!-- 2023 -->
-        <article class="timeline-item"
-          data-year="2023"
-          data-month="11"
-          data-category="nonfiction"
-          data-youtube="https://youtu.be/5-kUYB2ytio"
-          data-bg="het-journaal.png"
+        <article class="timeline-item reveal"
+          data-year="2023" data-month="11" data-category="nonfiction"
+          data-youtube="https://youtu.be/5-kUYB2ytio" data-bg="het-journaal.png"
           data-meta="Non-fiction · News piece · Nov 2023"
           data-desc="Student news report in the style of ‘Het Journaal’. i've made (copied) all the known assets used by the VRT to implement them into our own version, Even the desk and reflections! all fake!.">
           <div class="timeline-year">2023</div>
           <div class="timeline-card">
             <div class="timeline-content">
-              <div class="project-meta">
-                <span class="project-date">Nov 2023</span>
-                <span class="project-meta-sep">·</span>
-                <span class="project-role">Non-fiction · News piece</span>
+              <div class="timeline-thumb" style="background-image:url('het-journaal.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">Nov 2023</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Non-fiction · News piece</span>
+                </div>
+                <h3 class="project-title">Het Journaal</h3>
+                <p class="project-context">School news report</p>
+                <p class="project-desc">Broadcast-style school news report in the tone of “Het Journaal”.</p>
               </div>
-              <h2 class="project-title">Het Journaal</h2>
-              <p class="project-context">School news report</p>
-              <p class="project-desc">
-                Broadcast-style school news report in the tone of “Het Journaal”.
-              </p>
+              <span class="timeline-go">→</span>
             </div>
           </div>
         </article>
 
-        <article class="timeline-item"
-  data-year="2023"
-  data-month="9"
-  data-category="commercial"
-  data-bg="stop-motion.png"
-  data-meta="Commercial / Coenenvideo · Sep 2023"
-  data-youtube="https://youtube.com/shorts/jOl4QCwfndk?feature=share https://youtube.com/shorts/-6WdlFwqjok?feature=share https://youtube.com/shorts/pQb5z1YuUus"
-  data-desc="Coenenvideo started for fun because I had little to do in my second year of film school, no big challenges on the road, so I challenged myself to create something that was completely outside my comfort zone: animation.
+        <article class="timeline-item reveal"
+          data-year="2023" data-month="9" data-category="commercial"
+          data-bg="stop-motion.png"
+          data-meta="Commercial / Coenenvideo · Sep 2023"
+          data-youtube="https://youtube.com/shorts/jOl4QCwfndk?feature=share https://youtube.com/shorts/-6WdlFwqjok?feature=share https://youtube.com/shorts/pQb5z1YuUus"
+          data-desc="Coenenvideo started for fun because I had little to do in my second year of film school, no big challenges on the road, so I challenged myself to create something that was completely outside my comfort zone: animation.
 Since I can’t draw that well, I decided to animate images instead, and that’s when it all started. Coenenvideo was born!">
-  <div class="timeline-year"></div>
-  <div class="timeline-card">
-    <div class="timeline-content">
-      <div class="project-meta">
-        <span class="project-date">Sep 2023</span>
-        <span class="project-meta-sep">·</span>
-        <span class="project-role">Commercial / Experimental</span>
-      </div>
-      <h2 class="project-title">Coenenvideo</h2>
-      <p class="project-context">Instagram · Coenenvideo</p>
-      <p class="project-desc">
-        Short stop-motion clips made as an Instagram experiment.
-      </p>
-    </div>
-  </div>
-</article>
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="timeline-thumb" style="background-image:url('stop-motion.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">Sep 2023</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Commercial / Experimental</span>
+                </div>
+                <h3 class="project-title">Coenenvideo</h3>
+                <p class="project-context">Instagram · Coenenvideo</p>
+                <p class="project-desc">Short stop-motion clips made as an Instagram experiment.</p>
+              </div>
+              <span class="timeline-go">→</span>
+            </div>
+          </div>
+        </article>
 
-<article class="timeline-item"
-  data-year="2023"
-  data-month="8"
-  data-category="commercial"
-  data-bg="center-parcs.png"
-  data-meta="Commercial · Aug 2023"
-  data-youtube="https://youtube.com/shorts/98gC1yp5sZw?feature=share"
-  data-desc="During my summer break I worked for Center Parcs in their animation team, and they asked if I’d be interested in making some work for them paid, of course. I said, “Well, of course! At least I’ll have something to do this summer.”
+        <article class="timeline-item reveal"
+          data-year="2023" data-month="8" data-category="commercial"
+          data-bg="center-parcs.png"
+          data-meta="Commercial · Aug 2023"
+          data-youtube="https://youtube.com/shorts/98gC1yp5sZw?feature=share"
+          data-desc="During my summer break I worked for Center Parcs in their animation team, and they asked if I’d be interested in making some work for them paid, of course. I said, “Well, of course! At least I’ll have something to do this summer.”
 From that moment on, I felt that entrepreneurship and decision-making were things that really made me dream. Because honestly… what are the limits?">
-  <div class="timeline-year"></div>
-  <div class="timeline-card">
-    <div class="timeline-content">
-      <div class="project-meta">
-        <span class="project-date">Aug 2023</span>
-        <span class="project-meta-sep">·</span>
-        <span class="project-role">Commercial</span>
-      </div>
-      <h2 class="project-title">Center Parcs</h2>
-      <p class="project-context">Promotional film</p>
-      <p class="project-desc">
-        Promotional piece for Center Parcs holiday parks.
-      </p>
-    </div>
-  </div>
-</article>
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="timeline-thumb" style="background-image:url('center-parcs.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">Aug 2023</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Commercial</span>
+                </div>
+                <h3 class="project-title">Center Parcs</h3>
+                <p class="project-context">Promotional film</p>
+                <p class="project-desc">Promotional piece for Center Parcs holiday parks.</p>
+              </div>
+              <span class="timeline-go">→</span>
+            </div>
+          </div>
+        </article>
 
+        <article class="timeline-item reveal"
+          data-year="2023" data-month="4" data-category="fiction"
+          data-bg="het-plan.png"
+          data-meta="Fiction · Student film · Apr 2023"
+          data-images="het-plan-2.png,het-plan-3.png,het-plan-4.png"
+          data-desc="Fiction short made as a student project. well, it seems that there's no video... hmmmmmm... I think we all make some mistakes.">
+          <div class="timeline-year"></div>
+          <div class="timeline-card">
+            <div class="timeline-content">
+              <div class="timeline-thumb" style="background-image:url('het-plan.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">Apr 2023</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Fiction · Student film</span>
+                </div>
+                <h3 class="project-title">Het Plan</h3>
+                <p class="project-context">Narrative short film</p>
+                <p class="project-desc">Student fiction project exploring narrative and character.</p>
+              </div>
+              <span class="timeline-go">→</span>
+            </div>
+          </div>
+        </article>
 
-<article class="timeline-item"
-  data-year="2023"
-  data-month="4"
-  data-category="fiction"
-  data-bg="het-plan.png"
-  data-meta="Fiction · Student film · Apr 2023"
-  data-images="het-plan-2.png,het-plan-3.png,het-plan-4.png"
-  data-desc="Fiction short made as a student project. well, it seems that there's no video... hmmmmmm... I think we all make some mistakes.">
-  <div class="timeline-year"></div>
-  <div class="timeline-card">
-    <div class="timeline-content">
-      <div class="project-meta">
-        <span class="project-date">Apr 2023</span>
-        <span class="project-meta-sep">·</span>
-        <span class="project-role">Fiction · Student film</span>
-      </div>
-      <h2 class="project-title">Het Plan</h2>
-      <p class="project-context">Narrative short film</p>
-      <p class="project-desc">
-        Student fiction project exploring narrative and character.
-      </p>
-    </div>
-  </div>
-</article>
-
-
-        <article class="timeline-item"
-          data-year="2023"
-          data-month="2"
-          data-category="nonfiction"
-          data-youtube="https://youtu.be/36PZDkbGybQ"
-          data-bg="charleroi.png"
+        <article class="timeline-item reveal"
+          data-year="2023" data-month="2" data-category="nonfiction"
+          data-youtube="https://youtu.be/36PZDkbGybQ" data-bg="charleroi.png"
           data-meta="Non-fiction · Feb 2023"
           data-desc="Early documentary exploration in Charleroi. Observational footage and atmospheric city images.">
           <div class="timeline-year"></div>
           <div class="timeline-card">
             <div class="timeline-content">
-              <div class="project-meta">
-                <span class="project-date">Feb 2023</span>
-                <span class="project-meta-sep">·</span>
-                <span class="project-role">Non-fiction</span>
+              <div class="timeline-thumb" style="background-image:url('charleroi.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">Feb 2023</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Non-fiction</span>
+                </div>
+                <h3 class="project-title">Charleroi</h3>
+                <p class="project-context">Non-fiction piece</p>
+                <p class="project-desc">Observational non-fiction work shot in Charleroi.</p>
               </div>
-              <h2 class="project-title">Charleroi</h2>
-              <p class="project-context">Non-fiction piece</p>
-              <p class="project-desc">
-                Observational non-fiction work shot in Charleroi.
-              </p>
+              <span class="timeline-go">→</span>
             </div>
           </div>
         </article>
 
-        <article class="timeline-item"
-          data-year="2023"
-          data-month="1"
-          data-category="nonfiction"
-          data-youtube="https://youtu.be/FODNIKcIMYg"
-          data-bg="french-alps.png"
+        <article class="timeline-item reveal"
+          data-year="2023" data-month="1" data-category="nonfiction"
+          data-youtube="https://youtu.be/FODNIKcIMYg" data-bg="french-alps.png"
           data-meta="Non-fiction · Winter 2023"
           data-desc="Non-fiction work in the French Alps. Landscape, snow and quiet moments away from the city.">
           <div class="timeline-year"></div>
           <div class="timeline-card">
             <div class="timeline-content">
-              <div class="project-meta">
-                <span class="project-date">Winter 2023</span>
-                <span class="project-meta-sep">·</span>
-                <span class="project-role">Non-fiction</span>
+              <div class="timeline-thumb" style="background-image:url('french-alps.png')"></div>
+              <div class="timeline-body">
+                <div class="project-meta">
+                  <span class="project-date">Winter 2023</span>
+                  <span class="project-meta-sep">·</span>
+                  <span class="project-role">Non-fiction</span>
+                </div>
+                <h3 class="project-title">French Alps</h3>
+                <p class="project-context">Non-fiction / travel</p>
+                <p class="project-desc">School asignment to film someting in movement, shot at home in the French Alps.</p>
               </div>
-              <h2 class="project-title">French Alps</h2>
-              <p class="project-context">Non-fiction / travel</p>
-              <p class="project-desc">
-                School asignment to film someting in movement, shot at home in the French Alps.
-              </p>
+              <span class="timeline-go">→</span>
             </div>
           </div>
         </article>
       </div>
 
       <p class="small-note">
-        ↑ Click on any project tile or its dot in the bar to open a quick overlay with the film
-        and a short description. Use the filters to show only fiction, non-fiction, commercial
-        work or start-up projects.
+        Click any project (or its dot on the bar) to open the film and a short note. Use the
+        filters to show only fiction, non-fiction, commercial or start-up work.
       </p>
     </section>
-  </main>
 
     <footer class="contact-footer">
-    <p>
-      Contact ·
-      <a href="mailto:Martijn.coenen@student.luca-arts.be">
-        Martijn.coenen@student.luca-arts.be
-      </a>
-    </p>
-  </footer>
-<!-- ABOUT ME MODAL -->
-<div class="modal about-modal" id="about-modal" aria-hidden="true">
-  <div class="modal-backdrop"></div>
-  <div class="modal-dialog about-dialog" role="dialog" aria-modal="true" aria-labelledby="about-title">
-    <div class="modal-header about-header">
-      <div>
-        <div class="modal-title">About me</div>
-        <div class="modal-meta">Martijn Coenen · Cinematographer &amp; Filmmaker</div>
+      <span class="foot-name">Martijn Coenen</span>
+      <span>
+        <a href="mailto:Martijn.coenen@student.luca-arts.be">Martijn.coenen@student.luca-arts.be</a>
+        &nbsp;·&nbsp;
+        <a href="https://chargelink.be" target="_blank" rel="noopener">ChargeLink</a>
+      </span>
+    </footer>
+  </main>
+
+  <!-- ABOUT ME MODAL -->
+  <div class="modal about-modal" id="about-modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog about-dialog" role="dialog" aria-modal="true" aria-labelledby="about-title">
+      <div class="modal-header about-header">
+        <div>
+          <div class="modal-title" id="about-title">About me</div>
+          <div class="modal-meta">Martijn Coenen · Cinematographer &amp; Filmmaker</div>
+        </div>
+        <button class="modal-close about-close" type="button" aria-label="Close about section">×</button>
       </div>
-      <button class="about-close" type="button" aria-label="Close about section">×</button>
-    </div>
 
-    <div class="about-text">
+      <div class="about-text">
+        <div class="about-content" id="about-full">
+          <p>
+            I'm Martijn Coenen, a cinematographer and filmmaker in training based in Belgium.
+            I'm doing a Master in Film &amp; TV at LUCA School of Arts in Genk. My work sits
+            between intimate non-fiction, narrative shorts and automotive/commercial pieces.
+            I like staying close to people and situations – my grandmother in her living room,
+            someone having a rough day, a soldier alone in a field in <em>Red Tape</em>. I'm
+            more interested in images that feel honest than images that just look perfect.
+          </p>
+          <p>
+            Sometimes I feel that on set we're always chasing "perfect light", but for me
+            overexposure, low dynamic range or noise aren't automatically wrong. I'd rather
+            build a simple setup that gives the right feeling than force a textbook three-point
+            scheme on every frame. Alongside school I co-founded <strong>ChargeLink</strong>,
+            a practical on-set system that tracks camera batteries in real time so crews don't
+            lose takes to dead packs, and I run <strong>Coenenvideo</strong>, a long-running
+            stop-motion and automotive playground where I learned a lot by just making things.
+          </p>
+          <p>
+            On set, if I'm in charge, I try to keep things calm and straightforward. I want
+            people to feel genuinely respected, not talked over or forced into a fake "good
+            vibe". Outside of film my life is not some perfect feed either: I waste time on
+            YouTube, stress about deadlines, like cars, long drives, messing with gear and
+            spending time with my grandmother. I'm mainly interested in growing as a director
+            of photography and working with people who care more about what's in front of the
+            camera than about the "perfect" setup.
+          </p>
+        </div>
 
-  <!-- normal version -->
-  <div class="about-content" id="about-full">
-    <p>
-      I'm Martijn Coenen, a cinematographer and filmmaker in training based in Belgium.
-      I'm doing a Master in Film &amp; TV at LUCA School of Arts in Genk. My work sits
-      between intimate non-fiction, narrative shorts and automotive/commercial pieces.
-      I like staying close to people and situations – my grandmother in her living room,
-      someone having a rough day, a soldier alone in a field in <em>Red Tape</em>. I'm
-      more interested in images that feel honest than images that just look perfect.
-    </p>
+        <div class="about-content about-content-short" id="about-short" hidden>
+          <p>I make films, keep set tech behaving, and look for shots that actually mean something.</p>
+        </div>
 
-    <p>
-      Sometimes I feel that on set we're always chasing "perfect light", but for me
-      overexposure, low dynamic range or noise aren't automatically wrong. I'd rather
-      build a simple setup that gives the right feeling than force a textbook three-point
-      scheme on every frame. Alongside school I co-founded <strong>ChargeLink</strong>,
-      a practical on-set system that tracks camera batteries in real time so crews don't
-      lose takes to dead packs, and I run <strong>Coenenvideo</strong>, a long-running
-      stop-motion and automotive playground where I learned a lot by just making things.
-    </p>
+        <button type="button" class="about-toggle-btn" id="about-toggle-btn">extremely short version</button>
+      </div>
 
-    <p>
-      On set, if I'm in charge, I try to keep things calm and straightforward. I want
-      people to feel genuinely respected, not talked over or forced into a fake "good
-      vibe". Outside of film my life is not some perfect feed either: I waste time on
-      YouTube, stress about deadlines, like cars, long drives, messing with gear and
-      spending time with my grandmother. I'm mainly interested in growing as a director
-      of photography and working with people who care more about what's in front of the
-      camera than about the "perfect" setup.
-    </p>
-  </div>
-
-  <!-- extremely short version -->
-  <div class="about-content about-content-short" id="about-short" hidden>
-    <p>
-      I make films, keep set tech behaving, and look for shots that actually mean something.
-    </p>
-  </div>
-
-  <!-- tiny toggle button (we'll position it bottom-left with CSS) -->
-  <button type="button" class="about-toggle-btn" id="about-toggle-btn">
-    extremely short version
-  </button>
-</div>
-
-
-    <div class="about-photos">
-      <!-- swap these file names for your real images -->
-      <img src="about-1.png" alt="Martijn on set with a camera">
-      <img src="about-2.png" alt="Behind the scenes still">
-      <img src="about-3.png" alt="Landscape or location still">
+      <div class="about-photos">
+        <img src="about-1.png" alt="Martijn on set with a camera" />
+        <img src="about-2.png" alt="Behind the scenes still" />
+        <img src="about-3.png" alt="Landscape or location still" />
+      </div>
     </div>
   </div>
-</div>
 
-
-  <!-- MODAL OVERLAY -->
+  <!-- PROJECT MODAL -->
   <div class="modal" id="project-modal" aria-hidden="true">
     <div class="modal-backdrop"></div>
     <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -1680,526 +1610,408 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
         </div>
         <button class="modal-close" id="modal-close" aria-label="Close">×</button>
       </div>
-<div class="modal-video-wrap" id="modal-media"></div>
-<div class="modal-desc" id="modal-desc"></div>
+      <div class="modal-video-wrap" id="modal-media"></div>
+      <div class="modal-desc" id="modal-desc"></div>
     </div>
   </div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const bar = document.getElementById("year-slider-bar");
-    const fill = document.getElementById("year-slider-fill");
-    const handle = document.getElementById("year-slider-handle");
-    const tickElems = Array.from(document.querySelectorAll(".year-tick"));
-    const label = document.getElementById("year-slider-active"); // may be null now
-    const items = Array.from(document.querySelectorAll(".timeline-item"));
-    const filterButtons = Array.from(document.querySelectorAll(".nav-filter-btn"));
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const bar = document.getElementById("year-slider-bar");
+      const fill = document.getElementById("year-slider-fill");
+      const handle = document.getElementById("year-slider-handle");
+      const tickElems = Array.from(document.querySelectorAll(".year-tick"));
+      const label = null;
+      const items = Array.from(document.querySelectorAll(".timeline-item"));
+      const filterButtons = Array.from(document.querySelectorAll(".nav-filter-btn"));
 
-    const modal = document.getElementById("project-modal");
-    const modalTitle = document.getElementById("modal-title");
-    const modalMeta = document.getElementById("modal-meta");
-    const modalDesc = document.getElementById("modal-desc");
-    const modalMedia = document.getElementById("modal-media");
-    const modalVideo = document.getElementById("modal-video");
-    const modalClose = document.getElementById("modal-close");
-    const modalBackdrop = modal.querySelector(".modal-backdrop");
-    const modalDialog = modal.querySelector(".modal-dialog");
-    const modalVideoWrap = modal.querySelector(".modal-video-wrap");
+      const modal = document.getElementById("project-modal");
+      const modalTitle = document.getElementById("modal-title");
+      const modalMeta = document.getElementById("modal-meta");
+      const modalDesc = document.getElementById("modal-desc");
+      const modalMedia = document.getElementById("modal-media");
+      const modalClose = document.getElementById("modal-close");
+      const modalBackdrop = modal.querySelector(".modal-backdrop");
+      const modalDialog = modal.querySelector(".modal-dialog");
 
-    // ABOUT ME MODAL ELEMENTS
-    const aboutModal = document.getElementById("about-modal");
-    const aboutOpenBtn = document.getElementById("about-btn");
-    const aboutBackdrop = aboutModal ? aboutModal.querySelector(".modal-backdrop") : null;
-    const aboutClose = aboutModal ? aboutModal.querySelector(".about-close") : null;
+      // ABOUT MODAL
+      const aboutModal = document.getElementById("about-modal");
+      const aboutOpenBtn = document.getElementById("about-btn");
+      const aboutBackdrop = aboutModal ? aboutModal.querySelector(".modal-backdrop") : null;
+      const aboutClose = aboutModal ? aboutModal.querySelector(".about-close") : null;
 
-    function openAboutModal() {
-      if (!aboutModal) return;
-      aboutModal.classList.add("open");
-      document.body.classList.add("modal-open");
-    }
-
-    function closeAboutModal() {
-      if (!aboutModal) return;
-      aboutModal.classList.remove("open");
-      document.body.classList.remove("modal-open");
-    }
-    // About modal short/long toggle
-    const aboutFull = document.getElementById("about-full");
-    const aboutShort = document.getElementById("about-short");
-    const aboutToggleBtn = document.getElementById("about-toggle-btn");
-
-    if (aboutFull && aboutShort && aboutToggleBtn) {
-      let showingShort = false;
-
-      aboutToggleBtn.addEventListener("click", () => {
-        showingShort = !showingShort;
-
-        aboutFull.hidden = showingShort;
-        aboutShort.hidden = !showingShort;
-
-        aboutToggleBtn.textContent = showingShort
-          ? "back to normal version"
-          : "extremely short version";
-      });
-    }
-
-    function positionCurrentWorkConnector() {
-      const header = document.querySelector("header");
-      const connector = document.getElementById("current-work-connector");
-      const box = document.querySelector(".current-work");
-      const nowDot = document.querySelector(".year-now-marker");
-
-      if (!header || !connector || !box || !nowDot) return;
-
-      const headerRect = header.getBoundingClientRect();
-      const boxRect = box.getBoundingClientRect();
-      const dotRect = nowDot.getBoundingClientRect();
-
-      const startX = boxRect.left + boxRect.width / 2 - headerRect.left;
-      const startY = boxRect.bottom - headerRect.top;
-
-      const endX = dotRect.left + dotRect.width / 2 - headerRect.left;
-      const endY = dotRect.top + dotRect.height / 2 - headerRect.top;
-
-      const dx = endX - startX;
-      const dy = endY - startY;
-      const length = Math.hypot(dx, dy);
-      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-
-      connector.style.width = `${length}px`;
-      connector.style.transform = `translate(${startX}px, ${startY}px) rotate(${angle}deg)`;
-    }
-
-    let currentFilter = "all";
-
-    // Apply background images with left-side gradient
-    items.forEach(el => {
-      const bg = el.dataset.bg;
-      if (!bg) return;
-      const card = el.querySelector(".timeline-content");
-      if (!card) return;
-      card.style.backgroundImage =
-        "linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 32%, rgba(0,0,0,0.25) 68%, rgba(0,0,0,0) 100%), url('" + bg + "')";
-      card.style.backgroundSize = "cover";
-      card.style.backgroundPosition = "center center";
-    });
-
-    // ----- time axis setup: from earliest project (Jan) to NOW -----
-    const yearsInData = items.map(el => parseInt(el.dataset.year, 10));
-    const minYear = Math.min(...yearsInData);
-    const now = new Date();
-    const nowYear = now.getFullYear();
-    const nowMonth = now.getMonth() + 1; // 1..12
-
-    function monthIndex(year, month) {
-      return (year - minYear) * 12 + (month - 1);
-    }
-
-    const maxIndex = monthIndex(nowYear, nowMonth);
-
-    function ratioForYearStart(year) {
-      const idx = monthIndex(year, 1);
-      if (maxIndex <= 0) return 0;
-      let r = idx / maxIndex;
-      if (r < 0) r = 0;
-      if (r > 1) r = 1;
-      return r;
-    }
-
-    function ratioForItem(el) {
-      const y = parseInt(el.dataset.year, 10);
-      const m = parseInt(el.dataset.month || "6", 10);
-      const idx = monthIndex(y, m);
-      if (maxIndex <= 0) return 0.5;
-      let r = idx / maxIndex;
-      if (r < 0) r = 0;
-      if (r > 1) r = 1;
-      return r;
-    }
-
-    // ----- helpers -----
-
-    function visibleItemsForYear(year) {
-      return items.filter(el => {
-        const matchYear = el.dataset.year === String(year);
-        const cat = el.dataset.category;
-        const matchFilter = currentFilter === "all" || cat === currentFilter;
-        return matchYear && matchFilter && !el.classList.contains("hidden");
-      });
-    }
-
-    function scrollToYear(year) {
-      const visible = visibleItemsForYear(year);
-      if (!visible.length) return;
-      const target = visible[0];
-      const top = target.getBoundingClientRect().top + window.scrollY - 90;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-
-    function setActiveYear(year, opts = { scroll: true }) {
-      tickElems.forEach(t => {
-        t.classList.toggle("active", t.dataset.year === String(year));
-      });
-
-      let r = ratioForYearStart(Number(year));
-      if (Number(year) === nowYear) {
-        r = 1;
+      function openAboutModal() {
+        if (!aboutModal) return;
+        aboutModal.classList.add("open");
+        document.body.classList.add("modal-open");
       }
-      const leftPercent = r * 100;
-      handle.style.left = leftPercent + "%";
-      fill.style.width = leftPercent + "%";
-
-      // label is optional now
-      if (label) {
-        if (year === String(nowYear)) {
-          label.textContent = `${year} (latest)`;
-        } else {
-          label.textContent = String(year);
-        }
+      function closeAboutModal() {
+        if (!aboutModal) return;
+        aboutModal.classList.remove("open");
+        document.body.classList.remove("modal-open");
       }
 
-      if (opts.scroll) {
-        scrollToYear(year);
-      }
-    }
-
-    function applyFilter(filter) {
-      currentFilter = filter;
-      items.forEach(el => {
-        const cat = el.dataset.category;
-        const show = filter === "all" || cat === filter;
-        el.classList.toggle("hidden", !show);
-      });
-    }
-
-    function positionYearTicks() {
-      tickElems.forEach(t => {
-        const y = Number(t.dataset.year);
-        const r = ratioForYearStart(y);
-        t.style.left = (r * 100) + "%";
-      });
-    }
-
-    // ----- modal logic -----
-
-    function openModalFromItem(el) {
-      const titleEl = el.querySelector(".project-title");
-      const title = titleEl ? titleEl.textContent.trim() : "Project";
-      const meta = el.dataset.meta || "";
-      const desc = el.dataset.desc || "";
-      const bg = el.dataset.bg || "";
-
-      const singleVideo = el.dataset.video;
-      const multiVideos = el.dataset.videos;
-      const images = el.dataset.images;
-
-      const ytSingle = el.dataset.youtube;
-      const ytMulti = el.dataset.youtubeVideos;
-
-      modalTitle.textContent = title;
-      modalMeta.textContent = meta;
-      modalDesc.textContent = desc;
-
-      if (bg) {
-        modalDialog.style.backgroundImage = `url('${bg}')`;
-      } else {
-        modalDialog.style.backgroundImage = "none";
-      }
-
-      modalMedia.innerHTML = "";
-      modalDialog.classList.remove("no-video");
-
-      function toEmbedSrc(value) {
-        if (!value) return "";
-        const input = value.trim();
-
-        if (input.startsWith("https://www.youtube.com/embed/")) {
-          return input;
-        }
-
-        try {
-          const url = new URL(input);
-
-          if (url.hostname === "youtu.be") {
-            const id = url.pathname.slice(1);
-            if (id) return "https://www.youtube.com/embed/" + id;
-          }
-
-          if (
-            url.hostname === "youtube.com" ||
-            url.hostname === "www.youtube.com" ||
-            url.hostname.endsWith(".youtube.com")
-          ) {
-            if (url.pathname.startsWith("/shorts/")) {
-              const parts = url.pathname.split("/");
-              const id = parts[2] || "";
-              if (id) return "https://www.youtube.com/embed/" + id;
-            }
-
-            const id = url.searchParams.get("v");
-            if (id) return "https://www.youtube.com/embed/" + id;
-          }
-        } catch (e) {
-          // ignore
-        }
-
-        if (!input.startsWith("http")) {
-          return "https://www.youtube.com/embed/" + input;
-        }
-
-        return input;
-      }
-
-      function addIframe(value) {
-        const src = toEmbedSrc(value);
-        if (!src) return;
-        const iframe = document.createElement("iframe");
-        iframe.src = src;
-        iframe.allow =
-          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-        iframe.allowFullscreen = true;
-        iframe.loading = "lazy";
-        iframe.setAttribute("title", title + " — YouTube video");
-        modalMedia.appendChild(iframe);
-      }
-
-      if (images) {
-        images.split(",").map(s => s.trim()).forEach(src => {
-          if (!src) return;
-          const img = document.createElement("img");
-          img.src = src;
-          img.alt = title + " still";
-          img.style.width = "100%";
-          img.style.display = "block";
-          img.style.borderRadius = "10px";
-          modalMedia.appendChild(img);
+      const aboutFull = document.getElementById("about-full");
+      const aboutShort = document.getElementById("about-short");
+      const aboutToggleBtn = document.getElementById("about-toggle-btn");
+      if (aboutFull && aboutShort && aboutToggleBtn) {
+        let showingShort = false;
+        aboutToggleBtn.addEventListener("click", () => {
+          showingShort = !showingShort;
+          aboutFull.hidden = showingShort;
+          aboutShort.hidden = !showingShort;
+          aboutToggleBtn.textContent = showingShort ? "back to normal version" : "extremely short version";
         });
-      } else if (ytMulti) {
-        ytMulti.split(",").map(s => s.trim()).forEach(addIframe);
-      } else if (ytSingle) {
-        addIframe(ytSingle);
-      } else if (multiVideos) {
-        multiVideos.split(",").map(s => s.trim()).forEach(src => {
-          if (!src) return;
-          const v = document.createElement("video");
-          v.controls = true;
-          v.src = src;
-          modalMedia.appendChild(v);
-        });
-      } else if (singleVideo) {
-        const v = document.createElement("video");
-        v.controls = true;
-        v.src = singleVideo;
-        modalMedia.appendChild(v);
-      } else {
-        modalDialog.classList.add("no-video");
       }
 
-      modal.classList.add("open");
-      document.body.classList.add("modal-open");
-    }
+      let currentFilter = "all";
 
-    function closeModal() {
-      modal.classList.remove("open");
-      document.body.classList.remove("modal-open");
-      modalDialog.classList.remove("no-video");
+      // ---- time axis: earliest project (Jan) to NOW ----
+      const yearsInData = items.map(el => parseInt(el.dataset.year, 10));
+      const minYear = Math.min(...yearsInData);
+      const now = new Date();
+      const nowYear = now.getFullYear();
+      const nowMonth = now.getMonth() + 1;
 
-      const vids = modalMedia.querySelectorAll("video");
-      vids.forEach(v => {
-        try {
-          if (!v.paused) v.pause();
-        } catch (e) {}
-        v.removeAttribute("src");
-      });
+      function monthIndex(year, month) { return (year - minYear) * 12 + (month - 1); }
+      const maxIndex = monthIndex(nowYear, nowMonth);
 
-      const iframes = modalMedia.querySelectorAll("iframe");
-      iframes.forEach(f => {
-        try {
-          f.src = "";
-        } catch (e) {}
-      });
-
-      modalMedia.innerHTML = "";
-    }
-
-    modalClose.addEventListener("click", closeModal);
-    modalBackdrop.addEventListener("click", closeModal);
-
-    if (aboutOpenBtn) {
-      aboutOpenBtn.addEventListener("click", openAboutModal);
-    }
-    if (aboutBackdrop) {
-      aboutBackdrop.addEventListener("click", closeAboutModal);
-    }
-    if (aboutClose) {
-      aboutClose.addEventListener("click", closeAboutModal);
-    }
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        if (modal.classList.contains("open")) {
-          closeModal();
-        }
-        if (aboutModal && aboutModal.classList.contains("open")) {
-          closeAboutModal();
-        }
+      function ratioForYearStart(year) {
+        const idx = monthIndex(year, 1);
+        if (maxIndex <= 0) return 0;
+        return Math.min(1, Math.max(0, idx / maxIndex));
       }
-    });
+      function ratioForItem(el) {
+        const y = parseInt(el.dataset.year, 10);
+        const m = parseInt(el.dataset.month || "6", 10);
+        const idx = monthIndex(y, m);
+        if (maxIndex <= 0) return 0.5;
+        return Math.min(1, Math.max(0, idx / maxIndex));
+      }
 
-    // ----- filter buttons -----
-    filterButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const filter = btn.dataset.filter;
-
-        filterButtons.forEach(b => b.classList.toggle("active", b === btn));
-
-        applyFilter(filter);
-
-        const showreel = document.querySelector(".showreel-section");
-        if (showreel) {
-          showreel.style.display = (filter === "all") ? "" : "none";
-        }
-
-        const activeTick =
-          document.querySelector(".year-tick.active") ||
-          tickElems[tickElems.length - 1];
-        if (activeTick) {
-          setActiveYear(activeTick.dataset.year, { scroll: false });
-        }
-      });
-    });
-
-    // ----- year ticks -----
-    tickElems.forEach(tick => {
-      tick.addEventListener("click", () => {
-        const year = tick.dataset.year;
-        setActiveYear(year, { scroll: true });
-      });
-    });
-
-    // ----- slider hover -----
-    if (bar) {
-      bar.addEventListener("mousemove", (e) => {
-        const rect = bar.getBoundingClientRect();
-        let pos = e.clientX - rect.left;
-        pos = Math.max(0, Math.min(pos, rect.width));
-        handle.style.left = (pos / rect.width * 100) + "%";
-        fill.style.width = (pos / rect.width * 100) + "%";
-
-        let closestTick = tickElems[0];
-        let minDist = Infinity;
-        tickElems.forEach(t => {
-          const tr = t.getBoundingClientRect();
-          const center = tr.left + tr.width / 2;
-          const dist = Math.abs(center - e.clientX);
-          if (dist < minDist) {
-            minDist = dist;
-            closestTick = t;
-          }
+      function visibleItemsForYear(year) {
+        return items.filter(el => {
+          const matchYear = el.dataset.year === String(year);
+          const cat = el.dataset.category;
+          const matchFilter = currentFilter === "all" || cat === currentFilter;
+          return matchYear && matchFilter && !el.classList.contains("hidden");
         });
+      }
 
-        if (closestTick && label) {
-          const year = closestTick.dataset.year;
-          label.textContent =
-            year === String(nowYear) ? `${year} (latest)` : year;
-        }
-      });
+      function scrollToYear(year) {
+        const visible = visibleItemsForYear(year);
+        if (!visible.length) return;
+        const top = visible[0].getBoundingClientRect().top + window.scrollY - 90;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
 
-      bar.addEventListener("mouseleave", () => {
-        const active =
-          document.querySelector(".year-tick.active") ||
-          tickElems[tickElems.length - 1];
-        if (active) {
-          setActiveYear(active.dataset.year, { scroll: false });
-        }
-      });
-    }
-
-    // ----- make timeline items open modal -----
-    items.forEach(el => {
-      el.addEventListener("click", (ev) => {
-        ev.stopPropagation();
-        openModalFromItem(el);
-      });
-    });
-
-    // ----- project dots on slider -----
-    function createProjectDots() {
-      if (!bar || !items.length) return;
-
-      const preview = document.getElementById("year-preview");
-      const previewTitle = preview ? preview.querySelector(".year-preview-title-text") : null;
-      const slider = document.querySelector(".year-slider");
-
-      items.forEach(el => {
-        const r = ratioForItem(el);
+      function setActiveYear(year, opts = { scroll: true }) {
+        tickElems.forEach(t => t.classList.toggle("active", t.dataset.year === String(year)));
+        let r = ratioForYearStart(Number(year));
+        if (Number(year) === nowYear) r = 1;
         const leftPercent = r * 100;
+        handle.style.left = leftPercent + "%";
+        fill.style.width = leftPercent + "%";
+        if (opts.scroll) scrollToYear(year);
+      }
 
-        const dot = document.createElement("button");
-        dot.type = "button";
-        const cat = el.dataset.category || "default";
-        dot.className = "project-dot project-dot--" + cat;
-        dot.style.left = leftPercent + "%";
+      function applyFilter(filter) {
+        currentFilter = filter;
+        items.forEach(el => {
+          const show = filter === "all" || el.dataset.category === filter;
+          el.classList.toggle("hidden", !show);
+        });
+      }
 
+      function positionYearTicks() {
+        tickElems.forEach(t => {
+          t.style.left = (ratioForYearStart(Number(t.dataset.year)) * 100) + "%";
+        });
+      }
+
+      // ---- modal ----
+      function openModalFromItem(el) {
         const titleEl = el.querySelector(".project-title");
         const title = titleEl ? titleEl.textContent.trim() : "Project";
-        dot.title = title;
-
+        const meta = el.dataset.meta || "";
+        const desc = el.dataset.desc || "";
         const bg = el.dataset.bg || "";
 
-        dot.addEventListener("click", (ev) => {
+        const singleVideo = el.dataset.video;
+        const multiVideos = el.dataset.videos;
+        const images = el.dataset.images;
+        const ytSingle = el.dataset.youtube;
+        const ytMulti = el.dataset.youtubeVideos;
+
+        modalTitle.textContent = title;
+        modalMeta.textContent = meta;
+        modalDesc.textContent = desc;
+        modalDialog.style.backgroundImage = bg ? `url('${bg}')` : "none";
+
+        modalMedia.innerHTML = "";
+        modalDialog.classList.remove("no-video");
+
+        function toEmbedSrc(value) {
+          if (!value) return "";
+          const input = value.trim();
+          if (input.startsWith("https://www.youtube.com/embed/")) return input;
+          try {
+            const url = new URL(input);
+            if (url.hostname === "youtu.be") {
+              const id = url.pathname.slice(1);
+              if (id) return "https://www.youtube.com/embed/" + id;
+            }
+            if (url.hostname === "youtube.com" || url.hostname === "www.youtube.com" || url.hostname.endsWith(".youtube.com")) {
+              if (url.pathname.startsWith("/shorts/")) {
+                const id = url.pathname.split("/")[2] || "";
+                if (id) return "https://www.youtube.com/embed/" + id;
+              }
+              const id = url.searchParams.get("v");
+              if (id) return "https://www.youtube.com/embed/" + id;
+            }
+          } catch (e) {}
+          if (!input.startsWith("http")) return "https://www.youtube.com/embed/" + input;
+          return input;
+        }
+        function addIframe(value) {
+          const src = toEmbedSrc(value);
+          if (!src) return;
+          const iframe = document.createElement("iframe");
+          iframe.src = src;
+          iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+          iframe.allowFullscreen = true;
+          iframe.loading = "lazy";
+          iframe.setAttribute("title", title + " — YouTube video");
+          modalMedia.appendChild(iframe);
+        }
+
+        if (images) {
+          images.split(",").map(s => s.trim()).forEach(src => {
+            if (!src) return;
+            const img = document.createElement("img");
+            img.src = src; img.alt = title + " still";
+            modalMedia.appendChild(img);
+          });
+        } else if (ytMulti) {
+          ytMulti.split(",").map(s => s.trim()).forEach(addIframe);
+        } else if (ytSingle && ytSingle.trim()) {
+          ytSingle.trim().split(/\s+/).forEach(addIframe);
+        } else if (multiVideos) {
+          multiVideos.split(",").map(s => s.trim()).forEach(src => {
+            if (!src) return;
+            const v = document.createElement("video");
+            v.controls = true; v.src = src;
+            modalMedia.appendChild(v);
+          });
+        } else if (singleVideo) {
+          const v = document.createElement("video");
+          v.controls = true; v.src = singleVideo;
+          modalMedia.appendChild(v);
+        } else {
+          modalDialog.classList.add("no-video");
+        }
+
+        modal.classList.add("open");
+        document.body.classList.add("modal-open");
+      }
+
+      function closeModal() {
+        modal.classList.remove("open");
+        document.body.classList.remove("modal-open");
+        modalDialog.classList.remove("no-video");
+        modalMedia.querySelectorAll("video").forEach(v => {
+          try { if (!v.paused) v.pause(); } catch (e) {}
+          v.removeAttribute("src");
+        });
+        modalMedia.querySelectorAll("iframe").forEach(f => { try { f.src = ""; } catch (e) {} });
+        modalMedia.innerHTML = "";
+      }
+
+      modalClose.addEventListener("click", closeModal);
+      modalBackdrop.addEventListener("click", closeModal);
+      if (aboutOpenBtn) aboutOpenBtn.addEventListener("click", openAboutModal);
+      if (aboutBackdrop) aboutBackdrop.addEventListener("click", closeAboutModal);
+      if (aboutClose) aboutClose.addEventListener("click", closeAboutModal);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          if (modal.classList.contains("open")) closeModal();
+          if (aboutModal && aboutModal.classList.contains("open")) closeAboutModal();
+        }
+      });
+
+      // ---- featured "More / Watch" buttons -> open the matching timeline item's modal ----
+      function findItem(predicate) { return items.find(predicate); }
+      const featuredTargets = {
+        chargelink: () => findItem(el => el.dataset.category === "startup"),
+        bomma: () => findItem(el => (el.querySelector(".project-title") || {}).textContent &&
+                                    el.querySelector(".project-title").textContent.trim().startsWith("Bomma"))
+      };
+      document.querySelectorAll(".feature-open").forEach(btn => {
+        btn.addEventListener("click", (ev) => {
+          ev.preventDefault();
+          ev.stopPropagation();
+          const key = btn.dataset.target;
+          const getter = featuredTargets[key];
+          const el = getter && getter();
+          if (el) openModalFromItem(el);
+        });
+      });
+
+      // ---- filter buttons ----
+      filterButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const filter = btn.dataset.filter;
+          filterButtons.forEach(b => b.classList.toggle("active", b === btn));
+          applyFilter(filter);
+          const activeTick = document.querySelector(".year-tick.active") || tickElems[tickElems.length - 1];
+          if (activeTick) setActiveYear(activeTick.dataset.year, { scroll: false });
+        });
+      });
+
+      // ---- year ticks ----
+      tickElems.forEach(tick => {
+        tick.addEventListener("click", () => setActiveYear(tick.dataset.year, { scroll: true }));
+      });
+
+      // ---- slider hover ----
+      if (bar) {
+        bar.addEventListener("mousemove", (e) => {
+          const rect = bar.getBoundingClientRect();
+          let pos = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+          handle.style.left = (pos / rect.width * 100) + "%";
+          fill.style.width = (pos / rect.width * 100) + "%";
+        });
+        bar.addEventListener("mouseleave", () => {
+          const active = document.querySelector(".year-tick.active") || tickElems[tickElems.length - 1];
+          if (active) setActiveYear(active.dataset.year, { scroll: false });
+        });
+      }
+
+      // ---- timeline items open modal ----
+      items.forEach(el => {
+        el.addEventListener("click", (ev) => {
           ev.stopPropagation();
           openModalFromItem(el);
         });
-
-        const showPreview = () => {
-          if (!preview || !previewTitle || !slider) return;
-
-          if (!bg) {
-            preview.classList.remove("visible");
-            return;
-          }
-
-          preview.style.backgroundImage = `url(${bg})`;
-          previewTitle.textContent = title;
-
-          const sliderRect = slider.getBoundingClientRect();
-          const dotRect = dot.getBoundingClientRect();
-          const centerX = dotRect.left + dotRect.width / 2 - sliderRect.left;
-          preview.style.left = centerX + "px";
-
-          preview.classList.add("visible");
-        };
-
-        const hidePreview = () => {
-          if (!preview) return;
-          preview.classList.remove("visible");
-        };
-
-        dot.addEventListener("mouseenter", showPreview);
-        dot.addEventListener("mouseleave", hidePreview);
-        dot.addEventListener("focus", showPreview);
-        dot.addEventListener("blur", hidePreview);
-
-        bar.appendChild(dot);
       });
-    }
 
-    // ----- init -----
-    positionYearTicks();
-    createProjectDots();
+      // ---- project dots on slider ----
+      function createProjectDots() {
+        if (!bar || !items.length) return;
+        const preview = document.getElementById("year-preview");
+        const previewTitle = preview ? preview.querySelector(".year-preview-title-text") : null;
+        const slider = document.querySelector(".year-slider");
 
-    const defaultTick =
-      document.querySelector(".year-tick.active") ||
-      tickElems[tickElems.length - 1];
-    if (defaultTick) {
-      setActiveYear(defaultTick.dataset.year, { scroll: false });
-    }
+        items.forEach(el => {
+          const leftPercent = ratioForItem(el) * 100;
+          const dot = document.createElement("button");
+          dot.type = "button";
+          const cat = el.dataset.category || "default";
+          dot.className = "project-dot project-dot--" + cat;
+          dot.style.left = leftPercent + "%";
+          const titleEl = el.querySelector(".project-title");
+          const title = titleEl ? titleEl.textContent.trim() : "Project";
+          dot.title = title;
+          const bg = el.dataset.bg || "";
 
-    window.addEventListener("resize", positionCurrentWorkConnector);
-    positionCurrentWorkConnector();
-  });
-</script>
+          dot.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            openModalFromItem(el);
+          });
 
+          const showPreview = () => {
+            if (!preview || !previewTitle || !slider) return;
+            if (!bg) { preview.classList.remove("visible"); return; }
+            preview.style.backgroundImage = `linear-gradient(0deg, rgba(0,0,0,0.45), rgba(0,0,0,0.1)), url(${bg})`;
+            previewTitle.textContent = title;
+            const sliderRect = slider.getBoundingClientRect();
+            const dotRect = dot.getBoundingClientRect();
+            preview.style.left = (dotRect.left + dotRect.width / 2 - sliderRect.left) + "px";
+            preview.classList.add("visible");
+          };
+          const hidePreview = () => { if (preview) preview.classList.remove("visible"); };
+
+          dot.addEventListener("mouseenter", showPreview);
+          dot.addEventListener("mouseleave", hidePreview);
+          dot.addEventListener("focus", showPreview);
+          dot.addEventListener("blur", hidePreview);
+          bar.appendChild(dot);
+        });
+      }
+
+      // ---- showreel inline play ----
+      const reelVideo = document.getElementById("showreel-video");
+      const reelPlay = document.getElementById("showreel-play");
+      const reelPlay2 = document.getElementById("showreel-play-2");
+      function playReel() {
+        if (!reelVideo) return;
+        reelVideo.setAttribute("controls", "");
+        const p = reelVideo.play();
+        if (p && p.catch) p.catch(() => {});
+        if (reelPlay) reelPlay.classList.add("hidden");
+      }
+      if (reelPlay) reelPlay.addEventListener("click", playReel);
+      if (reelPlay2) reelPlay2.addEventListener("click", () => {
+        playReel();
+        reelVideo.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+      if (reelVideo) {
+        reelVideo.addEventListener("pause", () => { if (reelPlay && reelVideo.currentTime === 0) reelPlay.classList.remove("hidden"); });
+      }
+
+      // ---- 2.5D parallax on featured stages ----
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduceMotion) {
+        document.querySelectorAll("[data-parallax]").forEach(stage => {
+          const inner = stage.querySelector(".stage-inner");
+          const layers = Array.from(stage.querySelectorAll("[data-depth]"));
+          stage.addEventListener("pointermove", (e) => {
+            const r = stage.getBoundingClientRect();
+            const px = (e.clientX - r.left) / r.width - 0.5;
+            const py = (e.clientY - r.top) / r.height - 0.5;
+            layers.forEach(l => {
+              const d = parseFloat(l.dataset.depth) || 0;
+              l.style.transform = `translate3d(${(-px * d * 34).toFixed(1)}px, ${(-py * d * 28).toFixed(1)}px, 0)`;
+            });
+            if (inner) {
+              inner.style.setProperty("--rx", (py * -4).toFixed(2) + "deg");
+              inner.style.setProperty("--ry", (px * 6).toFixed(2) + "deg");
+            }
+          });
+          stage.addEventListener("pointerleave", () => {
+            layers.forEach(l => { l.style.transform = ""; });
+            if (inner) {
+              inner.style.setProperty("--rx", "0deg");
+              inner.style.setProperty("--ry", "0deg");
+            }
+          });
+        });
+      }
+
+      // ---- reveal on scroll ----
+      const revealEls = Array.from(document.querySelectorAll(".reveal"));
+      if ("IntersectionObserver" in window && !reduceMotion) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("in");
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+        revealEls.forEach(el => io.observe(el));
+      } else {
+        revealEls.forEach(el => el.classList.add("in"));
+      }
+
+      // ---- init ----
+      positionYearTicks();
+      createProjectDots();
+      const defaultTick = document.querySelector(".year-tick.active") || tickElems[tickElems.length - 1];
+      if (defaultTick) setActiveYear(defaultTick.dataset.year, { scroll: false });
+      window.addEventListener("resize", positionYearTicks);
+    });
+  </script>
 </body>
 </html>

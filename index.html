@@ -4,7 +4,20 @@
   <meta charset="utf-8" />
   <title>Martijn Coenen — Cinematographer &amp; Filmmaker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Martijn Coenen — cinematographer and filmmaker. Showreel, ChargeLink on-set battery monitoring, and the documentary Bomma &amp; Bompa." />
+  <meta name="description" content="Martijn Coenen — Junior DOP &amp; creative technologist. Showreel, the on-set battery system ChargeLink, and the documentary Bomma &amp; Bompa." />
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <!-- Open Graph / share preview. If you deploy somewhere other than the URL below, update these absolute links. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Martijn Coenen — Junior DOP / Creative Technologist" />
+  <meta property="og:description" content="Showreel, the on-set battery system ChargeLink, and the documentary Bomma &amp; Bompa. Cinematic storytelling meets on-set innovation." />
+  <meta property="og:url" content="https://martino-bot.github.io/portfolio/" />
+  <meta property="og:image" content="https://martino-bot.github.io/portfolio/showreel-cover3.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Martijn Coenen — Junior DOP / Creative Technologist" />
+  <meta name="twitter:description" content="Showreel, ChargeLink on-set battery monitoring, and the documentary Bomma &amp; Bompa." />
+  <meta name="twitter:image" content="https://martino-bot.github.io/portfolio/showreel-cover3.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -943,6 +956,214 @@
     }
     .about-toggle-btn:hover { color: var(--text); border-bottom-color: var(--text); }
 
+    /* CV button in header */
+    .nav-cv {
+      border: 1px solid var(--line-strong);
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 0.5rem 0.85rem;
+      cursor: pointer;
+      transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+    }
+    .nav-cv:hover { border-color: var(--text); background: rgba(255,255,255,0.05); }
+
+    /* CV MODAL — digital curriculum vitae */
+    .cv-modal .modal-dialog {
+      display: block;
+      max-width: 1000px;
+      max-height: 88vh;
+      overflow-y: auto;
+      background: var(--bg-2);
+      background-image: none;
+      padding: clamp(1.4rem, 3.5vw, 2.6rem);
+    }
+    .cv-modal .modal-dialog::before { display: none; }
+
+    .cv-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.4rem;
+      padding-bottom: 1.3rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 1.7rem;
+    }
+    .cv-head-id { display: flex; align-items: center; gap: 1.1rem; }
+    .cv-portrait {
+      flex: 0 0 auto;
+      width: 78px; height: 78px;
+      object-fit: cover;
+      border: 1px solid var(--line-strong);
+      filter: grayscale(0.3);
+    }
+    .cv-name {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+    .cv-role {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.68rem;
+      color: var(--live);
+      margin-top: 0.55rem;
+    }
+    .cv-contact {
+      font-size: 0.76rem;
+      color: var(--muted);
+      margin-top: 0.45rem;
+      letter-spacing: 0.02em;
+    }
+    .cv-contact a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); }
+    .cv-contact a:hover { color: var(--text); border-bottom-color: var(--text); }
+    .cv-head-actions { display: flex; align-items: center; gap: 0.6rem; flex: 0 0 auto; }
+
+    .cv-body {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: clamp(1.5rem, 4vw, 3rem);
+    }
+    .cv-section { margin-bottom: 1.7rem; }
+    .cv-section:last-child { margin-bottom: 0; }
+    .cv-section-title {
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--faint);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.95rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .cv-profile { font-size: 0.88rem; color: #cfcfca; line-height: 1.72; }
+
+    .cv-exp { padding: 0 0 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--line); }
+    .cv-exp:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+    .cv-exp-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.15rem;
+    }
+    .cv-exp-role { font-family: var(--serif); font-size: 1.05rem; line-height: 1.2; }
+    .cv-exp-org { color: var(--muted); font-style: italic; }
+    .cv-exp-date {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--faint);
+      white-space: nowrap;
+    }
+    .cv-exp-list { list-style: none; margin-top: 0.5rem; display: grid; gap: 0.32rem; }
+    .cv-exp-list li {
+      font-size: 0.81rem;
+      color: var(--muted);
+      line-height: 1.55;
+      padding-left: 1.05rem;
+      position: relative;
+    }
+    .cv-exp-list li::before { content: "—"; position: absolute; left: 0; color: var(--faint); }
+
+    .cv-line { margin-bottom: 0.9rem; }
+    .cv-line:last-child { margin-bottom: 0; }
+    .cv-line-main { font-size: 0.85rem; color: var(--text); }
+    .cv-line-sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+    .cv-line-date { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.13em; color: var(--faint); margin-top: 0.15rem; }
+
+    .cv-skillgroup { margin-bottom: 1rem; }
+    .cv-skillgroup:last-child { margin-bottom: 0; }
+    .cv-skillgroup h4 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text);
+      font-weight: 500;
+      margin-bottom: 0.45rem;
+    }
+    .cv-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .cv-tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.03em;
+      padding: 0.26rem 0.55rem;
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .cv-langs { display: grid; gap: 0.5rem; }
+    .cv-lang { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.8rem; }
+    .cv-lang span:first-child { color: var(--text); }
+    .cv-lang span:last-child { color: var(--faint); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.65rem; align-self: center; }
+
+    @media (max-width: 760px) {
+      .cv-body { grid-template-columns: 1fr; }
+      .cv-head { flex-direction: column; }
+      .cv-portrait { width: 64px; height: 64px; }
+    }
+
+    /* outro / contact */
+    .outro {
+      margin-top: clamp(3.5rem, 9vw, 6.5rem);
+      padding-top: clamp(2.2rem, 5vw, 3.5rem);
+      border-top: 1px solid var(--line);
+    }
+    .outro-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--live);
+      margin-bottom: 1.1rem;
+    }
+    .outro-title {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-size: clamp(2.2rem, 6.5vw, 4.2rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.1rem;
+    }
+    .outro-title em { font-style: italic; color: var(--muted); }
+    .outro-sub {
+      max-width: 38rem;
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 2rem;
+    }
+    .outro-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-bottom: 2.6rem;
+    }
+    .outro-worked {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.1rem;
+      align-items: baseline;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+    .outro-worked-label {
+      font-size: 0.64rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--faint);
+      flex: 0 0 auto;
+    }
+    .outro-worked-list {
+      font-size: 0.88rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
     /* footer */
     .contact-footer {
       margin-top: clamp(3rem, 7vw, 5rem);
@@ -1000,21 +1221,19 @@
     <!-- ===================== HEADER ===================== -->
     <header>
       <div class="topline">
-        <div class="mark">Martijn&nbsp;Coenen <span>— CINEMATOGRAPHER</span></div>
+        <div class="mark">Martijn&nbsp;Coenen <span>— DOP / CREATIVE TECHNOLOGIST</span></div>
         <div class="topline-right">
-          <span class="status">
-            <span class="status-dot"></span>
-            <span class="label">Available 2025</span>
-          </span>
           <button class="about-btn" id="about-btn" type="button">About</button>
+          <button class="nav-cv" id="cv-btn" type="button">Curriculum Vitae</button>
         </div>
       </div>
 
       <h1 class="hero-name">Martijn<br />Coenen<em>.</em></h1>
       <p class="hero-sub">
-        Cinematographer &amp; filmmaker in training. I stay close to people and
-        situations — looking for images that feel <strong>honest</strong> rather than
-        merely perfect. Below: three things worth your time, then everything else.
+        Junior DOP &amp; creative technologist, based between Belgium and France.
+        I bridge cinematic storytelling and on-set innovation — shooting images that
+        feel <strong>honest</strong>, and building the hardware and AI workflows that
+        make the set run smoother. Below: three things worth your time, then everything else.
       </p>
 
       <a class="scroll-cue" href="#featured">
@@ -1543,12 +1762,32 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
       </p>
     </section>
 
+    <!-- CONTACT / OUTRO -->
+    <section class="outro reveal" id="contact" aria-label="Contact">
+      <p class="outro-eyebrow"><span class="status-dot"></span> Open to work</p>
+      <h2 class="outro-title">Let's make something <em>honest</em>.</h2>
+      <p class="outro-sub">
+        Open to DOP work, camera assisting and creative-tech collaborations —
+        film sets, broadcast, automotive, and on-set tooling. Based between Belgium and France,
+        happy to travel.
+      </p>
+      <div class="outro-actions">
+        <a class="btn btn-primary" href="mailto:Martijn.coenen@sfr.fr">Email me <span class="arrow">↗</span></a>
+        <button class="btn" type="button" id="cv-btn-outro">Curriculum Vitae <span class="arrow">▸</span></button>
+        <a class="btn" href="https://chargelink.be" target="_blank" rel="noopener">ChargeLink <span class="arrow">↗</span></a>
+      </div>
+      <div class="outro-worked">
+        <span class="outro-worked-label">Worked with</span>
+        <span class="outro-worked-list">Audi · Aston Martin · NEP · VRT · Studio 100 · De Mensen · Play Media · UEFA Women's Euro · KBC</span>
+      </div>
+    </section>
+
     <footer class="contact-footer">
-      <span class="foot-name">Martijn Coenen</span>
+      <span class="foot-name">Martijn Coenen — Junior DOP / Creative Technologist</span>
       <span>
-        <a href="mailto:Martijn.coenen@student.luca-arts.be">Martijn.coenen@student.luca-arts.be</a>
+        <a href="mailto:Martijn.coenen@sfr.fr">Martijn.coenen@sfr.fr</a>
         &nbsp;·&nbsp;
-        <a href="https://chargelink.be" target="_blank" rel="noopener">ChargeLink</a>
+        <a href="#" id="cv-btn-foot">Curriculum Vitae</a>
       </span>
     </footer>
   </main>
@@ -1560,7 +1799,7 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
       <div class="modal-header about-header">
         <div>
           <div class="modal-title" id="about-title">About me</div>
-          <div class="modal-meta">Martijn Coenen · Cinematographer &amp; Filmmaker</div>
+          <div class="modal-meta">Martijn Coenen · Junior DOP / Creative Technologist</div>
         </div>
         <button class="modal-close about-close" type="button" aria-label="Close about section">×</button>
       </div>
@@ -1568,35 +1807,38 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
       <div class="about-text">
         <div class="about-content" id="about-full">
           <p>
-            I'm Martijn Coenen, a cinematographer and filmmaker in training based in Belgium.
-            I'm doing a Master in Film &amp; TV at LUCA School of Arts in Genk. My work sits
-            between intimate non-fiction, narrative shorts and automotive/commercial pieces.
-            I like staying close to people and situations – my grandmother in her living room,
-            someone having a rough day, a soldier alone in a field in <em>Red Tape</em>. I'm
-            more interested in images that feel honest than images that just look perfect.
+            I'm Martijn Coenen, a junior DOP and creative technologist based between Belgium
+            and France. I'm doing a Master in Film &amp; Television at LUCA School of Arts in
+            Genk, but a lot of my real schooling happens on set and at my workbench. I bridge
+            two worlds that usually stay apart — cinematic storytelling and on-set innovation:
+            one day operating a camera, the next building hardware for the camera department
+            or wiring up an AI workflow to take the boring parts out of production.
           </p>
           <p>
-            Sometimes I feel that on set we're always chasing "perfect light", but for me
-            overexposure, low dynamic range or noise aren't automatically wrong. I'd rather
-            build a simple setup that gives the right feeling than force a textbook three-point
-            scheme on every frame. Alongside school I co-founded <strong>ChargeLink</strong>,
-            a practical on-set system that tracks camera batteries in real time so crews don't
-            lose takes to dead packs, and I run <strong>Coenenvideo</strong>, a long-running
-            stop-motion and automotive playground where I learned a lot by just making things.
+            I co-founded <strong>ChargeLink</strong>, a radio-frequency battery monitoring
+            system for camera assistants — I handle the system architecture, the software and
+            the UI, test it with real ACs and pitch it to industry partners, and we're part of
+            the VRT Seeds &amp; Growth programme and KBC Start it. Before that I grew
+            <strong>Coenenvideo</strong> from a quiet school period into an automotive video
+            account with millions of views and freelance work for brands like Audi and Aston
+            Martin. Alongside that I assist camera on live broadcasts with NEP and DB Video,
+            and this summer I shadowed the Engineer in Charge at NEP Switzerland during the
+            UEFA Women's Euro.
           </p>
           <p>
-            On set, if I'm in charge, I try to keep things calm and straightforward. I want
-            people to feel genuinely respected, not talked over or forced into a fake "good
-            vibe". Outside of film my life is not some perfect feed either: I waste time on
-            YouTube, stress about deadlines, like cars, long drives, messing with gear and
-            spending time with my grandmother. I'm mainly interested in growing as a director
-            of photography and working with people who care more about what's in front of the
-            camera than about the "perfect" setup.
+            I'm a continuous, self-directed learner — I'd rather master a new system than wait
+            for someone to hand me a workflow. I'm not chasing "perfect light" either:
+            overexposure, low dynamic range or noise aren't automatically wrong to me; I'd
+            rather build a simple setup that gives the right feeling. And my life isn't a
+            perfect feed — I waste time on YouTube, stress about deadlines, love cars and long
+            drives, mess with gear, and spend time with my grandmother. Mostly I want to keep
+            growing as a DOP while working with people who care more about what's in front of
+            the camera than about the "perfect" setup.
           </p>
         </div>
 
         <div class="about-content about-content-short" id="about-short" hidden>
-          <p>I make films, keep set tech behaving, and look for shots that actually mean something.</p>
+          <p>Junior DOP and creative technologist — I shoot films, build the gear and AI tools that support them, and look for shots that actually mean something.</p>
         </div>
 
         <button type="button" class="about-toggle-btn" id="about-toggle-btn">extremely short version</button>
@@ -1606,6 +1848,193 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
         <img src="about-1.png" alt="Martijn on set with a camera" />
         <img src="about-2.png" alt="Behind the scenes still" />
         <img src="about-3.png" alt="Landscape or location still" />
+      </div>
+    </div>
+  </div>
+
+  <!-- CV MODAL -->
+  <div class="modal cv-modal" id="cv-modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="cv-name">
+      <div class="cv-head">
+        <div class="cv-head-id">
+          <img class="cv-portrait" src="about-1.png" alt="Martijn Coenen" />
+          <div>
+            <div class="cv-name" id="cv-name">Martijn Coenen</div>
+            <div class="cv-role">Junior DOP / Creative Technologist</div>
+            <div class="cv-contact">
+              +32 456 64 13 85 · <a href="mailto:Martijn.coenen@sfr.fr">Martijn.coenen@sfr.fr</a>
+            </div>
+          </div>
+        </div>
+        <div class="cv-head-actions">
+          <a class="btn btn-primary" href="Martijn-Coenen-CV.pdf" download="Martijn-Coenen-CV.pdf">
+            Download PDF <span class="arrow">↓</span>
+          </a>
+          <button class="modal-close cv-close" type="button" aria-label="Close CV">×</button>
+        </div>
+      </div>
+
+      <div class="cv-body">
+        <!-- LEFT COLUMN -->
+        <div class="cv-col">
+          <section class="cv-section">
+            <div class="cv-section-title">Profile</div>
+            <p class="cv-profile">
+              Junior DOP and adaptable creative technologist bridging the gap between cinematic
+              storytelling and on-set innovation. As a continuous, self-directed learner, I
+              actively seek out and master new systems to solve complex production challenges —
+              whether building specialized hardware for camera departments or designing custom
+              AI agents to streamline creative workflows. I thrive where a deep technical
+              foundation meets a refined eye for visual composition.
+            </p>
+          </section>
+
+          <section class="cv-section">
+            <div class="cv-section-title">Education</div>
+            <div class="cv-line">
+              <div class="cv-line-main">Master in Film &amp; Television</div>
+              <div class="cv-line-sub">LUCA School of Arts — Genk (BE)</div>
+              <div class="cv-line-date">2022 — present</div>
+            </div>
+            <div class="cv-line">
+              <div class="cv-line-main">Baccalauréat Général</div>
+              <div class="cv-line-sub">Lycée Charles Poncet — Cluses (FR)</div>
+              <div class="cv-line-date">2021</div>
+            </div>
+          </section>
+
+          <section class="cv-section">
+            <div class="cv-section-title">Languages</div>
+            <div class="cv-langs">
+              <div class="cv-lang"><span>Dutch</span><span>Native</span></div>
+              <div class="cv-lang"><span>French</span><span>Native</span></div>
+              <div class="cv-lang"><span>English</span><span>Fluent</span></div>
+              <div class="cv-lang"><span>German</span><span>Basics</span></div>
+            </div>
+          </section>
+
+          <section class="cv-section">
+            <div class="cv-section-title">Skills</div>
+            <div class="cv-skillgroup">
+              <h4>Filmmaking</h4>
+              <div class="cv-tags">
+                <span class="cv-tag">Cinematography</span>
+                <span class="cv-tag">Camera operation</span>
+                <span class="cv-tag">Shot design</span>
+                <span class="cv-tag">Premiere Pro</span>
+              </div>
+            </div>
+            <div class="cv-skillgroup">
+              <h4>Technical</h4>
+              <div class="cv-tags">
+                <span class="cv-tag">C / C++</span>
+                <span class="cv-tag">Raspberry Pi</span>
+                <span class="cv-tag">ESP-32</span>
+                <span class="cv-tag">Linux / shell</span>
+                <span class="cv-tag">Remote debugging</span>
+                <span class="cv-tag">LVGL touch GUI</span>
+                <span class="cv-tag">HTML</span>
+                <span class="cv-tag">Hardware prototyping</span>
+              </div>
+            </div>
+            <div class="cv-skillgroup">
+              <h4>AI</h4>
+              <div class="cv-tags">
+                <span class="cv-tag">AI agents &amp; workflows</span>
+                <span class="cv-tag">Claude</span>
+                <span class="cv-tag">Gemini</span>
+                <span class="cv-tag">Seedance</span>
+                <span class="cv-tag">Topaz Studio</span>
+              </div>
+            </div>
+            <div class="cv-skillgroup">
+              <h4>Production &amp; Organisation</h4>
+              <div class="cv-tags">
+                <span class="cv-tag">Budgeting</span>
+                <span class="cv-tag">Production management</span>
+                <span class="cv-tag">Supplier negotiation</span>
+                <span class="cv-tag">Team coordination</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="cv-col">
+          <section class="cv-section">
+            <div class="cv-section-title">Work Experience</div>
+
+            <div class="cv-exp">
+              <div class="cv-exp-top">
+                <div class="cv-exp-role">Co-founder &amp; Product Developer <span class="cv-exp-org">— ChargeLink</span></div>
+                <div class="cv-exp-date">2024 — present</div>
+              </div>
+              <ul class="cv-exp-list">
+                <li>Building a radio-frequency battery monitoring system for camera assistants on film sets.</li>
+                <li>Part of the VRT Seeds &amp; Growth programme and KBC Start it.</li>
+                <li>System architecture, software engineering &amp; UI design, user testing with ACs, and pitching to industry partners (Play Media, De Mensen, Studio 100, VRT). Market &amp; patent research and public relations.</li>
+              </ul>
+            </div>
+
+            <div class="cv-exp">
+              <div class="cv-exp-top">
+                <div class="cv-exp-role">EIC Intern <span class="cv-exp-org">— NEP Switzerland</span></div>
+                <div class="cv-exp-date">Summer 2025</div>
+              </div>
+              <ul class="cv-exp-list">
+                <li>Shadowed the Engineer in Charge on live sports broadcasts at the UEFA Women's Euro.</li>
+                <li>Followed the full technical chain from cameras to control room to on-air output.</li>
+              </ul>
+            </div>
+
+            <div class="cv-exp">
+              <div class="cv-exp-top">
+                <div class="cv-exp-role">Camera Assistant <span class="cv-exp-org">— NEP Belgium &amp; DB Video</span></div>
+                <div class="cv-exp-date">2023 — present</div>
+              </div>
+              <ul class="cv-exp-list">
+                <li>Assisting camera and vision teams on multicamera and live productions.</li>
+                <li>Camera setup, lenses, cabling and on-set troubleshooting.</li>
+                <li>Hands-on with broadcast workflows and professional camera systems.</li>
+              </ul>
+            </div>
+
+            <div class="cv-exp">
+              <div class="cv-exp-top">
+                <div class="cv-exp-role">Freelance Video Editor &amp; Camera Operator <span class="cv-exp-org">— Automotive &amp; Race Events</span></div>
+                <div class="cv-exp-date">2023 — 2025</div>
+              </div>
+              <ul class="cv-exp-list">
+                <li>Editing promotional and social videos for automotive brands (incl. Audi &amp; Aston Martin).</li>
+                <li>Shooting race events and track days (incl. Ford Mustang events) with a focus on speed and motion.</li>
+                <li>Handheld, gimbal and long-lens work; dynamic, music-driven cuts for online platforms.</li>
+              </ul>
+            </div>
+
+            <div class="cv-exp">
+              <div class="cv-exp-top">
+                <div class="cv-exp-role">Founder &amp; Content Creator <span class="cv-exp-org">— Coenenvideo</span></div>
+                <div class="cv-exp-date">2023 — 2024</div>
+              </div>
+              <ul class="cv-exp-list">
+                <li>Stop-motion-style car videos and experimental automotive edits, started during a quieter school period.</li>
+                <li>Grew to millions of views and ~€15K revenue in under a year as a hobby, leading to brand collaborations.</li>
+                <li>Developed a strong eye for motion, composition and music-driven editing for social formats.</li>
+              </ul>
+            </div>
+
+            <div class="cv-exp">
+              <div class="cv-exp-top">
+                <div class="cv-exp-role">Freelance Translation <span class="cv-exp-org">— Various clients</span></div>
+                <div class="cv-exp-date">2023 — present</div>
+              </div>
+              <ul class="cv-exp-list">
+                <li>Clients incl. Prime Video, The North Face, Fortnum &amp; Mason and Philips.</li>
+              </ul>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   </div>
@@ -1661,6 +2090,31 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
         aboutModal.classList.remove("open");
         document.body.classList.remove("modal-open");
       }
+
+      // CV MODAL
+      const cvModal = document.getElementById("cv-modal");
+      const cvOpenBtn = document.getElementById("cv-btn");
+      const cvBackdrop = cvModal ? cvModal.querySelector(".modal-backdrop") : null;
+      const cvClose = cvModal ? cvModal.querySelector(".cv-close") : null;
+
+      function openCvModal() {
+        if (!cvModal) return;
+        cvModal.classList.add("open");
+        document.body.classList.add("modal-open");
+        cvModal.querySelector(".modal-dialog").scrollTop = 0;
+      }
+      function closeCvModal() {
+        if (!cvModal) return;
+        cvModal.classList.remove("open");
+        document.body.classList.remove("modal-open");
+      }
+      const cvOpenBtnFoot = document.getElementById("cv-btn-foot");
+      const cvOpenBtnOutro = document.getElementById("cv-btn-outro");
+      if (cvOpenBtn) cvOpenBtn.addEventListener("click", openCvModal);
+      if (cvOpenBtnFoot) cvOpenBtnFoot.addEventListener("click", (e) => { e.preventDefault(); openCvModal(); });
+      if (cvOpenBtnOutro) cvOpenBtnOutro.addEventListener("click", openCvModal);
+      if (cvBackdrop) cvBackdrop.addEventListener("click", closeCvModal);
+      if (cvClose) cvClose.addEventListener("click", closeCvModal);
 
       const aboutFull = document.getElementById("about-full");
       const aboutShort = document.getElementById("about-short");
@@ -1848,6 +2302,7 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
         if (e.key === "Escape") {
           if (modal.classList.contains("open")) closeModal();
           if (aboutModal && aboutModal.classList.contains("open")) closeAboutModal();
+          if (cvModal && cvModal.classList.contains("open")) closeCvModal();
         }
       });
 

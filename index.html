@@ -639,7 +639,7 @@
     }
     /* ChargeLink feature becomes a single layered column with the hub behind it. */
     .cl-feature { display: block; position: relative; }
-    .cl-feature > .feature-copy { position: relative; z-index: 2; max-width: 34rem; }
+    .cl-feature > .feature-copy { position: relative; z-index: 2; max-width: 30rem; }
     .cl-feature > .cl-timeline,
     .cl-feature > .cl-expand { position: relative; z-index: 2; }
     /* dark scrim between the model and the content so text stays readable */
@@ -651,18 +651,18 @@
       pointer-events: none;
       background: linear-gradient(90deg,
         var(--bg) 0%,
-        rgba(7,7,8,0.82) 30%,
-        rgba(7,7,8,0.18) 62%,
-        transparent 88%);
+        rgba(7,7,8,0.88) 38%,
+        rgba(7,7,8,0.32) 66%,
+        transparent 90%);
     }
     /* Big passive hub, raised and angled, floating behind everything. Not draggable. */
     .cl-model--bg {
       position: absolute;
       z-index: 0;
-      top: -10%;
-      right: -6%;
-      width: 74%;
-      height: 120%;
+      top: 0;
+      right: -2%;
+      width: 50%;
+      height: 92%;
       pointer-events: none;
     }
     @media (max-width: 760px) {
@@ -1511,8 +1511,9 @@
           shadow-intensity="0"
           exposure="0.9"
           environment-image="neutral"
-          camera-orbit="0deg 58deg auto"
-          field-of-view="28deg"
+          orientation="12deg -90deg 0deg"
+          camera-orbit="0deg 80deg auto"
+          field-of-view="26deg"
           loading="lazy"
           reveal="auto"
           tabindex="-1"

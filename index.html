@@ -563,6 +563,84 @@
       .cl-label { max-width: none; }
     }
 
+    /* ChargeLink "More" expanding detail panel */
+    #cl-more-btn .arrow { transition: transform 0.3s var(--ease); }
+    #cl-more-btn[aria-expanded="true"] .arrow { transform: rotate(90deg); }
+
+    .cl-expand {
+      grid-column: 1 / -1;
+      order: 4;
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.5s var(--ease);
+    }
+    .cl-expand.open { grid-template-rows: 1fr; }
+    .cl-expand-inner { overflow: hidden; min-height: 0; }
+    .cl-expand-pad {
+      padding-top: clamp(1.6rem, 4vw, 2.4rem);
+      margin-top: clamp(1.6rem, 4vw, 2.4rem);
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.45s var(--ease) 0.1s, transform 0.45s var(--ease) 0.1s;
+    }
+    .cl-expand.open .cl-expand-pad { opacity: 1; transform: none; }
+
+    .cl-x-title {
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--faint);
+      margin-bottom: 1rem;
+    }
+    .cl-x-text {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 1.3rem;
+    }
+    .cl-specs { list-style: none; }
+    .cl-specs li {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.6rem 0;
+      border-top: 1px solid var(--line);
+      font-size: 0.82rem;
+    }
+    .cl-specs li span:first-child {
+      color: var(--faint);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.66rem;
+      align-self: center;
+    }
+    .cl-specs li span:last-child { color: var(--text); text-align: right; }
+
+    .cl-model-slot {
+      aspect-ratio: 4 / 3;
+      border: 1px dashed var(--line-strong);
+      display: grid;
+      place-content: center;
+      justify-items: center;
+      gap: 0.35rem;
+      text-align: center;
+    }
+    .cl-model-label { font-size: 0.8rem; letter-spacing: 0.06em; color: var(--muted); }
+    .cl-model-sub {
+      font-size: 0.64rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--faint);
+    }
+
+    @media (max-width: 760px) {
+      .cl-expand-pad { grid-template-columns: 1fr; }
+    }
+
     /* ---------- WORK / ARCHIVE ---------- */
 
     .work { margin-top: clamp(1rem, 3vw, 2rem); }
@@ -1382,8 +1460,8 @@
             <a class="btn btn-primary" href="https://chargelink.be" target="_blank" rel="noopener">
               chargelink.be <span class="arrow">↗</span>
             </a>
-            <button class="btn feature-open" type="button" data-target="chargelink">
-              More <span class="arrow">▸</span>
+            <button class="btn" type="button" id="cl-more-btn" aria-expanded="false" aria-controls="cl-expand">
+              <span class="cl-more-label">More</span> <span class="arrow">▸</span>
             </button>
           </div>
         </div>
@@ -1432,6 +1510,37 @@
               <div class="cl-label">VLAIO ISS funding — next step</div>
             </li>
           </ol>
+        </div>
+
+        <div class="cl-expand" id="cl-expand">
+          <div class="cl-expand-inner">
+            <div class="cl-expand-pad">
+              <div class="cl-x-col">
+                <div class="cl-x-title">How it works</div>
+                <p class="cl-x-text">
+                  10–20 batteries on a modern set and no simple way to watch them — one
+                  forgotten swap can stop a take. ChargeLink clips a small wireless node
+                  onto every battery and streams each voltage back to one central hub, so
+                  the whole set's power is visible at a glance.
+                </p>
+                <ul class="cl-specs">
+                  <li><span>Comms</span><span>LoRa · 868 MHz (sub-GHz)</span></li>
+                  <li><span>Range</span><span>Up to 400 m</span></li>
+                  <li><span>Mounts</span><span>V-Mount · Gold-Mount · B-Mount</span></li>
+                  <li><span>Hub</span><span>Touchscreen · status LEDs</span></li>
+                  <li><span>Nodes</span><span>Wireless · clip-on · brand-agnostic</span></li>
+                </ul>
+              </div>
+              <div class="cl-x-col">
+                <div class="cl-x-title">The hardware</div>
+                <!-- 3D models (hub + node) will be mounted here later -->
+                <div class="cl-model-slot" id="cl-model-slot">
+                  <span class="cl-model-label">Hub &amp; node — interactive 3D</span>
+                  <span class="cl-model-sub">coming soon</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </article>
 
@@ -2450,6 +2559,18 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
         });
       });
 
+      // ---- ChargeLink "More" expanding detail panel ----
+      const clMoreBtn = document.getElementById("cl-more-btn");
+      const clExpand = document.getElementById("cl-expand");
+      if (clMoreBtn && clExpand) {
+        const clMoreLabel = clMoreBtn.querySelector(".cl-more-label");
+        clMoreBtn.addEventListener("click", () => {
+          const open = clExpand.classList.toggle("open");
+          clMoreBtn.setAttribute("aria-expanded", open ? "true" : "false");
+          if (clMoreLabel) clMoreLabel.textContent = open ? "Close" : "More";
+        });
+      }
+
       // ---- filter buttons ----
       filterButtons.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -2556,6 +2677,8 @@ From that moment on, I felt that entrepreneurship and decision-making were thing
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (!reduceMotion) {
         document.querySelectorAll("[data-parallax]").forEach(stage => {
+          // Skip the mouse-follow motion on video stages so the play button is easy to click.
+          if (stage.querySelector(".stage-play")) return;
           const inner = stage.querySelector(".stage-inner");
           const layers = Array.from(stage.querySelectorAll("[data-depth]"));
           stage.addEventListener("pointermove", (e) => {

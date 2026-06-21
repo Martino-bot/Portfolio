@@ -483,6 +483,86 @@
     .btn .arrow { transition: transform 0.2s var(--ease); }
     .btn:hover .arrow { transform: translateX(3px); }
 
+    /* ChargeLink milestone timeline (full-width row inside the feature) */
+    .cl-timeline {
+      grid-column: 1 / -1;
+      order: 3;
+      margin-top: clamp(1.7rem, 4vw, 2.8rem);
+      padding-top: clamp(1.5rem, 4vw, 2.2rem);
+      border-top: 1px solid var(--line);
+    }
+    .cl-eyebrow {
+      display: block;
+      font-size: 0.66rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 1.8rem;
+    }
+    .cl-eyebrow strong { color: var(--live); font-weight: 500; }
+    .cl-track {
+      list-style: none;
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      position: relative;
+    }
+    .cl-track::before {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; top: 5px;
+      height: 1px;
+      background: var(--line);
+    }
+    .cl-node { position: relative; padding-right: 1rem; }
+    .cl-node:last-child { padding-right: 0; }
+    .cl-dot {
+      display: block;
+      width: 11px; height: 11px;
+      border-radius: 999px;
+      background: var(--bg);
+      border: 1px solid var(--faint);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 1rem;
+    }
+    .cl-node--done .cl-dot { background: var(--muted); border-color: var(--muted); }
+    .cl-node--live .cl-dot {
+      background: var(--live);
+      border-color: var(--live);
+      box-shadow: 0 0 0 4px var(--live-soft);
+      animation: pulse 2s ease-out infinite;
+    }
+    .cl-node--next .cl-dot {
+      background: var(--bg);
+      border: 1px dashed var(--live);
+    }
+    .cl-date {
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .cl-node--live .cl-date { color: var(--live); }
+    .cl-node--next .cl-date { color: var(--live); opacity: 0.85; }
+    .cl-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.35;
+      max-width: 16ch;
+    }
+    .cl-node--live .cl-label { color: var(--text); }
+
+    @media (max-width: 760px) {
+      .cl-track { grid-auto-flow: row; grid-auto-columns: auto; }
+      .cl-track::before { top: 0; bottom: 0; left: 5px; right: auto; width: 1px; height: auto; }
+      .cl-node { padding: 0 0 1.4rem 1.7rem; }
+      .cl-node:last-child { padding-bottom: 0; }
+      .cl-dot { position: absolute; left: 0; top: 2px; margin: 0; }
+      .cl-label { max-width: none; }
+    }
+
     /* ---------- WORK / ARCHIVE ---------- */
 
     .work { margin-top: clamp(1rem, 3vw, 2rem); }
@@ -1306,6 +1386,52 @@
               More <span class="arrow">▸</span>
             </button>
           </div>
+        </div>
+
+        <div class="cl-timeline">
+          <span class="cl-eyebrow">The road so far — <strong>live work</strong></span>
+          <ol class="cl-track">
+            <li class="cl-node cl-node--done" title="Two camera assistants forget a battery swap; the director's monitor dies mid-take. We decide to build the fix.">
+              <span class="cl-dot"></span>
+              <div class="cl-date">2024</div>
+              <div class="cl-label">The idea — a dead battery kills the take</div>
+            </li>
+            <li class="cl-node cl-node--done" title="Hub V0.3 — LoRa 868 MHz, universal V/Gold/B-mount, range up to 400 m.">
+              <span class="cl-dot"></span>
+              <div class="cl-date">2025</div>
+              <div class="cl-label">First working prototype — Hub V0.3</div>
+            </li>
+            <li class="cl-node cl-node--done" title="First field test on a professional set — Friesenjunkies, a German production.">
+              <span class="cl-dot"></span>
+              <div class="cl-date">Dec 2025</div>
+              <div class="cl-label">First set test — Friesenjunkies (DE)</div>
+            </li>
+            <li class="cl-node cl-node--done" title="Selected for VRT's Seeds &amp; Growth media-tech programme (2025 through April 2026).">
+              <span class="cl-dot"></span>
+              <div class="cl-date">2025 – Apr 2026</div>
+              <div class="cl-label">VRT Seeds &amp; Growth</div>
+            </li>
+            <li class="cl-node cl-node--done" title="Accepted into the KBC Start it start-up accelerator.">
+              <span class="cl-dot"></span>
+              <div class="cl-date">Apr 2026</div>
+              <div class="cl-label">Accepted — KBC Start it</div>
+            </li>
+            <li class="cl-node cl-node--done" title="Patent application filed for the ChargeLink system.">
+              <span class="cl-dot"></span>
+              <div class="cl-date">2026</div>
+              <div class="cl-label">Patent application filed</div>
+            </li>
+            <li class="cl-node cl-node--live" title="Running on a Ketnet production this month.">
+              <span class="cl-dot"></span>
+              <div class="cl-date">Jun 2026</div>
+              <div class="cl-label">Live on a Ketnet set</div>
+            </li>
+            <li class="cl-node cl-node--next" title="Next step: applying for VLAIO Innovative Starter Support (ISS) funding.">
+              <span class="cl-dot"></span>
+              <div class="cl-date">Jul 2026</div>
+              <div class="cl-label">VLAIO ISS funding — next step</div>
+            </li>
+          </ol>
         </div>
       </article>
 
